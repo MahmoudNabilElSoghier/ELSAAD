@@ -14,6 +14,12 @@ export interface NavItem {
   href: string;
 }
 
+export interface HeaderContent {
+  logoSubtitle: string;
+  whatsappLabel: string;
+  menuLabel: string;
+}
+
 export interface HeroContent {
   headline: string;
   subheadline: string;
