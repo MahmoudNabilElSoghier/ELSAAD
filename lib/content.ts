@@ -1,3 +1,4 @@
+import { company } from "@/lib/config";
 import type {
   Brand,
   Branch,
@@ -141,8 +142,8 @@ export const branches: Branch[] = [
   {
     id: "cairo",
     name: "فرع القاهرة - المهندسين",
-    address: "شارع جامعة الدول العربية، المهندسين",
-    phone: "01000000000",
+    address: company.address,
+    phone: company.phone,
     hours: "السبت - الخميس: 10 ص - 10 م",
   },
   {
@@ -180,7 +181,7 @@ export const footer: FooterContent = {
   social: {
     facebook: "https://facebook.com/elsaad",
     instagram: "https://instagram.com/elsaad",
-    whatsapp: "https://wa.me/201000000000",
+    whatsapp: company.whatsappUrl,
     youtube: "https://youtube.com/@elsaad",
   },
   copyright: "© 2025 السعد للدراجات النارية. جميع الحقوق محفوظة.",

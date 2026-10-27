@@ -2,19 +2,22 @@ import { testimonials } from "@/lib/content";
 import { Container } from "@/components/ui/Container";
 import { Card } from "@/components/ui/Card";
 import { Star, Quote } from "lucide-react";
+import { FadeIn } from "@/components/ui/FadeIn";
 
 export function Testimonials() {
   return (
     <section className="py-20 md:py-28 bg-bg">
       <Container size="xl">
-        <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
-            آراء عملائنا
-          </h2>
-          <p className="text-muted text-lg">
-            ثقة أكثر من 35 عاماً تتحدث عنها آراء عملائنا الكرام في كل مكان
-          </p>
-        </div>
+        <FadeIn>
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
+              آراء عملائنا
+            </h2>
+            <p className="text-muted text-lg">
+              ثقة أكثر من 35 عاماً تتحدث عنها آراء عملائنا الكرام في كل مكان
+            </p>
+          </div>
+        </FadeIn>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {testimonials.map((item) => (

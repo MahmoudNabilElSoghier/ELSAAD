@@ -1,23 +1,34 @@
 import { NextResponse } from "next/server";
+import { contactSchema } from "@/lib/schemas/contact";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, phone, message } = body;
+    const result = contactSchema.safeParse(body);
 
-    // Validate basic fields
-    if (!name || !phone || !message) {
+    if (!result.success) {
       return NextResponse.json(
-        { success: false, error: "جميع الحقول مطلوبة" },
+        {
+          success: false,
+          errors: result.error.flatten().fieldErrors,
+          error: "برجاء التحقق من صحة البيانات المدخلة",
+        },
         { status: 400 }
       );
     }
 
-    // Console log for Phase 1 (ready for Prisma / database integration in Phase 2)
-    console.log("Contact Form Submission:", {
+    const { name, phone, message } = result.data;
+
+    /*
+     * TODO (Phase 2): Replace console.log with Prisma database write:
+     * await prisma.contactMessage.create({
+     *   data: { name, phone, message: message || null }
+     * });
+     */
+    console.log("Validated Contact Submission:", {
       name,
       phone,
-      message,
+      message: message || null,
       timestamp: new Date().toISOString(),
     });
 

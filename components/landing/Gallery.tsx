@@ -2,19 +2,22 @@ import { gallery } from "@/lib/content";
 import { Container } from "@/components/ui/Container";
 import { Card } from "@/components/ui/Card";
 import { Image as ImageIcon } from "lucide-react";
+import { FadeIn } from "@/components/ui/FadeIn";
 
 export function Gallery() {
   return (
     <section className="py-20 md:py-28 bg-card border-y border-border">
       <Container size="xl">
-        <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
-            معرض الصور
-          </h2>
-          <p className="text-muted text-lg">
-            لمحات من معارضنا، موديلاتنا، ومراكز الصيانة المنتشرة في أنحاء الجمهورية
-          </p>
-        </div>
+        <FadeIn>
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
+              معرض الصور
+            </h2>
+            <p className="text-muted text-lg">
+              لمحات من معارضنا، موديلاتنا، ومراكز الصيانة المنتشرة في أنحاء الجمهورية
+            </p>
+          </div>
+        </FadeIn>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {gallery.map((item) => (

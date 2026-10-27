@@ -2,6 +2,7 @@ import { categories } from "@/lib/content";
 import { Container } from "@/components/ui/Container";
 import { Card } from "@/components/ui/Card";
 import { Bike, Wrench, Shield, Compass } from "lucide-react";
+import { FadeIn } from "@/components/ui/FadeIn";
 
 const icons = [Bike, Compass, Wrench, Shield];
 
@@ -9,14 +10,16 @@ export function Categories() {
   return (
     <section id="categories" className="py-20 md:py-28 bg-bg">
       <Container size="xl">
-        <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
-            أقسامنا ومنتجاتنا
-          </h2>
-          <p className="text-muted text-lg">
-            تخوّل في تشكيلتنا الواسعة من الدراجات الجديدة والمستعملة وقطع الغيار الأصلية
-          </p>
-        </div>
+        <FadeIn>
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
+              أقسامنا ومنتجاتنا
+            </h2>
+            <p className="text-muted text-lg">
+              تخوّل في تشكيلتنا الواسعة من الدراجات الجديدة والمستعملة وقطع الغيار الأصلية
+            </p>
+          </div>
+        </FadeIn>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {categories.map((category, index) => {

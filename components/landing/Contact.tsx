@@ -1,6 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { contactSchema, type ContactInput } from "@/lib/schemas/contact";
 import { contactForm } from "@/lib/content";
 import { company } from "@/lib/config";
 import { Container } from "@/components/ui/Container";
@@ -8,72 +11,69 @@ import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { MessageCircle, Phone, Send, CheckCircle2, AlertCircle } from "lucide-react";
+import { FadeIn } from "@/components/ui/FadeIn";
 
 export function Contact() {
-  const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    message: "",
-  });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [serverError, setServerError] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<ContactInput>({
+    resolver: zodResolver(contactSchema),
+  });
+
+  const onSubmit = async (data: ContactInput) => {
     setStatus("loading");
-    setErrorMessage("");
-
-    // Egyptian phone validation check (01 followed by 9 digits)
-    const phoneRegex = /^01[0125][0-9]{8}$/;
-    if (!phoneRegex.test(formData.phone)) {
-      setStatus("error");
-      setErrorMessage("برجاء إدخال رقم موبايل مصري صحيح (مثال: 01000000000)");
-      return;
-    }
+    setServerError("");
 
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(data),
       });
 
-      const data = await res.json();
+      const json = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.error || contactForm.errorMessage);
+        throw new Error(json.error || contactForm.errorMessage);
       }
 
       setStatus("success");
-      setFormData({ name: "", phone: "", message: "" });
+      reset();
     } catch (err: unknown) {
       setStatus("error");
-      setErrorMessage(err instanceof Error ? err.message : contactForm.errorMessage);
+      setServerError(err instanceof Error ? err.message : contactForm.errorMessage);
     }
   };
 
   return (
     <section id="contact" className="py-20 md:py-28 bg-bg">
       <Container size="xl">
-        <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
-            {contactForm.title}
-          </h2>
-          <p className="text-muted text-lg">
-            {contactForm.subtitle}
-          </p>
-        </div>
+        <FadeIn>
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
+              {contactForm.title}
+            </h2>
+            <p className="text-muted text-lg">
+              {contactForm.subtitle}
+            </p>
+          </div>
+        </FadeIn>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start max-w-5xl mx-auto">
           {/* Contact Form */}
           <Card padding="lg" className="bg-card border-border">
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <Input
                 label={contactForm.fields.name.label}
                 placeholder={contactForm.fields.name.placeholder}
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                required
+                error={errors.name?.message}
+                {...register("name")}
               />
 
               <Input
@@ -81,9 +81,8 @@ export function Contact() {
                 placeholder={contactForm.fields.phone.placeholder}
                 type="tel"
                 dir="ltr"
-                value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                required
+                error={errors.phone?.message}
+                {...register("phone")}
               />
 
               <div className="flex flex-col gap-1.5">
@@ -93,11 +92,12 @@ export function Contact() {
                 <textarea
                   rows={4}
                   placeholder={contactForm.fields.message.placeholder}
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  required
                   className="bg-bg border border-border rounded-lg px-4 py-3 text-white placeholder:text-muted focus:border-accent focus:outline-none resize-none"
+                  {...register("message")}
                 />
+                {errors.message?.message && (
+                  <p className="text-red-500 text-sm">{errors.message.message}</p>
+                )}
               </div>
 
               {status === "success" && (
@@ -110,7 +110,7 @@ export function Contact() {
               {status === "error" && (
                 <div className="flex items-center gap-2 p-4 rounded-lg bg-red-500/10 text-red-400 text-sm">
                   <AlertCircle className="w-5 h-5 shrink-0" />
-                  <span>{errorMessage || contactForm.errorMessage}</span>
+                  <span>{serverError || contactForm.errorMessage}</span>
                 </div>
               )}
 
@@ -144,7 +144,7 @@ export function Contact() {
                   <div>
                     <div className="text-sm text-muted">واتساب السريع</div>
                     <div className="font-bold text-white" dir="ltr">
-                      {company.whatsappUrl.replace("https://wa.me/", "")}
+                      {company.whatsappNumber}
                     </div>
                   </div>
                 </div>
@@ -163,12 +163,12 @@ export function Contact() {
                   <div>
                     <div className="text-sm text-muted">الخط الساخن</div>
                     <div className="font-bold text-white" dir="ltr">
-                      01000000000
+                      {company.phoneDisplay}
                     </div>
                   </div>
                 </div>
                 <Button variant="secondary" size="sm" asChild>
-                  <a href="tel:01000000000">اتصل بنا</a>
+                  <a href={`tel:${company.phone}`}>اتصل بنا</a>
                 </Button>
               </Card>
             </div>
