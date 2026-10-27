@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+@theme inline {
+  --color-bg: #0A0A0A;
+  --color-card: #151515;
+  --color-border: #262626;
+  --color-accent: #E63946;
+  --color-muted: #9CA3AF;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
