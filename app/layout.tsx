@@ -9,10 +9,27 @@ const cairo = Cairo({
   display: "swap",
 });
 
+// TODO: set metadataBase once domain is confirmed
 export const metadata: Metadata = {
   title: meta.title,
   description: meta.description,
   keywords: meta.keywords,
+  openGraph: {
+    title: "السعد للدراجات النارية",
+    description: "قطع غيار أصلية، دراجات جديدة ومستعملة، وخدمة صيانة معتمدة من أكبر ماركات العالم. 35+ سنة خبرة.",
+    locale: "ar_EG",
+    type: "website",
+    siteName: "ELSAAD",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "السعد للدراجات النارية",
+    description: "قطع غيار أصلية، دراجات جديدة ومستعملة، وخدمة صيانة معتمدة.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
