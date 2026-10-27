@@ -8,4 +8,5 @@ export const company: CompanyConfig = {
   yearsInBusiness: 35,
   branchesCount: 12,
   brandsCount: 20,
+  whatsappUrl: "https://wa.me/201000000000",
 };

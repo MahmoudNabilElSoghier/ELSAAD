@@ -6,6 +6,7 @@ export interface CompanyConfig {
   yearsInBusiness: number;
   branchesCount: number;
   brandsCount: number;
+  whatsappUrl: string;
 }
 
 export interface NavItem {
