@@ -3,7 +3,7 @@
 Landing page and future ERP system for ELSAAD Motorcycle.
 
 ## Tech Stack
-- Next.js 14+ (App Router) + TypeScript
+- Next.js 15.5 (App Router) + React 19 + TypeScript
 - Tailwind CSS
 - PostgreSQL + Prisma (planned)
 - Node API Routes
@@ -33,37 +33,26 @@ Landing page and future ERP system for ELSAAD Motorcycle.
 
 ## Development
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
 ### Setup
+    npm install
+    npm run dev
 
-```bash
-npm install
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Open http://localhost:3000
 
 ### Scripts
+- npm run dev — dev server
+- npm run build — production build
+- npm run start — serve production build
+- npm run lint — eslint
 
-```bash
-npm run dev     # start development server
-npm run build   # production build
-npm run start   # serve production build
-npm run lint    # eslint
-```
+### Editing content
+- Company info → lib/config.ts
+- Site copy → lib/content.ts
+- Form validation → lib/schemas/contact.ts
 
-### Learn More
-
-- [Next.js Docs](https://nextjs.org/docs) — App Router, routing, rendering.
-- [Next.js Learn](https://nextjs.org/learn) — interactive Next.js tutorial.
-- [Tailwind CSS Docs](https://tailwindcss.com/docs) — utility classes (v4: `@import "tailwindcss"` + `@theme` in `app/globals.css`).
-
-### Deploy
-
-Deploy easily on [Vercel](https://vercel.com/new) (Next.js first-party host), or see the [deployment docs](https://nextjs.org/docs/app/building-your-application/deploying) for other platforms.
+### Docs
+- Next.js App Router: https://nextjs.org/docs/app
+- Tailwind CSS v4: https://tailwindcss.com/docs
 
 ---
 
