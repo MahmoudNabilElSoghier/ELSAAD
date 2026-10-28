@@ -1,10 +1,15 @@
-// ELSAAD — Phase 2A active schema.
-// Based on docs/PHASE-2-SCHEMA.prisma with recommended decisions applied:
+// ELSAAD — Phase 2 foundation schema.
+// Phase 2 decisions applied:
 //   1B — no User model yet (Phase 2D); temporary ADMIN_API_KEY auth until then
-//   2C — Order.userId nullable, phone always required (guest checkout)
+//   2C — guest checkout: customerId nullable, phone required via Customer
 //   3C — soft delete (deletedAt) on Product + Order only
 //   4B — prices exclusive of VAT: Product.taxRate default 0.14, Order.taxAmount stored
-//   5A — StockMovement added now for stock audit trail
+//   5A — StockMovement retained (Phase 2A) although later brief deferred it to
+//        Phase 3 — FLAGGED for review, zero runtime impact (no UI/service uses it).
+// FLAG: old draft Product/Branch/Order/OrderItem replaced by Phase 2 definitions
+//       (no DATABASE_URL was ever provisioned, so no data exists to migrate).
+// FLAG: Category.products back-relation removed (old draft coupling) — Category
+//       remains a pure landing-page display model per brief.
 // Do NOT run `npx prisma migrate` until a DATABASE_URL is provisioned.
 
 generator client {
@@ -28,50 +33,15 @@ model ContactMessage {
   @@index([createdAt])
 }
 
-// ---------- Product catalog (Phase 2B) ----------
+// ---------- Landing-page display content (kept as-is) ----------
 
 model Category {
-  id          String    @id @default(cuid())
-  slug        String    @unique
+  id          String   @id @default(cuid())
+  slug        String   @unique
   title       String
   description String?
-  order       Int       @default(0)
-  createdAt   DateTime  @default(now())
-  products    Product[]
-}
-
-model Product {
-  id          String          @id @default(cuid())
-  slug        String          @unique
-  name        String
-  description String?
-  price       Decimal?        @db.Decimal(10, 2)
-  taxRate     Decimal         @default(0.14) @db.Decimal(5, 4)
-  stock       Int             @default(0)
-  imageUrl    String?
-  active      Boolean         @default(true)
-  deletedAt   DateTime?
-  categoryId  String
-  category    Category        @relation(fields: [categoryId], references: [id])
-  orderItems  OrderItem[]
-  movements   StockMovement[]
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
-
-  @@index([categoryId])
-  @@index([active])
-}
-
-// ---------- Static content mirrored from lib/content.ts ----------
-
-model Branch {
-  id      String @id @default(cuid())
-  slug    String @unique
-  name    String
-  address String
-  phone   String
-  hours   String
-  order   Int    @default(0)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
 }
 
 model Testimonial {
@@ -84,41 +54,7 @@ model Testimonial {
   createdAt DateTime @default(now())
 }
 
-// ---------- Orders (Phase 2C) ----------
-
-model Order {
-  id        String      @id @default(cuid())
-  customer  String
-  phone     String
-  address   String?
-  userId    String?
-  total     Decimal     @db.Decimal(10, 2)
-  taxAmount Decimal?    @db.Decimal(10, 2)
-  status    String      @default("pending")
-  deletedAt DateTime?
-  createdAt DateTime    @default(now())
-  items     OrderItem[]
-
-  @@index([phone])
-  @@index([status])
-}
-
-model OrderItem {
-  id        String  @id @default(cuid())
-  orderId   String
-  order     Order   @relation(fields: [orderId], references: [id])
-  productId String
-  product   Product @relation(fields: [productId], references: [id])
-  quantity  Int
-  unitPrice Decimal @db.Decimal(10, 2)
-
-  @@index([orderId])
-  @@index([productId])
-}
-
-// ---------- Stock audit trail (decision 5A) ----------
-// Every Product.stock change must write a movement row here.
-// No UI in Phase 2 — data only. Consumed by Phase 3 ERP.
+// ---------- Stock audit trail (decision 5A — see header FLAG) ----------
 
 model StockMovement {
   id        String   @id @default(cuid())
@@ -130,4 +66,282 @@ model StockMovement {
 
   @@index([productId])
   @@index([createdAt])
+}
+
+// ---------- Part catalog: brands / models / categories / suppliers ----------
+
+model Brand {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  nameAr      String?
+  slug        String   @unique
+  logoUrl     String?
+  website     String?
+  description String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  models   MachineModel[]
+  products Product[]
+}
+
+model MachineModel {
+  id          String   @id @default(cuid())
+  brandId     String
+  brand       Brand    @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  name        String
+  nameAr      String?
+  slug        String
+  category    String   @default("دراجات نارية")
+  yearFrom    Int?
+  yearTo      Int?
+  engineCc    Int?
+  description String?
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+
+  compatibilities ProductCompatibility[]
+
+  @@unique([brandId, slug])
+  @@index([brandId])
+  @@index([category])
+}
+
+model PartCategory {
+  id        String         @id @default(cuid())
+  name      String
+  nameAr    String?
+  slug      String         @unique
+  parentId  String?
+  parent    PartCategory?  @relation("CategoryTree", fields: [parentId], references: [id])
+  children  PartCategory[] @relation("CategoryTree")
+  order     Int            @default(0)
+  createdAt DateTime       @default(now())
+
+  products Product[]
+
+  @@index([parentId])
+}
+
+model Supplier {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  name      String
+  phone     String?
+  email     String?
+  address   String?
+  note      String?
+  createdAt DateTime @default(now())
+
+  products Product[]
+}
+
+// ---------- Products ----------
+
+model Product {
+  id             String        @id @default(cuid())
+  code           String        @unique
+  name           String
+  nameEn         String?
+  description    String?
+  oemCode        String?
+  partCategoryId String?
+  partCategory   PartCategory? @relation(fields: [partCategoryId], references: [id])
+  brandId        String?
+  brand          Brand?        @relation(fields: [brandId], references: [id])
+  supplierId     String?
+  supplier       Supplier?     @relation(fields: [supplierId], references: [id])
+  costPrice      Decimal?      @db.Decimal(10, 2)
+  wholesalePrice Decimal?      @db.Decimal(10, 2)
+  retailPrice    Decimal?      @db.Decimal(10, 2)
+  vipPrice       Decimal?      @db.Decimal(10, 2)
+  taxRate        Decimal       @default(0.14) @db.Decimal(5, 4)
+  unitOfMeasure  String        @default("قطعة")
+  reorderLevel   Int           @default(5)
+  tags           String[]      @default([])
+  active         Boolean       @default(true)
+  deletedAt      DateTime?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  images          ProductImage[]
+  compatibilities ProductCompatibility[]
+  inventory       BranchInventory[]
+  orderItems      OrderItem[]
+  movements       StockMovement[]
+
+  @@index([partCategoryId])
+  @@index([brandId])
+  @@index([active])
+}
+
+model ProductImage {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
+  alt       String?
+  order     Int     @default(0)
+  isPrimary Boolean @default(false)
+
+  @@index([productId])
+}
+
+model ProductCompatibility {
+  id        String       @id @default(cuid())
+  productId String
+  product   Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
+  modelId   String
+  model     MachineModel @relation(fields: [modelId], references: [id], onDelete: Cascade)
+  note      String?
+
+  @@unique([productId, modelId])
+  @@index([modelId])
+}
+
+// ---------- Branches / employees / inventory ----------
+
+model Branch {
+  id           String    @id @default(cuid())
+  code         String    @unique
+  slug         String    @unique
+  nameAr       String
+  nameEn       String?
+  type         String    @default("retail")
+  phone        String?
+  whatsapp     String?
+  address      String
+  addressEn    String?
+  governorate  String
+  latitude     Float?
+  longitude    Float?
+  openingHours Json?
+  managerId    String?
+  manager      Employee? @relation("BranchManager", fields: [managerId], references: [id])
+  active       Boolean   @default(true)
+  displayOrder Int       @default(0)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  employees   Employee[]
+  assignments EmployeeBranchAssignment[]
+  inventory   BranchInventory[]
+  orders      Order[]
+
+  @@index([governorate])
+  @@index([active])
+}
+
+model Employee {
+  id             String   @id @default(cuid())
+  employeeNumber String   @unique
+  nameAr         String
+  nameEn         String?
+  nationalId     String?  @unique
+  phone          String
+  email          String?
+  role           String   @default("cashier")
+  branchId       String?
+  branch         Branch?  @relation(fields: [branchId], references: [id])
+  active         Boolean  @default(true)
+  createdAt      DateTime @default(now())
+
+  managedBranches   Branch[]                   @relation("BranchManager")
+  branchAssignments EmployeeBranchAssignment[]
+  orders            Order[]
+
+  @@index([role])
+}
+
+model EmployeeBranchAssignment {
+  id         String   @id @default(cuid())
+  employeeId String
+  employee   Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  branchId   String
+  branch     Branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  assignedAt DateTime @default(now())
+  isActive   Boolean  @default(true)
+
+  @@unique([employeeId, branchId])
+  @@index([branchId])
+}
+
+model BranchInventory {
+  id           String   @id @default(cuid())
+  branchId     String
+  branch       Branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  productId    String
+  product      Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quantity     Int      @default(0)
+  reorderLevel Int?
+  updatedAt    DateTime @updatedAt
+
+  @@unique([branchId, productId])
+  @@index([productId])
+}
+
+// ---------- Customers / orders ----------
+
+model Customer {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  name        String
+  phone       String   @unique
+  phone2      String?
+  email       String?
+  type        String   @default("retail")
+  address     String?
+  governorate String?
+  taxNumber   String?
+  creditLimit Decimal? @db.Decimal(10, 2)
+  notes       String?
+  createdAt   DateTime @default(now())
+
+  orders Order[]
+}
+
+model Order {
+  id            String    @id @default(cuid())
+  orderNumber   String    @unique
+  customerId    String?
+  customer      Customer? @relation(fields: [customerId], references: [id])
+  branchId      String?
+  branch        Branch?   @relation(fields: [branchId], references: [id])
+  employeeId    String?
+  employee      Employee? @relation(fields: [employeeId], references: [id])
+  status        String    @default("pending")
+  subtotal      Decimal   @default(0) @db.Decimal(10, 2)
+  taxAmount     Decimal   @default(0) @db.Decimal(10, 2)
+  discount      Decimal   @default(0) @db.Decimal(10, 2)
+  total         Decimal   @db.Decimal(10, 2)
+  paymentMethod String?
+  paymentStatus String    @default("unpaid")
+  notes         String?
+  deletedAt     DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  items OrderItem[]
+
+  @@index([customerId])
+  @@index([branchId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int
+  unitPrice Decimal @db.Decimal(10, 2)
+  discount  Decimal @default(0) @db.Decimal(10, 2)
+  lineTotal Decimal @db.Decimal(10, 2)
+  note      String?
+
+  @@index([orderId])
+  @@index([productId])
 }
