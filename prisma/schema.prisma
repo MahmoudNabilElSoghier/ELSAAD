@@ -1,0 +1,133 @@
+// ELSAAD — Phase 2A active schema.
+// Based on docs/PHASE-2-SCHEMA.prisma with recommended decisions applied:
+//   1B — no User model yet (Phase 2D); temporary ADMIN_API_KEY auth until then
+//   2C — Order.userId nullable, phone always required (guest checkout)
+//   3C — soft delete (deletedAt) on Product + Order only
+//   4B — prices exclusive of VAT: Product.taxRate default 0.14, Order.taxAmount stored
+//   5A — StockMovement added now for stock audit trail
+// Do NOT run `npx prisma migrate` until a DATABASE_URL is provisioned.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------- Contact form persistence (Phase 2A) ----------
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String
+  message   String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}
+
+// ---------- Product catalog (Phase 2B) ----------
+
+model Category {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  title       String
+  description String?
+  order       Int       @default(0)
+  createdAt   DateTime  @default(now())
+  products    Product[]
+}
+
+model Product {
+  id          String          @id @default(cuid())
+  slug        String          @unique
+  name        String
+  description String?
+  price       Decimal?        @db.Decimal(10, 2)
+  taxRate     Decimal         @default(0.14) @db.Decimal(5, 4)
+  stock       Int             @default(0)
+  imageUrl    String?
+  active      Boolean         @default(true)
+  deletedAt   DateTime?
+  categoryId  String
+  category    Category        @relation(fields: [categoryId], references: [id])
+  orderItems  OrderItem[]
+  movements   StockMovement[]
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@index([categoryId])
+  @@index([active])
+}
+
+// ---------- Static content mirrored from lib/content.ts ----------
+
+model Branch {
+  id      String @id @default(cuid())
+  slug    String @unique
+  name    String
+  address String
+  phone   String
+  hours   String
+  order   Int    @default(0)
+}
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  role      String?
+  text      String
+  rating    Int      @default(5)
+  published Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+// ---------- Orders (Phase 2C) ----------
+
+model Order {
+  id        String      @id @default(cuid())
+  customer  String
+  phone     String
+  address   String?
+  userId    String?
+  total     Decimal     @db.Decimal(10, 2)
+  taxAmount Decimal?    @db.Decimal(10, 2)
+  status    String      @default("pending")
+  deletedAt DateTime?
+  createdAt DateTime    @default(now())
+  items     OrderItem[]
+
+  @@index([phone])
+  @@index([status])
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id])
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int
+  unitPrice Decimal @db.Decimal(10, 2)
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+// ---------- Stock audit trail (decision 5A) ----------
+// Every Product.stock change must write a movement row here.
+// No UI in Phase 2 — data only. Consumed by Phase 3 ERP.
+
+model StockMovement {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  delta     Int
+  reason    String?
+  createdAt DateTime @default(now())
+
+  @@index([productId])
+  @@index([createdAt])
+}
