@@ -1,4 +1,18 @@
 import { z } from "zod";
+import type { OpeningHours } from "../types/branch";
+
+export const openingHoursSchema = z.record(z.string(), z.string());
+
+// Prisma Json columns arrive untyped (object | string | number | ...); an
+// invalid shape degrades to null instead of throwing so one bad row cannot
+// break an entire list response.
+export function parseOpeningHours(value: unknown): OpeningHours | null {
+  if (value == null) return null;
+  const parsed = openingHoursSchema.safeParse(value);
+  if (parsed.success) return parsed.data;
+  console.warn("[@elsaad/shared] Invalid Branch.openingHours JSON, coercing to null");
+  return null;
+}
 
 export const createBranchSchema = z.object({
   code: z.string().min(1, "كود الفرع مطلوب"),

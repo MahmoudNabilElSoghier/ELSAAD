@@ -1,5 +1,5 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { mockEmployees } from "@elsaad/shared";
+import { fromPrismaEmployee, mockEmployees } from "@elsaad/shared";
 import type { CreateEmployeeInput, Employee } from "@elsaad/shared";
 import { withDb, type DbResult } from "../common/with-db";
 import { toDomainError } from "../common/prisma-errors";
@@ -12,14 +12,16 @@ export class EmployeesService {
   getEmployees(): Promise<DbResult<Employee[]>> {
     return withDb(
       this.prisma,
-      (db) =>
-        db.employee.findMany({
+      async (db) => {
+        const rows = await db.employee.findMany({
           orderBy: { employeeNumber: "asc" },
           include: {
             branch: true,
             _count: { select: { orders: true, branchAssignments: true } },
           },
-        }),
+        });
+        return rows.map(fromPrismaEmployee);
+      },
       () => mockEmployees,
     );
   }
@@ -58,7 +60,7 @@ export class EmployeesService {
           active: input.active ?? true,
         },
       });
-      return { data: created, isMock: false };
+      return { data: fromPrismaEmployee(created), isMock: false };
     } catch (error) {
       toDomainError(error);
     }

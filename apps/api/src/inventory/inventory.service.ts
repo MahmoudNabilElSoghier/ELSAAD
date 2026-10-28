@@ -1,5 +1,5 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { isLowStock, mockInventory } from "@elsaad/shared";
+import { fromPrismaBranchInventory, isLowStock, mockInventory } from "@elsaad/shared";
 import type { BranchInventory } from "@elsaad/shared";
 import { withDb, type DbResult } from "../common/with-db";
 import { PrismaService } from "../prisma/prisma.service";
@@ -12,15 +12,17 @@ export class InventoryService {
   getInventory(branchId?: string): Promise<DbResult<BranchInventory[]>> {
     return withDb(
       this.prisma,
-      (db) =>
-        db.branchInventory.findMany({
+      async (db) => {
+        const rows = await db.branchInventory.findMany({
           where: branchId ? { branchId } : {},
           orderBy: [{ branchId: "asc" }, { quantity: "asc" }],
           include: {
             branch: true,
             product: { include: { brand: true } },
           },
-        }),
+        });
+        return rows.map(fromPrismaBranchInventory);
+      },
       () => {
         const rows = mockInventory.filter((item) => !branchId || item.branchId === branchId);
         return [...rows].sort((a, b) => a.quantity - b.quantity);

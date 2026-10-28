@@ -1,5 +1,5 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { mockCompatibilities, mockModels, mockProducts } from "@elsaad/shared";
+import { fromPrismaModel, mockCompatibilities, mockModels, mockProducts } from "@elsaad/shared";
 import type { MachineModel } from "@elsaad/shared";
 import { withDb, type DbResult } from "../common/with-db";
 import { PrismaService } from "../prisma/prisma.service";
@@ -11,15 +11,17 @@ export class ModelsService {
   getModels(brandSlug?: string): Promise<DbResult<MachineModel[]>> {
     return withDb(
       this.prisma,
-      (db) =>
-        db.machineModel.findMany({
+      async (db) => {
+        const rows = await db.machineModel.findMany({
           where: brandSlug ? { brand: { slug: brandSlug } } : {},
           orderBy: [{ category: "asc" }, { name: "asc" }],
           include: {
             brand: true,
             _count: { select: { compatibilities: true } },
           },
-        }),
+        });
+        return rows.map(fromPrismaModel);
+      },
       () => mockModels.filter((model) => !brandSlug || model.brand?.slug === brandSlug),
     );
   }
@@ -30,8 +32,8 @@ export class ModelsService {
   ): Promise<DbResult<MachineModel | null>> {
     return withDb(
       this.prisma,
-      (db) =>
-        db.machineModel.findFirst({
+      async (db) => {
+        const model = await db.machineModel.findFirst({
           where: { slug: modelSlug, brand: { slug: brandSlug } },
           include: {
             brand: true,
@@ -41,7 +43,9 @@ export class ModelsService {
               },
             },
           },
-        }),
+        });
+        return model ? fromPrismaModel(model) : null;
+      },
       () => {
         const model = mockModels.find(
           (item) => item.slug === modelSlug && item.brand?.slug === brandSlug,

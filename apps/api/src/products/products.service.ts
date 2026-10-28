@@ -1,5 +1,11 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { mockCompatibilities, mockModels, mockProducts, totalStock } from "@elsaad/shared";
+import {
+  fromPrismaProduct,
+  mockCompatibilities,
+  mockModels,
+  mockProducts,
+  totalStock,
+} from "@elsaad/shared";
 import type { Product } from "@elsaad/shared";
 import { withDb, type DbResult } from "../common/with-db";
 import { toDomainError } from "../common/prisma-errors";
@@ -41,19 +47,6 @@ export interface ProductBody {
   tags: string[];
   active: boolean;
 }
-
-const toNumber = (value: number | string | null | undefined): number | null =>
-  value == null ? null : Number(value);
-
-// Prisma Decimal price fields → plain numbers (parity with web services).
-const mapProduct = (product: Product): Product => ({
-  ...product,
-  costPrice: toNumber(product.costPrice),
-  wholesalePrice: toNumber(product.wholesalePrice),
-  retailPrice: toNumber(product.retailPrice),
-  vipPrice: toNumber(product.vipPrice),
-  taxRate: Number(product.taxRate),
-});
 
 function buildWhere(filter: ProductFilter): Record<string, unknown> {
   const where: Record<string, unknown> = { deletedAt: null };
@@ -105,7 +98,7 @@ export class ProductsService {
           }),
           db.product.count({ where }),
         ]);
-        return { items: items.map(mapProduct), total };
+        return { items: items.map(fromPrismaProduct), total };
       },
       () => {
         const filtered = mockProducts.filter((product) => matchesMock(product, filter));
@@ -141,7 +134,7 @@ export class ProductsService {
             inventory: { include: { branch: true } },
           },
         });
-        return product ? mapProduct(product) : null;
+        return product ? fromPrismaProduct(product) : null;
       },
       () => {
         const product = mockProducts.find(
@@ -175,7 +168,7 @@ export class ProductsService {
             images: { orderBy: { order: "asc" } },
           },
         });
-        return product ? mapProduct(product) : null;
+        return product ? fromPrismaProduct(product) : null;
       },
       () => mockProducts.find((item) => item.id === id) ?? null,
     );
@@ -190,7 +183,7 @@ export class ProductsService {
           include: { inventory: true },
         });
         return products
-          .map(mapProduct)
+          .map(fromPrismaProduct)
           .filter((product: Product) => totalStock(product) <= product.reorderLevel);
       },
       () =>
@@ -218,7 +211,7 @@ export class ProductsService {
     }
     try {
       const created = await this.prisma.get().product.create({ data: input });
-      return { data: mapProduct(created), isMock: false };
+      return { data: fromPrismaProduct(created), isMock: false };
     } catch (error) {
       toDomainError(error);
     }
@@ -240,7 +233,7 @@ export class ProductsService {
     }
     try {
       const updated = await this.prisma.get().product.update({ where: { id }, data: input });
-      return { data: mapProduct(updated), isMock: false };
+      return { data: fromPrismaProduct(updated), isMock: false };
     } catch (error) {
       toDomainError(error);
     }

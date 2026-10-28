@@ -1,6 +1,6 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { mockOrders } from "@elsaad/shared";
-import type { Order, OrderItem } from "@elsaad/shared";
+import { fromPrismaOrder, mockOrders } from "@elsaad/shared";
+import type { Order } from "@elsaad/shared";
 import { withDb, type DbResult } from "../common/with-db";
 import { PrismaService } from "../prisma/prisma.service";
 
@@ -17,29 +17,6 @@ export interface OrderPage {
   pageSize: number;
   totalPages: number;
 }
-
-const toNumber = (value: number | string | null | undefined): number | null =>
-  value == null ? null : Number(value);
-
-// Prisma Decimal → plain numbers (parity with web services).
-const mapOrderItem = (item: OrderItem): OrderItem => ({
-  ...item,
-  unitPrice: Number(item.unitPrice),
-  discount: Number(item.discount),
-  lineTotal: Number(item.lineTotal),
-});
-
-const mapOrder = (order: Order): Order => ({
-  ...order,
-  subtotal: Number(order.subtotal),
-  taxAmount: Number(order.taxAmount),
-  discount: Number(order.discount),
-  total: Number(order.total),
-  items: order.items?.map(mapOrderItem),
-  customer: order.customer
-    ? { ...order.customer, creditLimit: toNumber(order.customer.creditLimit) }
-    : order.customer,
-});
 
 @Injectable()
 export class OrdersService {
@@ -68,7 +45,7 @@ export class OrdersService {
           }),
           db.order.count({ where }),
         ]);
-        return { items: items.map(mapOrder), total };
+        return { items: items.map(fromPrismaOrder), total };
       },
       () => {
         const filtered = mockOrders
@@ -103,7 +80,7 @@ export class OrdersService {
             items: { include: { product: { include: { brand: true } } } },
           },
         });
-        return order ? mapOrder(order) : null;
+        return order ? fromPrismaOrder(order) : null;
       },
       () => mockOrders.find((item) => item.id === id) ?? null,
     );
