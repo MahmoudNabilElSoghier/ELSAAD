@@ -194,9 +194,15 @@ const parseHours = (text: string): Record<string, string> => {
   return { [key]: `${open} - ${close}` };
 };
 
+const BRANCH_CODE_PARTS: Record<string, string> = {
+  cairo: "CAI",
+  giza: "GIZ",
+  alex: "ALX",
+};
+
 const buildBranches = (): BranchOut[] =>
   contentBranches.map((branch, index) => ({
-    code: `BR-${branch.id.slice(0, 3).toUpperCase()}-${String(index + 1).padStart(2, "0")}`,
+    code: `BR-${BRANCH_CODE_PARTS[branch.id] ?? branch.id.slice(0, 3).toUpperCase()}-${String(index + 1).padStart(2, "0")}`,
     slug: branch.id,
     nameAr: branch.name,
     nameEn: null,
