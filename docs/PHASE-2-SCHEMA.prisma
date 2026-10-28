@@ -1,0 +1,105 @@
+// DRAFT — Phase 2 schema proposal. Not yet active.
+// Once approved, this becomes prisma/schema.prisma.
+// do NOT run `npx prisma migrate` until this is reviewed and moved.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------- Phase 2A: Contact form persistence ----------
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String
+  message   String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}
+
+// ---------- Phase 2B: Product catalog ----------
+
+model Category {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  title       String
+  description String?
+  order       Int       @default(0)
+  createdAt   DateTime  @default(now())
+  products    Product[]
+}
+
+model Product {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  name        String
+  description String?
+  price       Decimal?  @db.Decimal(10, 2)
+  stock       Int       @default(0)
+  imageUrl    String?
+  active      Boolean   @default(true)
+  categoryId  String
+  category    Category  @relation(fields: [categoryId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([categoryId])
+  @@index([active])
+}
+
+// ---------- Static content mirrored from lib/content.ts ----------
+
+model Branch {
+  id      String  @id @default(cuid())
+  slug    String  @unique
+  name    String
+  address String
+  phone   String
+  hours   String
+  order   Int     @default(0)
+}
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  role      String?
+  text      String
+  rating    Int      @default(5)
+  published Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+// ---------- Phase 2C: Orders (placeholder, refined later) ----------
+
+model Order {
+  id         String      @id @default(cuid())
+  customer   String
+  phone      String
+  address    String?
+  total      Decimal     @db.Decimal(10, 2)
+  status     String      @default("pending")
+  createdAt  DateTime    @default(now())
+  items      OrderItem[]
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id])
+  productId String
+  quantity  Int
+  unitPrice Decimal @db.Decimal(10, 2)
+}
+
+// ---------- Questions for review ----------
+// 1. Do we need User model now, or defer to Phase 2D (auth)?
+// 2. Should Order be tied to a customer User, or keep phone-based?
+// 3. Do we need soft-delete (deletedAt) instead of hard delete?
+// 4. Are prices inclusive or exclusive of tax?
+// 5. Do we need a StockMovement model for ERP, or defer to Phase 3?
