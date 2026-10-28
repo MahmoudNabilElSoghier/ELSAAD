@@ -26,8 +26,9 @@ export function Footer() {
 
           {/* Quick Links */}
           <div className="space-y-4">
-            <h4 className="text-white font-bold text-base">روابط سريعة</h4>
-            <ul className="space-y-2.5">
+            <h3 className="text-white font-bold text-base">روابط سريعة</h3>
+            <nav aria-label="روابط سريعة">
+              <ul className="space-y-2.5">
               {navigation.map((item) => (
                 <li key={item.href + item.label}>
                   <Link
@@ -38,12 +39,13 @@ export function Footer() {
                   </Link>
                 </li>
               ))}
-            </ul>
+              </ul>
+            </nav>
           </div>
 
           {/* Social & Contact */}
           <div className="space-y-4">
-            <h4 className="text-white font-bold text-base">تابعنا</h4>
+            <h3 className="text-white font-bold text-base">تابعنا</h3>
             <div className="flex items-center gap-3">
               <a
                 href={footer.social.whatsapp}

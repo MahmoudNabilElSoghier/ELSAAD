@@ -27,7 +27,7 @@ export function Header() {
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-8">
+          <nav aria-label="القائمة الرئيسية" className="hidden md:flex items-center gap-8">
             {navigation.map((item) => (
               <Link
                 key={item.href + item.label}
@@ -77,7 +77,7 @@ export function Header() {
           id="mobile-menu"
           className="md:hidden bg-card border-b border-border px-4 pt-4 pb-6 space-y-4 animate-in fade-in slide-in-from-top-2 duration-200"
         >
-          <nav className="flex flex-col space-y-3">
+          <nav aria-label="القائمة الرئيسية" className="flex flex-col space-y-3">
             {navigation.map((item) => (
               <Link
                 key={item.href + item.label}
