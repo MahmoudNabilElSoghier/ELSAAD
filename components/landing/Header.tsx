@@ -16,7 +16,7 @@ export function Header() {
       <Container size="xl" as="div">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <Link href="#home" className="flex flex-col">
+          <Link href="/" className="flex flex-col">
             {/* TODO: replace with real SVG logo */}
             <span className="text-xl md:text-2xl font-extrabold tracking-wider text-accent">
               ELSAAD

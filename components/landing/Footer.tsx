@@ -11,7 +11,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           {/* Company Info */}
           <div className="md:col-span-2 space-y-4">
-            <Link href="#home" className="inline-block">
+            <Link href="/" className="inline-block">
               <span className="text-2xl font-extrabold tracking-wider text-accent">
                 ELSAAD
               </span>
