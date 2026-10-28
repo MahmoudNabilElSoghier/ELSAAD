@@ -86,10 +86,11 @@ export function Contact() {
               />
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium text-white">
+                <label htmlFor="contact-message" className="text-sm font-medium text-white">
                   {contactForm.fields.message.label}
                 </label>
                 <textarea
+                  id="contact-message"
                   rows={4}
                   placeholder={contactForm.fields.message.placeholder}
                   className="bg-bg border border-border rounded-lg px-4 py-3 text-white placeholder:text-muted focus:border-accent focus:outline-none resize-none"
