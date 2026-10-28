@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: elsaad
       POSTGRES_DB: elsaad
     ports:
-      - "5432:5432"
+      - "5434:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:

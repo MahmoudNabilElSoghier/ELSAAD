@@ -45,8 +45,12 @@ pnpm dev            # turbo: apps/api (:4000) + apps/web (:3000)
 Optional local services (DB/storage):
 
 ```bash
-docker compose up -d          # postgres :5432, redis :6380, minio :9010/:9011
+docker compose up -d          # postgres :5434, redis :6380, minio :9010/:9011
 ```
+
+> **Ports:** ELSAAD uses 5434 (Postgres), 6380 (Redis) and 9010–9011 (MinIO)
+> to avoid conflicts with other local stacks — native PostgreSQL 17 on 5432
+> and ChronicleX on 5433/6379/9000-9001.
 
 - Web: http://localhost:3000
 - API: http://localhost:4000/api/health — Swagger: `/api/docs`
