@@ -9,7 +9,7 @@ type ButtonProps = {
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 const variantClasses = {
-  primary: "bg-accent text-white hover:bg-accent/90",
+  primary: "bg-accent-strong text-white hover:bg-accent-strong/90",
   secondary: "border border-border bg-card text-white hover:border-accent",
   ghost: "text-white hover:bg-card",
 } as const;
