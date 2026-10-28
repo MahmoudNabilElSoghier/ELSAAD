@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { mockCompatibilities, mockModels, mockProducts } from "@elsaad/shared";
 import type { MachineModel } from "@elsaad/shared";
 import { withDb, type DbResult } from "../common/with-db";
@@ -6,7 +6,7 @@ import { PrismaService } from "../prisma/prisma.service";
 
 @Injectable()
 export class ModelsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
 
   getModels(brandSlug?: string): Promise<DbResult<MachineModel[]>> {
     return withDb(

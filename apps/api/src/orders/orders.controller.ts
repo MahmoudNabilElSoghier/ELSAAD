@@ -1,11 +1,11 @@
-import { Controller, Get, NotFoundException, Param, Query } from "@nestjs/common";
+import { Controller, Get, Inject, NotFoundException, Param, Query } from "@nestjs/common";
 import { ApiOperation, ApiParam, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { OrdersService, type OrderFilter } from "./orders.service";
 
 @ApiTags("orders")
 @Controller("orders")
 export class OrdersController {
-  constructor(private readonly orders: OrdersService) {}
+  constructor(@Inject(OrdersService) private readonly orders: OrdersService) {}
 
   @Get()
   @ApiQuery({ name: "status", required: false })

@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Inject,
   NotFoundException,
   Param,
   Post,
@@ -47,7 +48,7 @@ function normalize(values: ProductFormValues): ProductBody {
 @ApiTags("products")
 @Controller("products")
 export class ProductsController {
-  constructor(private readonly products: ProductsService) {}
+  constructor(@Inject(ProductsService) private readonly products: ProductsService) {}
 
   @Get()
   @ApiQuery({ name: "q", required: false })

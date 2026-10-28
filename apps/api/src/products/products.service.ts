@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { mockCompatibilities, mockModels, mockProducts } from "@elsaad/shared";
 import type { Product } from "@elsaad/shared";
 import { withDb, type DbResult } from "../common/with-db";
@@ -90,7 +90,7 @@ function matchesMock(product: Product, filter: ProductFilter): boolean {
 
 @Injectable()
 export class ProductsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
 
   async getProducts(filter: ProductFilter = {}): Promise<DbResult<ProductPage>> {
     const page = Math.max(1, filter.page ?? 1);
@@ -221,7 +221,7 @@ export class ProductsService {
       };
     }
     try {
-      const created = await this.prisma.product.create({ data: input });
+      const created = await this.prisma.get().product.create({ data: input });
       return { data: mapProduct(created), isMock: false };
     } catch (error) {
       toDomainError(error);
@@ -243,7 +243,7 @@ export class ProductsService {
       };
     }
     try {
-      const updated = await this.prisma.product.update({ where: { id }, data: input });
+      const updated = await this.prisma.get().product.update({ where: { id }, data: input });
       return { data: mapProduct(updated), isMock: false };
     } catch (error) {
       toDomainError(error);
@@ -256,7 +256,7 @@ export class ProductsService {
     }
     try {
       // Soft delete: the schema keeps deletedAt for audit/restore.
-      await this.prisma.product.update({
+      await this.prisma.get().product.update({
         where: { id },
         data: { deletedAt: new Date() },
       });

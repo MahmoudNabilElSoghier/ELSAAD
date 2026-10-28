@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { mockCategories } from "@elsaad/shared";
 import type { PartCategory } from "@elsaad/shared";
 import { withDb, type DbResult } from "../common/with-db";
@@ -15,7 +15,7 @@ export interface CategoryBody {
 
 @Injectable()
 export class CategoriesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
 
   getCategories(): Promise<DbResult<PartCategory[]>> {
     return withDb(
@@ -72,7 +72,7 @@ export class CategoriesService {
       };
     }
     try {
-      const created = await this.prisma.partCategory.create({
+      const created = await this.prisma.get().partCategory.create({
         data: {
           name: input.name,
           nameAr: input.nameAr,
@@ -104,7 +104,7 @@ export class CategoriesService {
       };
     }
     try {
-      const updated = await this.prisma.partCategory.update({
+      const updated = await this.prisma.get().partCategory.update({
         where: { id },
         data: {
           name: input.name,
@@ -125,7 +125,7 @@ export class CategoriesService {
       return { data: { id }, isMock: true };
     }
     try {
-      await this.prisma.partCategory.delete({ where: { id } });
+      await this.prisma.get().partCategory.delete({ where: { id } });
       return { data: { id }, isMock: false };
     } catch (error) {
       toDomainError(error);

@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { mockInventory } from "@elsaad/shared";
 import type { BranchInventory } from "@elsaad/shared";
 import { withDb, type DbResult } from "../common/with-db";
@@ -14,7 +14,7 @@ export function isLowStock(item: BranchInventory): boolean {
 
 @Injectable()
 export class InventoryService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
 
   // Inventory can be viewed globally or scoped to one branch (admin selector).
   getInventory(branchId?: string): Promise<DbResult<BranchInventory[]>> {

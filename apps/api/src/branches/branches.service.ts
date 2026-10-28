@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { mockBranches, mockInventory } from "@elsaad/shared";
 import type { Branch, CreateBranchInput } from "@elsaad/shared";
 import { withDb, type DbResult } from "../common/with-db";
@@ -7,7 +7,7 @@ import { PrismaService } from "../prisma/prisma.service";
 
 @Injectable()
 export class BranchesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
 
   getBranches(): Promise<DbResult<Branch[]>> {
     return withDb(
@@ -74,7 +74,7 @@ export class BranchesService {
       };
     }
     try {
-      const created = await this.prisma.branch.create({
+      const created = await this.prisma.get().branch.create({
         data: {
           code: input.code,
           slug: input.slug,

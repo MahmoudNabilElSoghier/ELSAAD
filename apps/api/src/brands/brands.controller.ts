@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Inject,
   NotFoundException,
   Param,
   Post,
@@ -25,7 +26,7 @@ const brandBody = () => new ZodValidationPipe(brandFormSchema);
 @ApiTags("brands")
 @Controller("brands")
 export class BrandsController {
-  constructor(private readonly brands: BrandsService) {}
+  constructor(@Inject(BrandsService) private readonly brands: BrandsService) {}
 
   @Get()
   @ApiOperation({ summary: "List brands (ordered, with model/product counts)" })

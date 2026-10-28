@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { mockOrders } from "@elsaad/shared";
 import type { Order, OrderItem } from "@elsaad/shared";
 import { withDb, type DbResult } from "../common/with-db";
@@ -43,7 +43,7 @@ const mapOrder = (order: Order): Order => ({
 
 @Injectable()
 export class OrdersService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
 
   async getOrders(filter: OrderFilter = {}): Promise<DbResult<OrderPage>> {
     const page = Math.max(1, filter.page ?? 1);

@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { mockEmployees } from "@elsaad/shared";
 import type { CreateEmployeeInput, Employee } from "@elsaad/shared";
 import { withDb, type DbResult } from "../common/with-db";
@@ -7,7 +7,7 @@ import { PrismaService } from "../prisma/prisma.service";
 
 @Injectable()
 export class EmployeesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
 
   getEmployees(): Promise<DbResult<Employee[]>> {
     return withDb(
@@ -45,7 +45,7 @@ export class EmployeesService {
       };
     }
     try {
-      const created = await this.prisma.employee.create({
+      const created = await this.prisma.get().employee.create({
         data: {
           employeeNumber: input.employeeNumber,
           nameAr: input.nameAr,

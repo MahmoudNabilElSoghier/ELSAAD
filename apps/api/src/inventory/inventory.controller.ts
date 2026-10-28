@@ -1,11 +1,11 @@
-import { Controller, Get, Query } from "@nestjs/common";
+import { Controller, Get, Inject, Query } from "@nestjs/common";
 import { ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { InventoryService } from "./inventory.service";
 
 @ApiTags("inventory")
 @Controller("inventory")
 export class InventoryController {
-  constructor(private readonly inventory: InventoryService) {}
+  constructor(@Inject(InventoryService) private readonly inventory: InventoryService) {}
 
   @Get()
   @ApiQuery({ name: "branchId", required: false })

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Inject, Post, UseGuards } from "@nestjs/common";
 import { ApiHeader, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { createEmployeeSchema, type CreateEmployeeInput } from "@elsaad/shared";
 import { AdminApiKeyGuard } from "../common/guards/admin-api-key.guard";
@@ -8,7 +8,7 @@ import { EmployeesService } from "./employees.service";
 @ApiTags("employees")
 @Controller("employees")
 export class EmployeesController {
-  constructor(private readonly employees: EmployeesService) {}
+  constructor(@Inject(EmployeesService) private readonly employees: EmployeesService) {}
 
   @Get()
   @ApiOperation({ summary: "List employees (ordered by employee number)" })

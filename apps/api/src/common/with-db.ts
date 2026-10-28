@@ -1,3 +1,4 @@
+import type { PrismaClient } from "@prisma/client";
 import type { PrismaService } from "../prisma/prisma.service";
 
 export interface DbResult<T> {
@@ -14,14 +15,17 @@ export interface DbResult<T> {
 // DATABASE_URL is real — reason: silent fallback can mask DB outages.
 export async function withDb<T>(
   prisma: PrismaService,
-  run: (db: PrismaService) => Promise<T>,
+  run: (db: PrismaClient) => Promise<T>,
   fallback: () => Promise<T> | T,
 ): Promise<DbResult<T>> {
   if (!process.env.DATABASE_URL) {
     return { data: await fallback(), isMock: true };
   }
   try {
-    return { data: await run(prisma), isMock: false };
+    // prisma.get() constructs the client lazily — if `prisma generate` has not
+    // run yet the constructor throws, which is caught here and served the
+    // mock fallback instead of crashing the request (or app boot).
+    return { data: await run(prisma.get()), isMock: false };
   } catch (error) {
     console.error("[api] DB unavailable, serving mock fallback:", error);
     return { data: await fallback(), isMock: true };

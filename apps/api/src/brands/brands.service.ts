@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { mockBrands, mockModels } from "@elsaad/shared";
 import type { Brand, BrandFormValues } from "@elsaad/shared";
 import { withDb, type DbResult } from "../common/with-db";
@@ -7,7 +7,7 @@ import { PrismaService } from "../prisma/prisma.service";
 
 @Injectable()
 export class BrandsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
 
   getBrands(): Promise<DbResult<Brand[]>> {
     return withDb(
@@ -63,8 +63,8 @@ export class BrandsService {
       };
     }
     try {
-      const order = (await this.prisma.brand.count()) + 1;
-      const created = await this.prisma.brand.create({
+      const order = (await this.prisma.get().brand.count()) + 1;
+      const created = await this.prisma.get().brand.create({
         data: {
           name: input.name,
           nameAr: input.nameAr ?? null,
@@ -99,7 +99,7 @@ export class BrandsService {
       };
     }
     try {
-      const updated = await this.prisma.brand.update({
+      const updated = await this.prisma.get().brand.update({
         where: { id },
         data: {
           name: input.name,
@@ -120,7 +120,7 @@ export class BrandsService {
       return { data: { id }, isMock: true };
     }
     try {
-      await this.prisma.brand.delete({ where: { id } });
+      await this.prisma.get().brand.delete({ where: { id } });
       return { data: { id }, isMock: false };
     } catch (error) {
       toDomainError(error);

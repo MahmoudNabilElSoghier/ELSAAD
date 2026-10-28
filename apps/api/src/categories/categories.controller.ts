@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Inject,
   NotFoundException,
   Param,
   Post,
@@ -27,7 +28,9 @@ const categoryBody = () => new ZodValidationPipe(categoryBodySchema);
 @ApiTags("categories")
 @Controller("categories")
 export class CategoriesController {
-  constructor(private readonly categories: CategoriesService) {}
+  constructor(
+    @Inject(CategoriesService) private readonly categories: CategoriesService,
+  ) {}
 
   @Get()
   @ApiOperation({ summary: "Flat part-category list (ordered)" })

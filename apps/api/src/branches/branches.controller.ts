@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Inject,
   NotFoundException,
   Param,
   Post,
@@ -16,7 +17,7 @@ import { BranchesService } from "./branches.service";
 @ApiTags("branches")
 @Controller("branches")
 export class BranchesController {
-  constructor(private readonly branches: BranchesService) {}
+  constructor(@Inject(BranchesService) private readonly branches: BranchesService) {}
 
   @Get()
   @ApiOperation({ summary: "List branches (ordered, with counts)" })
