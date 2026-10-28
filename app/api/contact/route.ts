@@ -1,8 +1,34 @@
 import { NextResponse } from "next/server";
 import { contactSchema } from "@/lib/schemas/contact";
 import { sendContactNotification } from "@/lib/email";
+import { rateLimit } from "@/lib/rate-limit";
 
 export async function POST(request: Request) {
+  // Extract IP (Vercel sets x-forwarded-for)
+  const ip =
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    request.headers.get("x-real-ip") ||
+    "unknown";
+
+  // 5 submissions per hour per IP
+  const limit = rateLimit(`contact:${ip}`, 5, 60 * 60 * 1000);
+
+  if (!limit.allowed) {
+    return NextResponse.json(
+      {
+        success: false,
+        error: `عدد المحاولات كبير. حاول تاني بعد ${limit.resetInSeconds} ثانية.`,
+      },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": String(limit.resetInSeconds),
+          "X-RateLimit-Remaining": "0",
+        },
+      }
+    );
+  }
+
   try {
     const body = await request.json();
     const result = contactSchema.safeParse(body);

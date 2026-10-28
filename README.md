@@ -54,6 +54,8 @@ console without touching a database — the deployed site is unaffected.
 
 ⚠️ Contact form requires `RESEND_API_KEY` + `CONTACT_EMAIL_TO` env vars to actually deliver messages. Without them, submissions return success but are logged only. Configure before public launch.
 
+Rate limiting on `/api/contact` is in-memory per-instance. On Vercel serverless, the counter resets on cold start. Sufficient to stop casual bots, not sophisticated attacks. Upgrade to Vercel KV / Upstash Redis if abuse becomes a problem.
+
 `npm audit` reports 6 vulnerabilities (4 high, 2 moderate) as of 2026-10-28. No code action now — scheduled for the next minor-upgrade checkpoint. The 2nd moderate is `@next/third-parties` merely propagating the known `next` advisory below.
 
 - **postcss <= 8.5.22** (high) — advisories against the copy bundled inside `next` (`node_modules/next/node_modules/postcss`):
