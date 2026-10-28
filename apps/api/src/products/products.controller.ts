@@ -1,0 +1,130 @@
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  NotFoundException,
+  Param,
+  Post,
+  Put,
+  Query,
+  UseGuards,
+} from "@nestjs/common";
+import { ApiHeader, ApiOperation, ApiParam, ApiQuery, ApiTags } from "@nestjs/swagger";
+import { productFormSchema, type ProductFormValues } from "@elsaad/shared";
+import { AdminApiKeyGuard } from "../common/guards/admin-api-key.guard";
+import { ZodValidationPipe } from "../common/pipes/zod-validation.pipe";
+import { ProductsService, type ProductBody, type ProductFilter } from "./products.service";
+
+const productBody = () => new ZodValidationPipe(productFormSchema);
+
+function normalize(values: ProductFormValues): ProductBody {
+  return {
+    code: values.code,
+    name: values.name,
+    nameEn: values.nameEn || null,
+    description: values.description || null,
+    oemCode: values.oemCode || null,
+    brandId: values.brandId || null,
+    partCategoryId: values.partCategoryId || null,
+    costPrice: values.costPrice ? Number(values.costPrice) : null,
+    wholesalePrice: values.wholesalePrice ? Number(values.wholesalePrice) : null,
+    retailPrice: values.retailPrice ? Number(values.retailPrice) : null,
+    vipPrice: values.vipPrice ? Number(values.vipPrice) : null,
+    taxRate: values.taxRate ? Number(values.taxRate) : 0.14,
+    unitOfMeasure: values.unitOfMeasure,
+    reorderLevel: values.reorderLevel ? Number(values.reorderLevel) : 0,
+    tags: (values.tags ?? "")
+      .split(/[،,]/)
+      .map((tag) => tag.trim())
+      .filter(Boolean),
+    active: values.active,
+    // TODO(Phase 3): supplierId — reason: suppliers have no service/UI yet
+    // (schema column exists), so the field is intentionally not in this form.
+  };
+}
+
+@ApiTags("products")
+@Controller("products")
+export class ProductsController {
+  constructor(private readonly products: ProductsService) {}
+
+  @Get()
+  @ApiQuery({ name: "q", required: false })
+  @ApiQuery({ name: "brandSlug", required: false })
+  @ApiQuery({ name: "categorySlug", required: false })
+  @ApiQuery({ name: "page", required: false })
+  @ApiQuery({ name: "pageSize", required: false })
+  @ApiQuery({ name: "includeInactive", required: false })
+  @ApiOperation({ summary: "Paginated product list with filters" })
+  getProducts(
+    @Query("q") q?: string,
+    @Query("brandSlug") brandSlug?: string,
+    @Query("categorySlug") categorySlug?: string,
+    @Query("page") page?: string,
+    @Query("pageSize") pageSize?: string,
+    @Query("includeInactive") includeInactive?: string,
+  ) {
+    const filter: ProductFilter = {
+      q: q || undefined,
+      brandSlug: brandSlug || undefined,
+      categorySlug: categorySlug || undefined,
+      page: page ? Number(page) : undefined,
+      pageSize: pageSize ? Number(pageSize) : undefined,
+      includeInactive: includeInactive === "true" || includeInactive === "1",
+    };
+    return this.products.getProducts(filter);
+  }
+
+  @Get("low-stock")
+  @ApiOperation({ summary: "Active products at or below their reorder level" })
+  getLowStock() {
+    return this.products.getLowStockProducts();
+  }
+
+  @Get("code/:code")
+  @ApiParam({ name: "code", description: "Product code (part number)" })
+  @ApiOperation({ summary: "Public product detail by code" })
+  async getByCode(@Param("code") code: string) {
+    const result = await this.products.getProductByCode(code);
+    if (!result.data) throw new NotFoundException(`Product code "${code}" not found`);
+    return result;
+  }
+
+  @Get(":id")
+  @ApiParam({ name: "id" })
+  @ApiOperation({ summary: "Admin product detail by id (incl. inactive rows)" })
+  async getById(@Param("id") id: string) {
+    const result = await this.products.getProductById(id);
+    if (!result.data) throw new NotFoundException(`Product "${id}" not found`);
+    return result;
+  }
+
+  @Post()
+  @UseGuards(AdminApiKeyGuard)
+  @ApiHeader({ name: "x-admin-api-key", required: false })
+  @ApiOperation({ summary: "Create product (admin, requires x-admin-api-key)" })
+  create(@Body(productBody()) body: ProductFormValues) {
+    return this.products.create(normalize(body));
+  }
+
+  @Put(":id")
+  @UseGuards(AdminApiKeyGuard)
+  @ApiHeader({ name: "x-admin-api-key", required: false })
+  @ApiParam({ name: "id" })
+  @ApiOperation({ summary: "Update product (admin, requires x-admin-api-key)" })
+  update(@Param("id") id: string, @Body(productBody()) body: ProductFormValues) {
+    return this.products.update(id, normalize(body));
+  }
+
+  @Delete(":id")
+  @UseGuards(AdminApiKeyGuard)
+  @ApiHeader({ name: "x-admin-api-key", required: false })
+  @ApiParam({ name: "id" })
+  @ApiOperation({
+    summary: "Soft-delete product (admin, requires x-admin-api-key)",
+  })
+  remove(@Param("id") id: string) {
+    return this.products.remove(id);
+  }
+}
