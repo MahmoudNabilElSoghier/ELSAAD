@@ -1,3 +1,4 @@
+import { mockCompatibilities, mockModels, mockProducts } from "@/lib/mock";
 import type { MachineModel } from "./types";
 import { withDb } from "./withDb";
 
@@ -12,7 +13,7 @@ export async function getModels(brandSlug?: string): Promise<MachineModel[]> {
           _count: { select: { compatibilities: true } },
         },
       }),
-    () => []
+    () => mockModels.filter((model) => !brandSlug || model.brand?.slug === brandSlug)
   );
 }
 
@@ -33,6 +34,20 @@ export async function getModelBySlug(
           },
         },
       }),
-    () => null
+    () => {
+      const model = mockModels.find(
+        (item) => item.slug === modelSlug && item.brand?.slug === brandSlug
+      );
+      if (!model) return null;
+      return {
+        ...model,
+        compatibilities: mockCompatibilities
+          .filter((compat) => compat.modelId === model.id)
+          .map((compat) => ({
+            ...compat,
+            product: mockProducts.find((product) => product.id === compat.productId),
+          })),
+      };
+    }
   );
 }

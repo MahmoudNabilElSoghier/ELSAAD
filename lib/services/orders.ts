@@ -1,3 +1,4 @@
+import { mockOrders } from "@/lib/mock";
 import type { Order, OrderItem } from "./types";
 import { withDb } from "./withDb";
 
@@ -62,7 +63,13 @@ export async function getOrders(filter: OrderFilter = {}): Promise<OrderPage> {
       ]);
       return { items: items.map(mapOrder), total };
     },
-    async () => ({ items: [], total: 0 })
+    async () => {
+      const filtered = mockOrders
+        .filter((order) => !filter.status || order.status === filter.status)
+        .sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+      const start = (page - 1) * pageSize;
+      return { items: filtered.slice(start, start + pageSize), total: filtered.length };
+    }
   );
   return {
     items: data.items,
@@ -87,6 +94,6 @@ export async function getOrderById(id: string): Promise<Order | null> {
       });
       return order ? mapOrder(order) : null;
     },
-    async () => null
+    async () => mockOrders.find((item) => item.id === id) ?? null
   );
 }

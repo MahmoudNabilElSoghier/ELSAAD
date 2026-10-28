@@ -1,3 +1,4 @@
+import { mockCategories } from "@/lib/mock";
 import type { PartCategory } from "./types";
 import { withDb } from "./withDb";
 
@@ -8,7 +9,7 @@ export async function getPartCategories(): Promise<PartCategory[]> {
         orderBy: { order: "asc" },
         include: { _count: { select: { products: true } } },
       }),
-    () => []
+    () => mockCategories
   );
 }
 

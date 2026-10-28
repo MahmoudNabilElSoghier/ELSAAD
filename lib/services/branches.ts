@@ -1,3 +1,4 @@
+import { mockBranches, mockInventory } from "@/lib/mock";
 import type { Branch } from "./types";
 import { withDb } from "./withDb";
 
@@ -10,7 +11,7 @@ export async function getBranches(): Promise<Branch[]> {
           _count: { select: { inventory: true, employees: true, orders: true } },
         },
       }),
-    () => []
+    () => mockBranches
   );
 }
 
@@ -24,6 +25,13 @@ export async function getBranchBySlug(slug: string): Promise<Branch | null> {
           _count: { select: { inventory: true, employees: true, orders: true } },
         },
       }),
-    () => null
+    () => {
+      const branch = mockBranches.find((item) => item.slug === slug);
+      if (!branch) return null;
+      return {
+        ...branch,
+        inventory: mockInventory.filter((item) => item.branchId === branch.id),
+      };
+    }
   );
 }

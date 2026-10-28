@@ -1,3 +1,4 @@
+import { mockInventory } from "@/lib/mock";
 import type { BranchInventory } from "./types";
 import { withDb } from "./withDb";
 
@@ -13,7 +14,10 @@ export async function getInventory(branchId?: string): Promise<BranchInventory[]
           product: { include: { brand: true } },
         },
       }),
-    () => []
+    async () => {
+      const rows = mockInventory.filter((item) => !branchId || item.branchId === branchId);
+      return [...rows].sort((a, b) => a.quantity - b.quantity);
+    }
   );
 }
 

@@ -1,3 +1,4 @@
+import { mockCompatibilities, mockModels, mockProducts } from "@/lib/mock";
 import type { Product } from "./types";
 import { withDb } from "./withDb";
 
@@ -35,7 +36,7 @@ export function totalStock(product: Product): number {
 }
 
 // Prisma-specific where builder — only used on the DB path (mock filtering is
-// done separately in the fallback via matchesMockProduct).
+// done separately in the fallback via the predicate below).
 function buildWhere(filter: ProductFilter): Record<string, unknown> {
   const where: Record<string, unknown> = { deletedAt: null, active: true };
   if (filter.q) {
@@ -49,6 +50,19 @@ function buildWhere(filter: ProductFilter): Record<string, unknown> {
   if (filter.brandSlug) where.brand = { slug: filter.brandSlug };
   if (filter.categorySlug) where.partCategory = { slug: filter.categorySlug };
   return where;
+}
+
+// Mock-path filter mirroring buildWhere semantics (case-insensitive contains).
+function matchesMock(product: Product, filter: ProductFilter): boolean {
+  if (!product.active || product.deletedAt) return false;
+  if (filter.brandSlug && product.brand?.slug !== filter.brandSlug) return false;
+  if (filter.categorySlug && product.partCategory?.slug !== filter.categorySlug) return false;
+  if (filter.q) {
+    const needle = filter.q.toLowerCase();
+    const haystack = `${product.name} ${product.code} ${product.oemCode ?? ""}`.toLowerCase();
+    if (!haystack.includes(needle)) return false;
+  }
+  return true;
 }
 
 export async function getProducts(filter: ProductFilter = {}): Promise<ProductPage> {
@@ -69,7 +83,11 @@ export async function getProducts(filter: ProductFilter = {}): Promise<ProductPa
       ]);
       return { items: items.map(mapProduct), total };
     },
-    async () => ({ items: [], total: 0 })
+    async () => {
+      const filtered = mockProducts.filter((product) => matchesMock(product, filter));
+      const start = (page - 1) * pageSize;
+      return { items: filtered.slice(start, start + pageSize), total: filtered.length };
+    }
   );
   return {
     items: data.items,
@@ -97,7 +115,21 @@ export async function getProductByCode(code: string): Promise<Product | null> {
       });
       return product ? mapProduct(product) : null;
     },
-    async () => null
+    async () => {
+      const product = mockProducts.find(
+        (item) => item.code === code && item.active && !item.deletedAt
+      );
+      if (!product) return null;
+      return {
+        ...product,
+        compatibilities: mockCompatibilities
+          .filter((compat) => compat.productId === product.id)
+          .map((compat) => ({
+            ...compat,
+            model: mockModels.find((model) => model.id === compat.modelId),
+          })),
+      };
+    }
   );
 }
 
@@ -116,7 +148,7 @@ export async function getProductById(id: string): Promise<Product | null> {
       });
       return product ? mapProduct(product) : null;
     },
-    async () => null
+    async () => mockProducts.find((item) => item.id === id) ?? null
   );
 }
 
@@ -131,6 +163,10 @@ export async function getLowStockProducts(): Promise<Product[]> {
         .map(mapProduct)
         .filter((product: Product) => totalStock(product) <= product.reorderLevel);
     },
-    async () => []
+    async () =>
+      mockProducts.filter(
+        (product) =>
+          product.active && !product.deletedAt && totalStock(product) <= product.reorderLevel
+      )
   );
 }

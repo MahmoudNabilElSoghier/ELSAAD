@@ -1,3 +1,4 @@
+import { mockEmployees } from "@/lib/mock";
 import type { Employee } from "./types";
 import { withDb } from "./withDb";
 
@@ -11,6 +12,6 @@ export async function getEmployees(): Promise<Employee[]> {
           _count: { select: { orders: true, branchAssignments: true } },
         },
       }),
-    () => []
+    () => mockEmployees
   );
 }
