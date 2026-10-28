@@ -2,14 +2,15 @@
   "name": "elsaad",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@9.15.9",
   "engines": {
     "node": ">=20.0.0"
   },
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint",
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "start": "turbo run start",
+    "lint": "turbo run lint",
     "db:push": "prisma db push",
     "db:seed": "tsx prisma/seed.ts",
     "db:migrate-excel": "tsx scripts/migrate-excel.ts",
@@ -41,9 +42,11 @@
     "eslint-config-next": "15.5",
     "papaparse": "^5.7.0",
     "postcss": "^8.5.32",
+    "prettier": "^3.9.10",
     "prisma": "^6.19.3",
     "tailwindcss": "^4",
     "tsx": "^4.23.15",
+    "turbo": "^2.11.10",
     "typescript": "^5",
     "xlsx": "^0.18.5"
   }

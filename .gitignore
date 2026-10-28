@@ -40,3 +40,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# monorepo
+apps/*/node_modules/
+packages/*/node_modules/
+.turbo/
+apps/api/dist/
+minio-data/
+postgres-data/
+redis-data/
+uploads/

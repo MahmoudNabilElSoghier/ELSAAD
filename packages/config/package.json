@@ -1,0 +1,12 @@
+{
+  "name": "@elsaad/config",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./eslint/base.js",
+  "exports": {
+    "./typescript/base.json": "./typescript/base.json",
+    "./typescript/next.json": "./typescript/next.json",
+    "./eslint/base": "./eslint/base.js",
+    "./prettier": "./prettier/index.js"
+  }
+}
