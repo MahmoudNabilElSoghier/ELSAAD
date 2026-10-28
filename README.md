@@ -45,7 +45,7 @@ pnpm dev            # turbo: apps/api (:4000) + apps/web (:3000)
 Optional local services (DB/storage):
 
 ```bash
-docker compose up -d          # postgres :5432, redis :6379, minio :9000/9001
+docker compose up -d          # postgres :5432, redis :6380, minio :9010/:9011
 ```
 
 - Web: http://localhost:3000
