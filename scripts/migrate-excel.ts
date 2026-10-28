@@ -200,19 +200,26 @@ const BRANCH_CODE_PARTS: Record<string, string> = {
   alex: "ALX",
 };
 
-const buildBranches = (): BranchOut[] =>
-  contentBranches.map((branch, index) => ({
-    code: `BR-${BRANCH_CODE_PARTS[branch.id] ?? branch.id.slice(0, 3).toUpperCase()}-${String(index + 1).padStart(2, "0")}`,
-    slug: branch.id,
-    nameAr: branch.name,
-    nameEn: null,
-    type: "retail",
-    phone: branch.phone,
-    address: branch.address,
-    governorate: GOVERNORATES[branch.id] ?? "غير محدد",
-    openingHours: parseHours(branch.hours),
-    displayOrder: index + 1,
-  }));
+const buildBranches = (): BranchOut[] => {
+  const codeCounts = new Map<string, number>();
+  return contentBranches.map((branch, index) => {
+    const part = BRANCH_CODE_PARTS[branch.id] ?? branch.id.slice(0, 3).toUpperCase();
+    const count = (codeCounts.get(part) ?? 0) + 1;
+    codeCounts.set(part, count);
+    return {
+      code: `BR-${part}-${String(count).padStart(2, "0")}`,
+      slug: branch.id,
+      nameAr: branch.name,
+      nameEn: null,
+      type: "retail",
+      phone: branch.phone,
+      address: branch.address,
+      governorate: GOVERNORATES[branch.id] ?? "غير محدد",
+      openingHours: parseHours(branch.hours),
+      displayOrder: index + 1,
+    };
+  });
+};
 
 const listDataFiles = (): string[] => {
   if (!fs.existsSync(DATA_DIR)) return [];
