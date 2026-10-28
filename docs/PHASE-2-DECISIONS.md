@@ -1,8 +1,8 @@
 # Phase 2 — Open Decisions
 
-Before Phase 2A kicks off, we need to answer 5 schema questions. Each
-question below includes options, trade-offs, and a recommended path.
-Fill in the **Decision** line for each before merging this doc.
+> **RESOLVED (2026-10-28)** — All five decisions adopted as recommended
+> (1B + 2C + 3C + 4B + 5A) and applied in `prisma/schema.prisma`.
+> Decision 4 remains pending accountant confirmation on VAT treatment.
 
 ---
 
@@ -37,7 +37,7 @@ phone-based guest checkout.
 Ship Phase 2A fast. Add `User` in 2D. Use temporary `ADMIN_API_KEY` env var
 for Phase 2B admin endpoints until auth is ready.
 
-**Decision:** [ ] A · [ ] B · [ ] Other: ___
+**Decision:** [ ] A · [x] B · [ ] Other: ___
 
 ---
 
@@ -61,7 +61,7 @@ for Phase 2B admin endpoints until auth is ready.
 Add `userId String?` to Order. Phone always required. If logged in,
 populate userId. Guest orders still work.
 
-**Decision:** [ ] A · [ ] B · [ ] C · [ ] Other: ___
+**Decision:** [ ] A · [ ] B · [x] C · [ ] Other: ___
 
 ---
 
@@ -87,7 +87,7 @@ populate userId. Guest orders still work.
 Add a global Prisma middleware to auto-filter `deletedAt: null` on reads
 to avoid forgetting the filter.
 
-**Decision:** [ ] A · [ ] B · [ ] C · [ ] Other: ___
+**Decision:** [ ] A · [ ] B · [x] C · [ ] Other: ___
 
 ---
 
@@ -113,7 +113,7 @@ schedule tax. Client's accounting system likely has an opinion.
 default 0.14. Compute total on order creation. Store computed `taxAmount`
 and `total` on Order for audit.
 
-**Decision:** [ ] A · [ ] B · [ ] C · [ ] Other: ___
+**Decision:** [ ] A · [x] B · [ ] C · [ ] Other: ___
 
 **⚠️ Action needed:** Confirm with ELSAAD's accountant whether sales are
 subject to VAT 14% only, or VAT + schedule tax.
@@ -145,7 +145,7 @@ Add `StockMovement` model in Phase 2A. Every `Product.stock` change
 must go through a `StockService.adjustStock()` method that writes a
 movement row. No UI yet — just the data.
 
-**Decision:** [ ] A · [ ] B · [ ] Other: ___
+**Decision:** [x] A · [ ] B · [ ] Other: ___
 
 ---
 
@@ -153,13 +153,13 @@ movement row. No UI yet — just the data.
 
 | # | Question | Recommended | Decision |
 |---|----------|-------------|----------|
-| 1 | `User` model timing | Defer to 2D | ☐ |
-| 2 | Order↔User linkage | Hybrid (userId nullable) | ☐ |
-| 3 | Soft delete scope | Product + Order only | ☐ |
-| 4 | VAT pricing | Exclusive + taxRate field | ☐ |
-| 5 | `StockMovement` timing | Add now | ☐ |
+| 1 | `User` model timing | Defer to 2D | [x] B |
+| 2 | Order↔User linkage | Hybrid (userId nullable) | [x] C |
+| 3 | Soft delete scope | Product + Order only | [x] C |
+| 4 | VAT pricing | Exclusive + taxRate field | [x] B |
+| 5 | `StockMovement` timing | Add now | [x] A |
 
-Fill in decisions, then move to `PHASE-2-PLAN.md` to begin Phase 2A.
+Decisions applied to the active schema in `prisma/schema.prisma` (Phase 2A).
 
 ---
 

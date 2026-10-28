@@ -1,8 +1,10 @@
 # Phase 2 — E-commerce + ERP Foundation Plan
 
-> **⚠️ Prerequisite:** 5 schema decisions are open. See
-> [`PHASE-2-DECISIONS.md`](PHASE-2-DECISIONS.md). Phase 2A does not
-> begin until all 5 are answered.
+> **✅ Prerequisite satisfied (2026-10-28):** all 5 schema decisions are
+> resolved (1B + 2C + 3C + 4B + 5A) in
+> [`PHASE-2-DECISIONS.md`](PHASE-2-DECISIONS.md) and applied in the
+> active schema `prisma/schema.prisma`. Only the VAT/accountant
+> confirmation (decision 4) is still outstanding as a non-blocker.
 
 ## Overview
 Phase 1 (landing page) is live. Phase 2 adds database persistence,

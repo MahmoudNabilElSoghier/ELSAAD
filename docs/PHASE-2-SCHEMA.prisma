@@ -1,6 +1,6 @@
-// DRAFT — Phase 2 schema proposal. Not yet active.
-// Once approved, this becomes prisma/schema.prisma.
-// do NOT run `npx prisma migrate` until this is reviewed and moved.
+// DRAFT — historical Phase 2 schema proposal.
+// SUPERSEDED by the active schema: prisma/schema.prisma (decisions applied).
+// Do NOT migrate from this draft.
 
 generator client {
   provider = "prisma-client-js"
