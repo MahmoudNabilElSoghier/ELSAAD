@@ -1,5 +1,9 @@
 # Phase 2 — E-commerce + ERP Foundation Plan
 
+> **⚠️ Prerequisite:** 5 schema decisions are open. See
+> [`PHASE-2-DECISIONS.md`](PHASE-2-DECISIONS.md). Phase 2A does not
+> begin until all 5 are answered.
+
 ## Overview
 Phase 1 (landing page) is live. Phase 2 adds database persistence,
 e-commerce capability, and prepares for the full ERP system.
