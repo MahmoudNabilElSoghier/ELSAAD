@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { BrandForm } from "@/components/admin/BrandForm";
-import { getBrands } from "@/lib/services/brands";
+import { getBrands } from "@elsaad/api-client";
 
 export const metadata: Metadata = {
   title: "الماركات | السعد للدراجات النارية",

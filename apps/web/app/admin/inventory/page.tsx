@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Button } from "@/components/ui/Button";
 import { InventoryTable } from "@/components/admin/InventoryTable";
-import { getBranches } from "@/lib/services/branches";
-import { getInventory, isLowStock } from "@/lib/services/inventory";
+import { getBranches, getInventory, isLowStock } from "@elsaad/api-client";
 
 export const metadata: Metadata = {
   title: "المخزون | السعد للدراجات النارية",

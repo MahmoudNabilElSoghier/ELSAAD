@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getEmployees } from "@/lib/services/employees";
+import { getEmployees } from "@elsaad/api-client";
 
 export const metadata: Metadata = {
   title: "الموظفون | السعد للدراجات النارية",

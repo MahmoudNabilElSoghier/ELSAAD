@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ProductForm } from "@/components/admin/ProductForm";
-import { getBrands } from "@/lib/services/brands";
-import { getPartCategories } from "@/lib/services/categories";
+import { getBrands, getPartCategories } from "@elsaad/api-client";
 
 export const metadata: Metadata = {
   title: "منتج جديد | السعد للدراجات النارية",

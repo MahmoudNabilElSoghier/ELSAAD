@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getBranches } from "@/lib/services/branches";
+import { getBranches } from "@elsaad/api-client";
 
 export const metadata: Metadata = {
   title: "الفروع | السعد للدراجات النارية",

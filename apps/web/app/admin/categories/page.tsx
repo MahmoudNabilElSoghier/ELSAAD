@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { CategoryManager } from "@/components/admin/CategoryManager";
-import { getCategoryTree } from "@/lib/services/categories";
+import { getCategoryTree } from "@elsaad/api-client";
 
 export const metadata: Metadata = {
   title: "التصنيفات | السعد للدراجات النارية",

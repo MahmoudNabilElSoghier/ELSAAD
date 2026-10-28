@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
-import { getBrands } from "@/lib/services/brands";
-import { getLowStockItems } from "@/lib/services/inventory";
-import { getOrders } from "@/lib/services/orders";
-import { getProducts } from "@/lib/services/products";
+import { getBrands, getLowStockItems, getOrders, getProducts } from "@elsaad/api-client";
 
 export const metadata: Metadata = {
   title: "لوحة التحكم | السعد للدراجات النارية",

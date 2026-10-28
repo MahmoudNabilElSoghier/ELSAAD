@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { getProducts, totalStock } from "@/lib/services/products";
+import { getProducts, totalStock } from "@elsaad/api-client";
 
 export const metadata: Metadata = {
   title: "المنتجات | السعد للدراجات النارية",
