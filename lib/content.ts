@@ -15,12 +15,15 @@ import type {
   TrustBarItem,
 } from "@/types";
 
+// Hash links use "/#id" (not "#id") so they land on the homepage when clicked
+// from other routes (/products, /brands, ...).
 export const navigation: NavItem[] = [
-  { label: "الرئيسية", href: "#home" },
-  { label: "الموديلات", href: "#categories" },
-  { label: "قطع الغيار", href: "#categories" },
-  { label: "الفروع", href: "#branches" },
-  { label: "تواصل", href: "#contact" },
+  { label: "الرئيسية", href: "/#home" },
+  { label: "الموديلات", href: "/#categories" },
+  { label: "قطع الغيار", href: "/products" },
+  { label: "الماركات", href: "/brands" },
+  { label: "الفروع", href: "/#branches" },
+  { label: "تواصل", href: "/#contact" },
 ];
 
 export const hero: HeroContent = {
