@@ -39,6 +39,22 @@ export function Footer() {
                   </Link>
                 </li>
               ))}
+              <li>
+                <Link
+                  href="/privacy"
+                  className="text-sm text-muted hover:text-white transition-colors"
+                >
+                  سياسة الخصوصية
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/terms"
+                  className="text-sm text-muted hover:text-white transition-colors"
+                >
+                  الشروط والأحكام
+                </Link>
+              </li>
               </ul>
             </nav>
           </div>
