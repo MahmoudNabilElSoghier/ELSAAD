@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { BrandsModule } from "./brands/brands.module";
+import { BranchesModule } from "./branches/branches.module";
 import { CategoriesModule } from "./categories/categories.module";
 import { HealthModule } from "./health/health.module";
 import { ModelsModule } from "./models/models.module";
@@ -13,6 +14,7 @@ import { ProductsModule } from "./products/products.module";
     PrismaModule,
     HealthModule,
     BrandsModule,
+    BranchesModule,
     CategoriesModule,
     ModelsModule,
     ProductsModule,
