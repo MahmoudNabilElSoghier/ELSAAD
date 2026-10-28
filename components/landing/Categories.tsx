@@ -40,9 +40,8 @@ export function Categories() {
                     {category.description}
                   </p>
                 </div>
-                <div className="text-accent text-sm font-semibold inline-flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                  <span>اعرف المزيد</span>
-                  <span aria-hidden="true">&larr;</span>
+                <div className="text-accent text-sm font-semibold">
+                  <span>متاح في الفروع</span>
                 </div>
               </Card>
             );
