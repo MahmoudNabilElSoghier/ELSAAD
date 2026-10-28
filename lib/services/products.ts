@@ -8,6 +8,8 @@ export interface ProductFilter {
   categorySlug?: string;
   page?: number;
   pageSize?: number;
+  // Admin lists need inactive rows too; the public catalog keeps active-only.
+  includeInactive?: boolean;
 }
 
 export interface ProductPage {
@@ -38,7 +40,8 @@ export function totalStock(product: Product): number {
 // Prisma-specific where builder — only used on the DB path (mock filtering is
 // done separately in the fallback via the predicate below).
 function buildWhere(filter: ProductFilter): Record<string, unknown> {
-  const where: Record<string, unknown> = { deletedAt: null, active: true };
+  const where: Record<string, unknown> = { deletedAt: null };
+  if (!filter.includeInactive) where.active = true;
   if (filter.q) {
     const q = filter.q;
     where.OR = [
@@ -54,7 +57,8 @@ function buildWhere(filter: ProductFilter): Record<string, unknown> {
 
 // Mock-path filter mirroring buildWhere semantics (case-insensitive contains).
 function matchesMock(product: Product, filter: ProductFilter): boolean {
-  if (!product.active || product.deletedAt) return false;
+  if (product.deletedAt) return false;
+  if (!product.active && !filter.includeInactive) return false;
   if (filter.brandSlug && product.brand?.slug !== filter.brandSlug) return false;
   if (filter.categorySlug && product.partCategory?.slug !== filter.categorySlug) return false;
   if (filter.q) {
