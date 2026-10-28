@@ -19,6 +19,15 @@ Landing page and future ERP system for ELSAAD Motorcycle.
 - Phase 2 — E-commerce
 - Phase 3 — ERP (inventory, spare parts, orders)
 
+## Phase 2 Planning
+
+See [`docs/PHASE-2-PLAN.md`](docs/PHASE-2-PLAN.md) for the detailed
+phase-by-phase plan, and [`docs/PHASE-2-SCHEMA.prisma`](docs/PHASE-2-SCHEMA.prisma)
+for the proposed database schema (draft — not yet applied).
+
+The [client assets checklist](docs/CLIENT-ASSETS-CHECKLIST.md) tracks what
+content we still need from ELSAAD before launch.
+
 ## Known Issues
 
 `npm audit` reports 2 vulnerabilities (1 high, 1 moderate) as of 2026-10-27. No code action now — scheduled for the next minor-upgrade checkpoint.
