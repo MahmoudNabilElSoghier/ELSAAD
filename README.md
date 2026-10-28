@@ -52,6 +52,8 @@ console without touching a database — the deployed site is unaffected.
 
 ## Known Issues
 
+⚠️ Contact form requires `RESEND_API_KEY` + `CONTACT_EMAIL_TO` env vars to actually deliver messages. Without them, submissions return success but are logged only. Configure before public launch.
+
 `npm audit` reports 5 vulnerabilities (4 high, 1 moderate) as of 2026-10-28. No code action now — scheduled for the next minor-upgrade checkpoint.
 
 - **postcss <= 8.5.22** (high) — advisories against the copy bundled inside `next` (`node_modules/next/node_modules/postcss`):

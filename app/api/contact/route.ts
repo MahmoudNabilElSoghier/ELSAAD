@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { contactSchema } from "@/lib/schemas/contact";
+import { sendContactNotification } from "@/lib/email";
 
 export async function POST(request: Request) {
   try {
@@ -19,19 +20,54 @@ export async function POST(request: Request) {
 
     const { name, phone, message } = result.data;
 
-    if (process.env.DATABASE_URL) {
-      // Dynamic import: PrismaClient is only constructed when a database
-      // is actually configured (client generation happens on first db push).
-      const { db } = await import("@/lib/db");
-      await db.contactMessage.create({
-        data: { name, phone, message: message || null },
-      });
-    } else {
-      console.log("Validated Contact Submission:", {
+    const dbConfigured = !!process.env.DATABASE_URL;
+    const emailConfigured = !!process.env.RESEND_API_KEY;
+
+    let dbOk = false;
+    let emailOk = false;
+    let emailError = "";
+
+    if (dbConfigured) {
+      try {
+        const { db } = await import("@/lib/db");
+        await db.contactMessage.create({
+          data: { name, phone, message: message || null },
+        });
+        dbOk = true;
+      } catch (err) {
+        console.error("DB save failed:", err);
+      }
+    }
+
+    if (emailConfigured) {
+      const result = await sendContactNotification({
         name,
         phone,
-        message: message || null,
-        timestamp: new Date().toISOString(),
+        message: message || "",
+      });
+      emailOk = result.ok;
+      if (!result.ok) emailError = result.error || "";
+    }
+
+    if (!dbOk && !emailOk && (dbConfigured || emailConfigured)) {
+      console.error("Contact delivery failed", {
+        dbConfigured,
+        emailConfigured,
+        emailError,
+      });
+      return NextResponse.json(
+        {
+          success: false,
+          error: "تعذر إرسال الرسالة. حاول مرة أخرى أو تواصل معنا على واتساب.",
+        },
+        { status: 500 }
+      );
+    }
+
+    if (!dbConfigured && !emailConfigured) {
+      console.warn("CONTACT: no delivery channel configured — message lost:", {
+        name,
+        phone,
       });
     }
 
