@@ -19,18 +19,21 @@ export async function POST(request: Request) {
 
     const { name, phone, message } = result.data;
 
-    /*
-     * TODO (Phase 2): Replace console.log with Prisma database write:
-     * await prisma.contactMessage.create({
-     *   data: { name, phone, message: message || null }
-     * });
-     */
-    console.log("Validated Contact Submission:", {
-      name,
-      phone,
-      message: message || null,
-      timestamp: new Date().toISOString(),
-    });
+    if (process.env.DATABASE_URL) {
+      // Dynamic import: PrismaClient is only constructed when a database
+      // is actually configured (client generation happens on first db push).
+      const { db } = await import("@/lib/db");
+      await db.contactMessage.create({
+        data: { name, phone, message: message || null },
+      });
+    } else {
+      console.log("Validated Contact Submission:", {
+        name,
+        phone,
+        message: message || null,
+        timestamp: new Date().toISOString(),
+      });
+    }
 
     return NextResponse.json(
       { success: true, message: "تم استلام رسالتك بنجاح" },
