@@ -11,12 +11,15 @@
     "db:seed": "tsx prisma/seed.ts",
     "db:migrate-excel": "tsx scripts/migrate-excel.ts",
     "db:studio": "prisma studio",
-    "prisma:validate": "prisma validate"
+    "prisma:validate": "prisma validate",
+    "test:storage": "tsx scripts/test-storage.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1158.0",
+    "@aws-sdk/s3-request-presigner": "^3.1158.0",
     "@elsaad/shared": "workspace:*",
     "@nestjs/common": "^10.4.15",
     "@nestjs/config": "^3.3.0",
@@ -33,10 +36,12 @@
   "devDependencies": {
     "@elsaad/config": "workspace:*",
     "@eslint/eslintrc": "^3",
+    "@types/multer": "^2.3.0",
     "@types/node": "^20",
     "@types/papaparse": "^5.5.2",
     "eslint": "^9.39.5",
     "eslint-config-next": "15.5",
+    "multer": "^2.5.0",
     "papaparse": "^5.7.0",
     "prisma": "^6.19.3",
     "tsx": "^4.23.15",

@@ -10,11 +10,13 @@ import { ModelsModule } from "./models/models.module";
 import { OrdersModule } from "./orders/orders.module";
 import { PrismaModule } from "./prisma/prisma.module";
 import { ProductsModule } from "./products/products.module";
+import { StorageModule } from "./storage/storage.module";
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     PrismaModule,
+    StorageModule,
     HealthModule,
     BrandsModule,
     BranchesModule,
