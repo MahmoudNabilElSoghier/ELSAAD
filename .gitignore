@@ -21,6 +21,7 @@ node_modules/
 # monorepo
 .turbo/
 apps/api/dist/
+apps/api/prisma/data/
 minio-data/
 postgres-data/
 redis-data/

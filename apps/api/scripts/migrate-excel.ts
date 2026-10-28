@@ -2,7 +2,7 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import * as XLSX from "xlsx";
 import Papa from "papaparse";
-import { branches as contentBranches } from "@/lib/content";
+import { mockBranches } from "@elsaad/shared";
 
 type Row = Record<string, unknown>;
 
@@ -155,71 +155,22 @@ const brandFromFileName = (file: string): string | null => {
   return prefix || null;
 };
 
-const GOVERNORATES: Record<string, string> = {
-  cairo: "القاهرة",
-  giza: "الجيزة",
-  alex: "الإسكندرية",
-};
-
-const DAY_KEYS: Record<string, string> = {
-  السبت: "sat",
-  الأحد: "sun",
-  الاثنين: "mon",
-  الثلاثاء: "tue",
-  الأربعاء: "wed",
-  الخميس: "thu",
-  الجمعة: "fri",
-};
-
-const parseHours = (text: string): Record<string, string> => {
-  const days = Object.keys(DAY_KEYS)
-    .filter((day) => text.includes(day))
-    .map((day) => DAY_KEYS[day]);
-  const key =
-    days.length >= 2
-      ? `${days[0]}-${days[days.length - 1]}`
-      : (days[0] ?? "sat-thu");
-  const match = text.match(
-    /(\d{1,2})(?::(\d{2}))?\s*(ص|م)\s*-\s*(\d{1,2})(?::(\d{2}))?\s*(ص|م)/,
-  );
-  if (!match) return { [key]: text };
-  const conv = (hour: string, minute: string | undefined, meridiem: string): string => {
-    let h = Number(hour);
-    if (meridiem === "م" && h !== 12) h += 12;
-    if (meridiem === "ص" && h === 12) h = 0;
-    return `${String(h).padStart(2, "0")}:${minute ?? "00"}`;
-  };
-  const open = conv(match[1], match[2], match[3]);
-  const close = conv(match[4], match[5], match[6]);
-  return { [key]: `${open} - ${close}` };
-};
-
-const BRANCH_CODE_PARTS: Record<string, string> = {
-  cairo: "CAI",
-  giza: "GIZ",
-  alex: "ALX",
-};
-
-const buildBranches = (): BranchOut[] => {
-  const codeCounts = new Map<string, number>();
-  return contentBranches.map((branch, index) => {
-    const part = BRANCH_CODE_PARTS[branch.id] ?? branch.id.slice(0, 3).toUpperCase();
-    const count = (codeCounts.get(part) ?? 0) + 1;
-    codeCounts.set(part, count);
-    return {
-      code: `BR-${part}-${String(count).padStart(2, "0")}`,
-      slug: branch.id,
-      nameAr: branch.name,
-      nameEn: null,
-      type: "retail",
-      phone: branch.phone,
-      address: branch.address,
-      governorate: GOVERNORATES[branch.id] ?? "غير محدد",
-      openingHours: parseHours(branch.hours),
-      displayOrder: index + 1,
-    };
-  });
-};
+// Branches come from the shared mock catalog (BR-CAI-01/BR-GIZ-01/BR-ALX-01) so
+// JSON output, mock fallback and seed stay aligned.
+// TODO: replace with a real branches Excel sheet if the client provides one.
+const buildBranches = (): BranchOut[] =>
+  mockBranches.map((branch) => ({
+    code: branch.code,
+    slug: branch.slug,
+    nameAr: branch.nameAr,
+    nameEn: branch.nameEn,
+    type: branch.type,
+    phone: branch.phone,
+    address: branch.address,
+    governorate: branch.governorate,
+    openingHours: branch.openingHours ?? {},
+    displayOrder: branch.displayOrder,
+  }));
 
 const listDataFiles = (): string[] => {
   if (!fs.existsSync(DATA_DIR)) return [];
