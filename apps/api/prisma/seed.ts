@@ -11,6 +11,7 @@
  */
 import * as fs from "node:fs";
 import * as path from "node:path";
+import { createHash } from "node:crypto";
 import { PrismaClient } from "@prisma/client";
 import { categories as contentCategories, testimonials } from "@elsaad/shared";
 import {
@@ -545,6 +546,86 @@ async function main() {
     managersLinked += 1;
   }
 
+  // ---------- Sample documents (Phase 8) ----------
+  // Idempotent via stable storageKey upserts. The local driver also writes the
+  // placeholder bytes so downloads work immediately after `db:seed`; with
+  // STORAGE_DRIVER=minio only the rows are seeded — TODO: upload the sample
+  // objects to the bucket separately (reason: seed must not require MinIO).
+  const placeholderPdf = Buffer.from(
+    [
+      "%PDF-1.4",
+      "1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj",
+      "2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj",
+      "3 0 obj<</Type/Page/Parent 2 0 R/MediaBox[0 0 200 200]>>endobj",
+      "trailer<</Root 1 0 R>>",
+      "%%EOF",
+      "",
+    ].join("\n"),
+    "utf8",
+  );
+  const pdfChecksum = createHash("sha256").update(placeholderPdf).digest("hex");
+  const storageDriver = process.env.STORAGE_DRIVER ?? "local";
+  const uploadRoot = path.resolve(
+    process.cwd(),
+    process.env.STORAGE_UPLOAD_DIR ?? "./uploads",
+  );
+  const firstProductCode = seedProducts[0]?.code ?? null;
+  const firstProductId = firstProductCode
+    ? (productIdByCode.get(firstProductCode) ?? null)
+    : null;
+  const sampleDocuments = [
+    firstProductId
+      ? {
+          entityType: "PRODUCT" as const,
+          entityId: firstProductId,
+          storageKey: `product/${firstProductId}/seed-product-manual.pdf`,
+          originalName: "product-manual.pdf",
+          immutable: false,
+          status: "ACTIVE" as const,
+          deletedAt: null as Date | null,
+        }
+      : null,
+    {
+      entityType: "ORDER" as const,
+      entityId: "seed-order",
+      storageKey: "order/seed-order/seed-invoice.pdf",
+      originalName: "invoice.pdf",
+      immutable: true,
+      status: "DELETED" as const,
+      deletedAt: new Date(),
+    },
+  ].filter((doc): doc is NonNullable<typeof doc> => doc !== null);
+  let seededDocuments = 0;
+  for (const doc of sampleDocuments) {
+    if (storageDriver === "local") {
+      const filePath = path.join(uploadRoot, ...doc.storageKey.split("/"));
+      if (!fs.existsSync(filePath)) {
+        fs.mkdirSync(path.dirname(filePath), { recursive: true });
+        fs.writeFileSync(filePath, placeholderPdf);
+      }
+    }
+    const data = {
+      entityType: doc.entityType,
+      entityId: doc.entityId,
+      fileName: doc.storageKey.split("/").pop() ?? doc.storageKey,
+      originalName: doc.originalName,
+      mimeType: "application/pdf",
+      size: placeholderPdf.length,
+      checksum: pdfChecksum,
+      storageDriver,
+      immutable: doc.immutable,
+      retainedUntil: doc.immutable ? new Date(Date.now() + 365 * 24 * 60 * 60 * 1000) : null,
+      status: doc.status,
+      deletedAt: doc.deletedAt,
+    };
+    await prisma.document.upsert({
+      where: { storageKey: doc.storageKey },
+      update: { status: data.status, deletedAt: data.deletedAt },
+      create: { ...data, storageKey: doc.storageKey },
+    });
+    seededDocuments += 1;
+  }
+
   console.log("Seed complete:", {
     source: jsonBrands || jsonProducts ? "prisma/data/*.json" : "lib/mock (demo)",
     landingCategories: contentCategories.length,
@@ -561,6 +642,7 @@ async function main() {
     inventoryRows: seededInventory,
     skippedInventory,
     managersLinked,
+    seededDocuments,
   });
 }
 

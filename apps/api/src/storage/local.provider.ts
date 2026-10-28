@@ -55,6 +55,13 @@ export class LocalStorageProvider implements StorageProvider {
     return `${base}/storage/local/${key.split("/").map(encodeURIComponent).join("/")}`;
   }
 
+  async setRetention(_key: string, _lock: ObjectLockOptions): Promise<void> {
+    // TODO: local driver cannot enforce WORM on disk — retention is recorded in
+    // the Document row only; use STORAGE_DRIVER=minio for real COMPLIANCE locks.
+    void _key;
+    void _lock;
+  }
+
   async deleteObject(key: string): Promise<void> {
     try {
       await unlink(this.resolveKey(key));

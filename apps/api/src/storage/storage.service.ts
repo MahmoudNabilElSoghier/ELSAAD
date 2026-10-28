@@ -30,6 +30,10 @@ export class StorageService {
     return this.provider.getDownloadUrl(key, expiresInSeconds);
   }
 
+  setRetention(key: string, lock: ObjectLockOptions): Promise<void> {
+    return this.provider.setRetention(key, lock);
+  }
+
   deleteObject(key: string): Promise<void> {
     return this.provider.deleteObject(key);
   }

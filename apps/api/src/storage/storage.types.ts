@@ -24,6 +24,9 @@ export interface StorageProvider {
   ): Promise<StoredObject>;
   // Signed URL (minio, TTL) or public local path (local driver).
   getDownloadUrl(key: string, expiresInSeconds?: number): Promise<string>;
+  // Retrofit WORM retention onto an existing object (minio: COMPLIANCE).
+  // Local driver: no-op — disk has no object lock (FLAGged in schema header).
+  setRetention(key: string, lock: ObjectLockOptions): Promise<void>;
   deleteObject(key: string): Promise<void>;
   healthCheck(): Promise<boolean>;
 }

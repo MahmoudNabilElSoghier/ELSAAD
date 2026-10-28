@@ -4,6 +4,7 @@ import {
   GetObjectCommand,
   HeadBucketCommand,
   PutObjectCommand,
+  PutObjectRetentionCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
@@ -93,6 +94,19 @@ export class MinioStorageProvider implements StorageProvider, OnModuleInit {
       this.client,
       new GetObjectCommand({ Bucket: this.bucket, Key: key }),
       { expiresIn: expiresInSeconds },
+    );
+  }
+
+  async setRetention(key: string, lock: ObjectLockOptions): Promise<void> {
+    await this.client.send(
+      new PutObjectRetentionCommand({
+        Bucket: this.bucket,
+        Key: key,
+        Retention: {
+          Mode: "COMPLIANCE",
+          RetainUntilDate: lock.retainUntilDate,
+        },
+      }),
     );
   }
 

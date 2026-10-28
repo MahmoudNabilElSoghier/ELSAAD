@@ -281,6 +281,51 @@ model BranchInventory {
   @@index([productId])
 }
 
+// ---------- Documents (Phase 8 — storage-backed attachments) ----------
+// FLAG: real WORM enforcement (COMPLIANCE retention) requires STORAGE_DRIVER=
+// minio — the local driver records immutable/retainedUntil in the DB only and
+// its setRetention() is a no-op (TODO: enforce on disk or require minio).
+
+enum DocumentEntityType {
+  PRODUCT
+  CATEGORY
+  BRAND
+  MODEL
+  SUPPLIER
+  BRANCH
+  EMPLOYEE
+  ORDER
+  CUSTOMER
+}
+
+enum DocumentStatus {
+  ACTIVE
+  DELETED
+}
+
+model Document {
+  id            String             @id @default(cuid())
+  entityType    DocumentEntityType
+  entityId      String
+  fileName      String // sanitized unique-on-disk name
+  originalName  String // client's filename (display)
+  mimeType      String
+  size          Int
+  checksum      String // sha256 hex of the bytes
+  storageKey    String             @unique
+  storageDriver String // "minio" | "local" — snapshot at upload time
+  uploadedById  String? // no FK yet: auth arrives after Decision 1B
+  immutable     Boolean            @default(false)
+  retainedUntil DateTime?
+  status        DocumentStatus     @default(ACTIVE)
+  deletedAt     DateTime?
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+
+  @@index([entityType, entityId])
+  @@index([status])
+}
+
 // ---------- Customers / orders ----------
 
 model Customer {
