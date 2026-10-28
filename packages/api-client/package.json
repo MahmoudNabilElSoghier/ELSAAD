@@ -1,0 +1,19 @@
+{
+  "name": "@elsaad/api-client",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "sideEffects": false,
+  "scripts": {
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@elsaad/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "@elsaad/config": "workspace:*",
+    "eslint": "^9.39.5",
+    "typescript": "^5"
+  }
+}

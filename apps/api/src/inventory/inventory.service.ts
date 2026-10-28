@@ -1,16 +1,8 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { mockInventory } from "@elsaad/shared";
+import { isLowStock, mockInventory } from "@elsaad/shared";
 import type { BranchInventory } from "@elsaad/shared";
 import { withDb, type DbResult } from "../common/with-db";
 import { PrismaService } from "../prisma/prisma.service";
-
-// Low stock = quantity at or below the row's override, else the product default.
-// NOTE: computed in JS (Prisma cannot compare two columns in one where clause) —
-// acceptable at Phase 2 scale; revisit with a raw query if inventory grows large.
-export function isLowStock(item: BranchInventory): boolean {
-  const threshold = item.reorderLevel ?? item.product?.reorderLevel ?? 0;
-  return item.quantity <= threshold;
-}
 
 @Injectable()
 export class InventoryService {

@@ -1,5 +1,5 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { mockCompatibilities, mockModels, mockProducts } from "@elsaad/shared";
+import { mockCompatibilities, mockModels, mockProducts, totalStock } from "@elsaad/shared";
 import type { Product } from "@elsaad/shared";
 import { withDb, type DbResult } from "../common/with-db";
 import { toDomainError } from "../common/prisma-errors";
@@ -54,10 +54,6 @@ const mapProduct = (product: Product): Product => ({
   vipPrice: toNumber(product.vipPrice),
   taxRate: Number(product.taxRate),
 });
-
-export function totalStock(product: Product): number {
-  return (product.inventory ?? []).reduce((sum, item) => sum + item.quantity, 0);
-}
 
 function buildWhere(filter: ProductFilter): Record<string, unknown> {
   const where: Record<string, unknown> = { deletedAt: null };
