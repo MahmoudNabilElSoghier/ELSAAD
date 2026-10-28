@@ -12,7 +12,7 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { PrismaClient } from "@prisma/client";
-import { categories as contentCategories, testimonials } from "@/lib/content";
+import { categories as contentCategories, testimonials } from "@elsaad/shared";
 import {
   mockBrands,
   mockBranches,
@@ -22,7 +22,7 @@ import {
   mockInventory,
   mockModels,
   mockProducts,
-} from "@/lib/mock";
+} from "@elsaad/shared";
 import type {
   BranchOut,
   BrandOut,

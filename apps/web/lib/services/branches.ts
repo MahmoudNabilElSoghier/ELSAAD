@@ -1,5 +1,5 @@
-import { mockBranches, mockInventory } from "@/lib/mock";
-import type { Branch } from "./types";
+import { mockBranches, mockInventory } from "@elsaad/shared";
+import type { Branch } from "@elsaad/shared";
 import { withDb } from "./withDb";
 
 export async function getBranches(): Promise<Branch[]> {

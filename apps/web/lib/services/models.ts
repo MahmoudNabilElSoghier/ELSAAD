@@ -1,5 +1,5 @@
-import { mockCompatibilities, mockModels, mockProducts } from "@/lib/mock";
-import type { MachineModel } from "./types";
+import { mockCompatibilities, mockModels, mockProducts } from "@elsaad/shared";
+import type { MachineModel } from "@elsaad/shared";
 import { withDb } from "./withDb";
 
 export async function getModels(brandSlug?: string): Promise<MachineModel[]> {

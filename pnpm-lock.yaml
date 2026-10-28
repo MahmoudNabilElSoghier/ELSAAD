@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      '@elsaad/shared':
+        specifier: workspace:*
+        version: link:packages/shared
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3
@@ -47,6 +51,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@elsaad/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
       '@hookform/resolvers':
         specifier: ^6.0.1
         version: 6.0.2(@standard-schema/spec@1.1.0)(react-hook-form@7.91.0(@types/react@19.3.0)(react@19.3.1))(zod@4.6.7)

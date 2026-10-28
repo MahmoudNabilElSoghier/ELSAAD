@@ -1,5 +1,5 @@
-import { mockOrders } from "@/lib/mock";
-import type { Order, OrderItem } from "./types";
+import { mockOrders } from "@elsaad/shared";
+import type { Order, OrderItem } from "@elsaad/shared";
 import { withDb } from "./withDb";
 
 export interface OrderFilter {

@@ -1,5 +1,5 @@
-import { mockCategories } from "@/lib/mock";
-import type { PartCategory } from "./types";
+import { mockCategories } from "@elsaad/shared";
+import type { PartCategory } from "@elsaad/shared";
 import { withDb } from "./withDb";
 
 export async function getPartCategories(): Promise<PartCategory[]> {

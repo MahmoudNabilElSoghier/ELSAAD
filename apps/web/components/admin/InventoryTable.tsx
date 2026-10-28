@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { BranchInventory } from "@/lib/services/types";
+import type { BranchInventory } from "@elsaad/shared";
 
 const nf = new Intl.NumberFormat("ar-EG-u-nu-latn");
 

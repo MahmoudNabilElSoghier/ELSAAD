@@ -8,8 +8,8 @@ import { Input } from "@/components/ui/Input";
 import {
   categoryFormSchema,
   type CategoryFormValues,
-} from "@/lib/schemas/catalog";
-import type { PartCategory } from "@/lib/services/types";
+} from "@elsaad/shared";
+import type { PartCategory } from "@elsaad/shared";
 
 const nf = new Intl.NumberFormat("ar-EG-u-nu-latn");
 

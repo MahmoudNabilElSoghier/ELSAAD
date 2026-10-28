@@ -1,5 +1,5 @@
-import { mockCompatibilities, mockModels, mockProducts } from "@/lib/mock";
-import type { Product } from "./types";
+import { mockCompatibilities, mockModels, mockProducts } from "@elsaad/shared";
+import type { Product } from "@elsaad/shared";
 import { withDb } from "./withDb";
 
 export interface ProductFilter {

@@ -2,7 +2,6 @@ import { company } from "@/lib/config";
 import type {
   Brand,
   Branch,
-  Category,
   ContactFormContent,
   Feature,
   FooterContent,
@@ -11,9 +10,15 @@ import type {
   NavItem,
   PageMeta,
   SiteContent,
-  Testimonial,
   TrustBarItem,
 } from "@/types";
+import type { Category, Testimonial } from "@elsaad/shared";
+import { categories as sharedCategories, testimonials as sharedTestimonials } from "@elsaad/shared";
+
+// categories/testimonials are owned by @elsaad/shared (seeded from there too)
+// and re-exported here so landing components keep importing from "@/lib/content".
+export const categories: Category[] = sharedCategories;
+export const testimonials: Testimonial[] = sharedTestimonials;
 
 // Hash links use "/#id" (not "#id") so they land on the homepage when clicked
 // from other routes (/products, /brands, ...).
@@ -39,29 +44,6 @@ export const trustBar: TrustBarItem[] = [
   { value: "12", label: "فرع" },
   { value: "20+", label: "ماركة عالمية" },
   { value: "10K+", label: "عميل" },
-];
-
-export const categories: Category[] = [
-  {
-    id: "new-motorcycles",
-    title: "دراجات جديدة",
-    description: "أحدث الموديلات من أفضل الماركات العالمية بضمان رسمي",
-  },
-  {
-    id: "used-motorcycles",
-    title: "دراجات مستعملة",
-    description: "دراجات مفحوصة بالكامل وبضمان وحالة ممتازة",
-  },
-  {
-    id: "spare-parts",
-    title: "قطع غيار",
-    description: "قطع أصلية معتمدة لكل الماركات والموديلات",
-  },
-  {
-    id: "accessories",
-    title: "إكسسوارات",
-    description: "كل ما تحتاجه لدراجتك — خوذات، ملابس، ومعدات حماية",
-  },
 ];
 
 export const whyUs: Feature[] = [
@@ -117,27 +99,6 @@ export const gallery: GalleryImage[] = [
   { id: "gallery-4", src: "/gallery/placeholder-4.jpg", alt: "" },
   { id: "gallery-5", src: "/gallery/placeholder-5.jpg", alt: "" },
   { id: "gallery-6", src: "/gallery/placeholder-6.jpg", alt: "" },
-];
-
-export const testimonials: Testimonial[] = [
-  {
-    id: 1,
-    name: "أحمد محمود",
-    role: "عميل",
-    text: "اشتريت دراجتي من فرع السعد — خدمة ممتازة، قطع الغيار متوفرة، والصيانة دقيقة. أنصح بيهم.",
-  },
-  {
-    id: 2,
-    name: "محمد سعيد",
-    role: "تاجر قطع غيار",
-    text: "أفضل مكان لقطع غيار الدراجات في مصر — أصلي، أسعار مناسبة، وتعامل محترم من أول يوم.",
-  },
-  {
-    id: 3,
-    name: "كريم عبد الله",
-    role: "عميل دائم",
-    text: "بتعامل معاهم من 5 سنين — ثقة ومصداقية في كل صفقة. مفيش مرة اشتكيت من حاجة.",
-  },
 ];
 
 /* TODO: replace with real addresses, phones, hours from client */

@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { brandFormSchema, type BrandFormValues } from "@/lib/schemas/catalog";
+import { brandFormSchema, type BrandFormValues } from "@elsaad/shared";
 
 export function BrandForm() {
   const [open, setOpen] = useState(false);

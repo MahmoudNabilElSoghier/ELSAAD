@@ -1,5 +1,5 @@
-import { mockInventory } from "@/lib/mock";
-import type { BranchInventory } from "./types";
+import { mockInventory } from "@elsaad/shared";
+import type { BranchInventory } from "@elsaad/shared";
 import { withDb } from "./withDb";
 
 // Inventory can be viewed globally or scoped to one branch (admin selector).

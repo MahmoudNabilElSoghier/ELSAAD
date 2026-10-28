@@ -5,8 +5,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { productFormSchema, type ProductFormValues } from "@/lib/schemas/catalog";
-import type { Brand, PartCategory, Product } from "@/lib/services/types";
+import { productFormSchema, type ProductFormValues } from "@elsaad/shared";
+import type { Brand, PartCategory, Product } from "@elsaad/shared";
 
 const toPriceInput = (value: number | null | undefined) =>
   value == null ? "" : String(value);

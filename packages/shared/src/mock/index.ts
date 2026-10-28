@@ -19,7 +19,7 @@ import type {
   PartCategory,
   Product,
   ProductCompatibility,
-} from "@/lib/services/types";
+} from "../types";
 
 const earlier = "2026-01-10T09:00:00.000Z";
 const now = "2026-01-20T09:00:00.000Z";

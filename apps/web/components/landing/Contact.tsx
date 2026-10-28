@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { contactSchema, type ContactInput } from "@/lib/schemas/contact";
+import { contactSchema, type ContactInput } from "@elsaad/shared";
 import { contactForm } from "@/lib/content";
 import { company } from "@/lib/config";
 import { Container } from "@/components/ui/Container";

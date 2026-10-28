@@ -1,5 +1,5 @@
-import { mockEmployees } from "@/lib/mock";
-import type { Employee } from "./types";
+import { mockEmployees } from "@elsaad/shared";
+import type { Employee } from "@elsaad/shared";
 import { withDb } from "./withDb";
 
 export async function getEmployees(): Promise<Employee[]> {

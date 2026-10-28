@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^6.0.1",
+    "@elsaad/shared": "workspace:*",
     "@next/third-parties": "^15.5.0",
     "@prisma/client": "^6.19.3",
     "framer-motion": "^14.7.1",

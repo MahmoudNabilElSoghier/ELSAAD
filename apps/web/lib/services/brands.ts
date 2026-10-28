@@ -1,5 +1,5 @@
-import { mockBrands, mockModels } from "@/lib/mock";
-import type { Brand } from "./types";
+import { mockBrands, mockModels } from "@elsaad/shared";
+import type { Brand } from "@elsaad/shared";
 import { withDb } from "./withDb";
 
 export async function getBrands(): Promise<Brand[]> {
