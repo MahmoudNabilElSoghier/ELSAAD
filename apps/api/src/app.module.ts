@@ -7,6 +7,7 @@ import { EmployeesModule } from "./employees/employees.module";
 import { HealthModule } from "./health/health.module";
 import { InventoryModule } from "./inventory/inventory.module";
 import { ModelsModule } from "./models/models.module";
+import { OrdersModule } from "./orders/orders.module";
 import { PrismaModule } from "./prisma/prisma.module";
 import { ProductsModule } from "./products/products.module";
 
@@ -21,6 +22,7 @@ import { ProductsModule } from "./products/products.module";
     EmployeesModule,
     InventoryModule,
     ModelsModule,
+    OrdersModule,
     ProductsModule,
   ],
 })
