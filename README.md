@@ -25,6 +25,9 @@ See [`docs/PHASE-2-PLAN.md`](docs/PHASE-2-PLAN.md) for the detailed
 phase-by-phase plan, and [`docs/PHASE-2-SCHEMA.prisma`](docs/PHASE-2-SCHEMA.prisma)
 for the proposed database schema (draft — not yet applied).
 
+- [`docs/PHASE-2-DECISIONS.md`](docs/PHASE-2-DECISIONS.md) — 5 open
+  schema questions with trade-offs and recommendations.
+
 The [client assets checklist](docs/CLIENT-ASSETS-CHECKLIST.md) tracks what
 content we still need from ELSAAD before launch.
 
