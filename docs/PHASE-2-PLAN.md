@@ -6,6 +6,13 @@
 > active schema `prisma/schema.prisma`. Only the VAT/accountant
 > confirmation (decision 4) is still outstanding as a non-blocker.
 
+> **✅ Foundation sprint delivered (2026-10-28):** Phases A–I complete —
+> 18-model schema, service layer with mock fallback, admin dashboard
+> (`/admin/*`), public catalog (`/products`, `/brands`), Excel/CSV →
+> `prisma/data/*.json` migration script, JSON-or-mock seed, docs.
+> Everything runs in mock mode until `DATABASE_URL` is provisioned
+> (2A deliverables that need a live DB remain open). Next: Phase 2C.
+
 ## Overview
 Phase 1 (landing page) is live. Phase 2 adds database persistence,
 e-commerce capability, and prepares for the full ERP system.
@@ -23,19 +30,19 @@ e-commerce capability, and prepares for the full ERP system.
 Goal: Make contact form persistent.
 
 Deliverables:
-- [ ] Prisma schema with ContactMessage model
+- [x] Prisma schema with ContactMessage model
 - [ ] Postgres database provisioned (Neon or Vercel Postgres)
-- [ ] Prisma client instantiated (lib/db.ts singleton pattern)
+- [x] Prisma client instantiated (lib/db.ts singleton pattern)
 - [ ] POST /api/contact writes to DB (replace console.log)
 - [ ] Simple read endpoint /api/contact/list (protected, admin-only)
-- [ ] Migration committed + documented in README
+- [x] Migration committed + documented in README
 
 ## Phase 2B — Product catalog (Week 3-4)
-- [ ] Product, Category schemas
-- [ ] Seed data script
-- [ ] /products page reading from DB
-- [ ] /products/[slug] detail page
-- [ ] Admin CRUD (simple form-based, no fancy UI yet)
+- [x] Product, Category schemas (PartCategory + full catalog model set)
+- [x] Seed data script (JSON from Excel migration or lib/mock fallback)
+- [x] /products page reading from DB (services with mock fallback)
+- [x] /products/[slug] detail page
+- [x] Admin CRUD (simple form-based, no fancy UI yet)
 
 ## Phase 2C — Cart + Orders (Week 5-6)
 - [ ] Cart (client state — Zustand or localStorage)
