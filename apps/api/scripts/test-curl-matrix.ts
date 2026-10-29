@@ -6,8 +6,8 @@ function request(
   method: string,
   path: string,
   headers: Record<string, string> = {},
-  body?: any,
-): Promise<{ status: number; headers: any; body: string }> {
+  body?: unknown,
+): Promise<{ status: number; headers: Record<string, unknown>; body: string }> {
   return new Promise((resolve, reject) => {
     const dataStr = body ? JSON.stringify(body) : "";
     const reqOptions: http.RequestOptions = {
