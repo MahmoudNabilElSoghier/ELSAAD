@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createEmployeeSchema, type CreateEmployeeInput, type UpdateEmployeeInput } from "@elsaad/shared";
-import { createEmployee, updateEmployee, getBranches } from "@elsaad/api-client";
+import { createEmployee, updateEmployee, getBranches, ApiError } from "@elsaad/api-client";
 import type { Employee, Branch } from "@elsaad/shared";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -16,6 +16,31 @@ interface EmployeeFormProps {
   initialData?: Employee;
   onSuccess?: () => void;
   onCancel?: () => void;
+}
+
+const EDIT_FORBIDDEN = ["id", "employeeNumber", "nationalId", "hireDate", "createdAt", "updatedAt", "baseSalary"] as const;
+
+function pickEditable<T extends Record<string, unknown>>(input: T, forbidden: readonly string[]): Partial<T> {
+  const out: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(input)) {
+    if (!forbidden.includes(k)) out[k] = v;
+  }
+  return out as Partial<T>;
+}
+
+function getErrorMessage(err: unknown): string {
+  if (err instanceof ApiError) {
+    const errBody = err.body as { message?: string; issues?: Array<{ path?: string | string[]; message?: string }> };
+    if (errBody?.issues && Array.isArray(errBody.issues)) {
+      const details = errBody.issues
+        .map((i) => `${Array.isArray(i.path) ? i.path.join(".") : i.path || ""}: ${i.message}`)
+        .join("; ");
+      return `فشل التحقق — ${details}`;
+    }
+    if (err.message) return err.message;
+  }
+  if (err instanceof Error) return err.message;
+  return "حدث خطأ أثناء حفظ الموظف";
 }
 
 export function EmployeeForm({ mode = "create", initialData, onSuccess, onCancel }: EmployeeFormProps) {
@@ -57,6 +82,7 @@ export function EmployeeForm({ mode = "create", initialData, onSuccess, onCancel
     setBanner(null);
     try {
       const payload = {
+        ...(initialData ?? {}),
         ...data,
         branchId: data.branchId || null,
         nameEn: data.nameEn || undefined,
@@ -65,15 +91,16 @@ export function EmployeeForm({ mode = "create", initialData, onSuccess, onCancel
       };
 
       if (mode === "edit" && initialData) {
+        const editable = pickEditable(payload, EDIT_FORBIDDEN);
         const updatePayload: UpdateEmployeeInput = {
-          nameAr: payload.nameAr,
-          nameEn: payload.nameEn,
-          nationalId: payload.nationalId,
-          phone: payload.phone,
-          email: payload.email,
-          role: payload.role,
-          branchId: payload.branchId,
-          active: payload.active,
+          nameAr: editable.nameAr as string,
+          nameEn: editable.nameEn as string | undefined,
+          nationalId: editable.nationalId as string | undefined,
+          phone: editable.phone as string,
+          email: editable.email as string | undefined,
+          role: editable.role as string,
+          branchId: editable.branchId as string | null | undefined,
+          active: editable.active as boolean | undefined,
         };
         await updateEmployee(initialData.id, updatePayload);
         setBanner({ type: "success", message: "تم تحديث الموظف بنجاح" });
@@ -86,7 +113,7 @@ export function EmployeeForm({ mode = "create", initialData, onSuccess, onCancel
     } catch (err) {
       setBanner({
         type: "error",
-        message: err instanceof Error ? err.message : "حدث خطأ أثناء حفظ الموظف",
+        message: getErrorMessage(err),
       });
     } finally {
       setLoading(false);
@@ -103,7 +130,7 @@ export function EmployeeForm({ mode = "create", initialData, onSuccess, onCancel
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Input label="رقم الموظف" {...register("employeeNumber")} error={errors.employeeNumber?.message} placeholder="EMP-001" />
+          <Input label="رقم الموظف" {...register("employeeNumber")} error={errors.employeeNumber?.message} placeholder="EMP-001" disabled={mode === "edit"} />
           <Input label="الاسم بالعربية" {...register("nameAr")} error={errors.nameAr?.message} placeholder="أحمد محمد" />
           <Input label="الاسم بالإنجليزية" {...register("nameEn")} error={errors.nameEn?.message} placeholder="Ahmed Mohamed" />
           <Input label="الرقم القومي" {...register("nationalId")} error={errors.nationalId?.message} placeholder="29501010101010" />

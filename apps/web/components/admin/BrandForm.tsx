@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { FormBanner } from "./FormBanner";
 import { brandFormSchema, type BrandFormValues, type UpdateBrandInput, type Brand } from "@elsaad/shared";
-import { createBrand, updateBrand } from "@elsaad/api-client";
+import { createBrand, updateBrand, ApiError } from "@elsaad/api-client";
 import { Loader2 } from "lucide-react";
 
 interface BrandFormProps {
@@ -15,6 +15,31 @@ interface BrandFormProps {
   initialData?: Brand;
   onSuccess?: () => void;
   onCancel?: () => void;
+}
+
+const EDIT_FORBIDDEN = ["id", "slug", "createdAt", "updatedAt"] as const;
+
+function pickEditable<T extends Record<string, unknown>>(input: T, forbidden: readonly string[]): Partial<T> {
+  const out: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(input)) {
+    if (!forbidden.includes(k)) out[k] = v;
+  }
+  return out as Partial<T>;
+}
+
+function getErrorMessage(err: unknown): string {
+  if (err instanceof ApiError) {
+    const errBody = err.body as { message?: string; issues?: Array<{ path?: string | string[]; message?: string }> };
+    if (errBody?.issues && Array.isArray(errBody.issues)) {
+      const details = errBody.issues
+        .map((i) => `${Array.isArray(i.path) ? i.path.join(".") : i.path || ""}: ${i.message}`)
+        .join("; ");
+      return `فشل التحقق — ${details}`;
+    }
+    if (err.message) return err.message;
+  }
+  if (err instanceof Error) return err.message;
+  return "حدث خطأ أثناء حفظ الماركة";
 }
 
 export function BrandForm({ mode = "create", initialData, onSuccess, onCancel }: BrandFormProps) {
@@ -56,11 +81,12 @@ export function BrandForm({ mode = "create", initialData, onSuccess, onCancel }:
       };
 
       if (mode === "edit" && initialData) {
+        const editable = pickEditable(payload, EDIT_FORBIDDEN);
         const updatePayload: UpdateBrandInput = {
-          name: payload.name,
-          nameAr: payload.nameAr,
-          website: payload.website,
-          description: payload.description,
+          name: editable.name as string,
+          nameAr: editable.nameAr as string | undefined,
+          website: editable.website as string | undefined,
+          description: editable.description as string | undefined,
         };
         await updateBrand(initialData.id, updatePayload);
         setBanner({ type: "success", message: "تم تحديث الماركة بنجاح" });
@@ -75,7 +101,7 @@ export function BrandForm({ mode = "create", initialData, onSuccess, onCancel }:
     } catch (err) {
       setBanner({
         type: "error",
-        message: err instanceof Error ? err.message : "حدث خطأ أثناء حفظ الماركة",
+        message: getErrorMessage(err),
       });
     }
   };

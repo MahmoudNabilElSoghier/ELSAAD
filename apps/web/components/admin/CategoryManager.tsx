@@ -13,10 +13,35 @@ import {
   type UpdateCategoryInput,
   type PartCategory,
 } from "@elsaad/shared";
-import { createCategory, updateCategory, deleteCategory } from "@elsaad/api-client";
+import { createCategory, updateCategory, deleteCategory, ApiError } from "@elsaad/api-client";
 import { Loader2 } from "lucide-react";
 
 const nf = new Intl.NumberFormat("ar-EG-u-nu-latn");
+
+const EDIT_FORBIDDEN = ["id", "slug", "createdAt", "updatedAt"] as const;
+
+function pickEditable<T extends Record<string, unknown>>(input: T, forbidden: readonly string[]): Partial<T> {
+  const out: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(input)) {
+    if (!forbidden.includes(k)) out[k] = v;
+  }
+  return out as Partial<T>;
+}
+
+function getErrorMessage(err: unknown): string {
+  if (err instanceof ApiError) {
+    const errBody = err.body as { message?: string; issues?: Array<{ path?: string | string[]; message?: string }> };
+    if (errBody?.issues && Array.isArray(errBody.issues)) {
+      const details = errBody.issues
+        .map((i) => `${Array.isArray(i.path) ? i.path.join(".") : i.path || ""}: ${i.message}`)
+        .join("; ");
+      return `فشل التحقق — ${details}`;
+    }
+    if (err.message) return err.message;
+  }
+  if (err instanceof Error) return err.message;
+  return "حدث خطأ أثناء حفظ التصنيف";
+}
 
 type Mode =
   | { type: "edit"; category: PartCategory }
@@ -53,6 +78,7 @@ function CategoryFormPanel({
     setBanner(null);
     try {
       const payload = {
+        ...(category ?? {}),
         nameAr: values.nameAr,
         name: values.name || undefined,
         slug: values.slug,
@@ -61,10 +87,11 @@ function CategoryFormPanel({
       };
 
       if (isEdit && category) {
+        const editable = pickEditable(payload, EDIT_FORBIDDEN);
         const updatePayload: UpdateCategoryInput = {
-          nameAr: payload.nameAr,
-          name: payload.name,
-          order: String(payload.order),
+          nameAr: editable.nameAr as string,
+          name: editable.name as string | undefined,
+          order: editable.order as string,
         };
         await updateCategory(category.id, updatePayload);
       } else {
@@ -76,7 +103,7 @@ function CategoryFormPanel({
     } catch (err) {
       setBanner({
         type: "error",
-        message: err instanceof Error ? err.message : "حدث خطأ أثناء حفظ التصنيف",
+        message: getErrorMessage(err),
       });
     }
   };
@@ -151,7 +178,7 @@ export function CategoryManager({ tree, onSuccess }: { tree: PartCategory[]; onS
     } catch (err) {
       setBanner({
         type: "error",
-        message: err instanceof Error ? err.message : "تعسّر حذف التصنيف",
+        message: getErrorMessage(err),
       });
       setDeleteTarget(null);
     }

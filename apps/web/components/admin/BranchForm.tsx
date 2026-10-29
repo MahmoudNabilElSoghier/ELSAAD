@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createBranchSchema, type CreateBranchInput, type UpdateBranchInput } from "@elsaad/shared";
-import { createBranch, updateBranch, getEmployees } from "@elsaad/api-client";
+import { createBranch, updateBranch, getEmployees, ApiError } from "@elsaad/api-client";
 import type { Branch, Employee } from "@elsaad/shared";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -16,6 +16,31 @@ interface BranchFormProps {
   initialData?: Branch;
   onSuccess?: () => void;
   onCancel?: () => void;
+}
+
+const EDIT_FORBIDDEN = ["id", "code", "slug", "createdAt", "updatedAt"] as const;
+
+function pickEditable<T extends Record<string, unknown>>(input: T, forbidden: readonly string[]): Partial<T> {
+  const out: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(input)) {
+    if (!forbidden.includes(k)) out[k] = v;
+  }
+  return out as Partial<T>;
+}
+
+function getErrorMessage(err: unknown): string {
+  if (err instanceof ApiError) {
+    const errBody = err.body as { message?: string; issues?: Array<{ path?: string | string[]; message?: string }> };
+    if (errBody?.issues && Array.isArray(errBody.issues)) {
+      const details = errBody.issues
+        .map((i) => `${Array.isArray(i.path) ? i.path.join(".") : i.path || ""}: ${i.message}`)
+        .join("; ");
+      return `فشل التحقق — ${details}`;
+    }
+    if (err.message) return err.message;
+  }
+  if (err instanceof Error) return err.message;
+  return "حدث خطأ أثناء حفظ الفرع";
 }
 
 export function BranchForm({ mode = "create", initialData, onSuccess, onCancel }: BranchFormProps) {
@@ -62,6 +87,17 @@ export function BranchForm({ mode = "create", initialData, onSuccess, onCancel }
     setBanner(null);
     try {
       const payload = {
+        ...(initialData ? {
+          ...initialData,
+          latitude: initialData.latitude ?? undefined,
+          longitude: initialData.longitude ?? undefined,
+          managerId: initialData.managerId ?? undefined,
+          phone: initialData.phone ?? undefined,
+          whatsapp: initialData.whatsapp ?? undefined,
+          nameEn: initialData.nameEn ?? undefined,
+          addressEn: initialData.addressEn ?? undefined,
+          openingHours: initialData.openingHours ?? undefined,
+        } : {}),
         ...data,
         managerId: data.managerId || null,
         phone: data.phone || undefined,
@@ -71,18 +107,19 @@ export function BranchForm({ mode = "create", initialData, onSuccess, onCancel }
       };
 
       if (mode === "edit" && initialData) {
+        const editable = pickEditable(payload, EDIT_FORBIDDEN);
         const updatePayload: UpdateBranchInput = {
-          nameAr: payload.nameAr,
-          nameEn: payload.nameEn,
-          type: payload.type,
-          phone: payload.phone,
-          whatsapp: payload.whatsapp,
-          address: payload.address,
-          addressEn: payload.addressEn,
-          governorate: payload.governorate,
-          managerId: payload.managerId,
-          displayOrder: payload.displayOrder,
-          active: payload.active,
+          nameAr: editable.nameAr as string,
+          nameEn: editable.nameEn as string | undefined,
+          type: editable.type as string,
+          phone: editable.phone as string | undefined,
+          whatsapp: editable.whatsapp as string | undefined,
+          address: editable.address as string,
+          addressEn: editable.addressEn as string | undefined,
+          governorate: editable.governorate as string,
+          managerId: editable.managerId as string | null | undefined,
+          displayOrder: editable.displayOrder as number | undefined,
+          active: editable.active as boolean | undefined,
         };
         await updateBranch(initialData.id, updatePayload);
         setBanner({ type: "success", message: "تم تحديث الفرع بنجاح" });
@@ -95,7 +132,7 @@ export function BranchForm({ mode = "create", initialData, onSuccess, onCancel }
     } catch (err) {
       setBanner({
         type: "error",
-        message: err instanceof Error ? err.message : "حدث خطأ أثناء حفظ الفرع",
+        message: getErrorMessage(err),
       });
     } finally {
       setLoading(false);
@@ -112,8 +149,8 @@ export function BranchForm({ mode = "create", initialData, onSuccess, onCancel }
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Input label="كود الفرع" {...register("code")} error={errors.code?.message} placeholder="BR-CAI-02" />
-          <Input label="المعرّف (Slug)" {...register("slug")} error={errors.slug?.message} placeholder="cairo-maadi" />
+          <Input label="كود الفرع" {...register("code")} error={errors.code?.message} placeholder="BR-CAI-02" disabled={mode === "edit"} />
+          <Input label="المعرّف (Slug)" {...register("slug")} error={errors.slug?.message} placeholder="cairo-maadi" disabled={mode === "edit"} />
           <Input label="الاسم بالعربية" {...register("nameAr")} error={errors.nameAr?.message} placeholder="فرع المعادي" />
           <Input label="الاسم بالإنجليزية" {...register("nameEn")} error={errors.nameEn?.message} placeholder="Maadi Branch" />
 

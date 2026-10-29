@@ -7,8 +7,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { FormBanner } from "./FormBanner";
-import { productFormSchema, type ProductFormValues, type Brand, type PartCategory, type Product } from "@elsaad/shared";
-import { createProduct, updateProduct } from "@elsaad/api-client";
+import { productFormSchema, type ProductFormValues, type UpdateProductInput, type Brand, type PartCategory, type Product } from "@elsaad/shared";
+import { createProduct, updateProduct, ApiError } from "@elsaad/api-client";
 import { Loader2 } from "lucide-react";
 
 const toPriceInput = (value: number | null | undefined) =>
@@ -19,6 +19,31 @@ type ProductFormProps = {
   brands: Brand[];
   categories: PartCategory[];
 };
+
+const EDIT_FORBIDDEN = ["id", "code", "slug", "createdAt", "updatedAt"] as const;
+
+function pickEditable<T extends Record<string, unknown>>(input: T, forbidden: readonly string[]): Partial<T> {
+  const out: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(input)) {
+    if (!forbidden.includes(k)) out[k] = v;
+  }
+  return out as Partial<T>;
+}
+
+function getErrorMessage(err: unknown): string {
+  if (err instanceof ApiError) {
+    const errBody = err.body as { message?: string; issues?: Array<{ path?: string | string[]; message?: string }> };
+    if (errBody?.issues && Array.isArray(errBody.issues)) {
+      const details = errBody.issues
+        .map((i) => `${Array.isArray(i.path) ? i.path.join(".") : i.path || ""}: ${i.message}`)
+        .join("; ");
+      return `فشل التحقق — ${details}`;
+    }
+    if (err.message) return err.message;
+  }
+  if (err instanceof Error) return err.message;
+  return "حدث خطأ أثناء حفظ المنتج";
+}
 
 const inputClass =
   "bg-bg border rounded-lg px-4 py-3 text-white placeholder:text-muted focus:border-accent focus:outline-none disabled:opacity-50 border-border";
@@ -57,7 +82,10 @@ export function ProductForm({ product, brands, categories }: ProductFormProps) {
     setBanner(null);
     try {
       if (product) {
-        await updateProduct(product.id, values);
+        const fullValues = { ...(product as unknown as Record<string, unknown>), ...values };
+        const editable = pickEditable(fullValues, EDIT_FORBIDDEN);
+        const updatePayload: UpdateProductInput = editable as UpdateProductInput;
+        await updateProduct(product.id, updatePayload);
         setBanner({ type: "success", message: "تم تحديث المنتج بنجاح" });
       } else {
         await createProduct(values);
@@ -71,7 +99,7 @@ export function ProductForm({ product, brands, categories }: ProductFormProps) {
     } catch (err) {
       setBanner({
         type: "error",
-        message: err instanceof Error ? err.message : "حدث خطأ أثناء حفظ المنتج",
+        message: getErrorMessage(err),
       });
     }
   };
@@ -92,6 +120,7 @@ export function ProductForm({ product, brands, categories }: ProductFormProps) {
           placeholder="SYM-FLT-001"
           error={errors.code?.message}
           {...register("code")}
+          disabled={!!product}
         />
         <Input
           label="اسم المنتج *"
