@@ -2,7 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { getEmployees } from "@elsaad/api-client";
+import { EmployeeForm } from "@/components/admin/EmployeeForm";
+import { FormBanner } from "@/components/admin/FormBanner";
 import type { Employee } from "@elsaad/shared";
+import { Button } from "@/components/ui/Button";
 import { Loader2 } from "lucide-react";
 
 const nf = new Intl.NumberFormat("ar-EG-u-nu-latn");
@@ -24,21 +27,66 @@ const roleStyles: Record<string, string> = {
 export default function AdminEmployeesPage() {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [showCreate, setShowCreate] = useState(false);
+  const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null);
+  const [banner, setBanner] = useState<{ type: "success" | "error"; message: string } | null>(null);
+
+  const refetch = () => setRefreshKey((k) => k + 1);
 
   useEffect(() => {
+    setLoading(true);
     getEmployees()
       .then(setEmployees)
       .finally(() => setLoading(false));
-  }, []);
+  }, [refreshKey]);
 
   return (
     <div className="space-y-6" dir="rtl">
-      <div>
-        <h1 className="text-2xl font-extrabold text-white">الموظفون</h1>
-        <p className="mt-1 text-sm text-muted">
-          {loading ? "جاري التحميل..." : `${nf.format(employees.length)} موظف مسجل، مع فرع وكل صلاحية.`}
-        </p>
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-extrabold text-white">الموظفون</h1>
+          <p className="mt-1 text-sm text-muted">
+            {loading ? "جاري التحميل..." : `${nf.format(employees.length)} موظف مسجل، مع فرع وكل صلاحية.`}
+          </p>
+        </div>
+        {!showCreate && (
+          <Button size="sm" onClick={() => setShowCreate(true)}>
+            + إضافة موظف
+          </Button>
+        )}
       </div>
+
+      {banner && <FormBanner type={banner.type} message={banner.message} onClose={() => setBanner(null)} />}
+
+      {showCreate && (
+        <EmployeeForm
+          mode="create"
+          onSuccess={() => {
+            setShowCreate(false);
+            setBanner({ type: "success", message: "تم إضافة الموظف بنجاح" });
+            refetch();
+          }}
+          onCancel={() => setShowCreate(false)}
+        />
+      )}
+
+      {editingEmployee && (
+        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
+          <div className="w-full max-w-2xl bg-[#151515] border border-[#262626] rounded-xl p-6 max-h-[90vh] overflow-y-auto">
+            <EmployeeForm
+              mode="edit"
+              initialData={editingEmployee}
+              onSuccess={() => {
+                setEditingEmployee(null);
+                setBanner({ type: "success", message: "تم تحديث الموظف بنجاح" });
+                refetch();
+              }}
+              onCancel={() => setEditingEmployee(null)}
+            />
+          </div>
+        </div>
+      )}
 
       {loading ? (
         <div className="flex items-center justify-center min-h-[40vh]">
@@ -57,12 +105,13 @@ export default function AdminEmployeesPage() {
                   <th className="px-4 py-3 font-medium text-right">الفرع</th>
                   <th className="px-4 py-3 font-medium text-right">الطلبات</th>
                   <th className="px-4 py-3 font-medium text-right">الحالة</th>
+                  <th className="px-4 py-3 font-medium text-right">الإجراءات</th>
                 </tr>
               </thead>
               <tbody>
                 {employees.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="px-4 py-8 text-center text-muted">
+                    <td colSpan={8} className="px-4 py-8 text-center text-muted">
                       لا يوجد موظفون بعد.
                     </td>
                   </tr>
@@ -112,6 +161,15 @@ export default function AdminEmployeesPage() {
                         >
                           {employee.active ? "نشط" : "موقوف"}
                         </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <button
+                          type="button"
+                          onClick={() => setEditingEmployee(employee)}
+                          className="font-semibold text-accent hover:underline"
+                        >
+                          تعديل
+                        </button>
                       </td>
                     </tr>
                   ))

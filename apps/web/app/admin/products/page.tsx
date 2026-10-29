@@ -5,7 +5,10 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { getProducts, totalStock, type ProductPage } from "@elsaad/api-client";
+import { FormBanner } from "@/components/admin/FormBanner";
+import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
+import { getProducts, deleteProduct, totalStock, type ProductPage } from "@elsaad/api-client";
+import type { Product } from "@elsaad/shared";
 import { Loader2 } from "lucide-react";
 
 const nf = new Intl.NumberFormat("ar-EG-u-nu-latn");
@@ -20,6 +23,11 @@ export default function AdminProductsPage() {
 
   const [result, setResult] = useState<ProductPage | null>(null);
   const [loading, setLoading] = useState(true);
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [deleteTarget, setDeleteTarget] = useState<Product | null>(null);
+  const [banner, setBanner] = useState<{ type: "success" | "error"; message: string } | null>(null);
+
+  const refetch = () => setRefreshKey((k) => k + 1);
 
   useEffect(() => {
     setLoading(true);
@@ -31,7 +39,24 @@ export default function AdminProductsPage() {
     })
       .then(setResult)
       .finally(() => setLoading(false));
-  }, [q, pageNum]);
+  }, [q, pageNum, refreshKey]);
+
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
+    setBanner(null);
+    try {
+      await deleteProduct(deleteTarget.id);
+      setBanner({ type: "success", message: "تم حذف المنتج بنجاح" });
+      setDeleteTarget(null);
+      refetch();
+    } catch (err) {
+      setBanner({
+        type: "error",
+        message: err instanceof Error ? err.message : "تعسّر حذف المنتج",
+      });
+      setDeleteTarget(null);
+    }
+  };
 
   const pageHref = (target: number) => {
     const params = new URLSearchParams();
@@ -54,6 +79,8 @@ export default function AdminProductsPage() {
           <Link href="/admin/products/new">منتج جديد</Link>
         </Button>
       </div>
+
+      {banner && <FormBanner type={banner.type} message={banner.message} onClose={() => setBanner(null)} />}
 
       <form action="/admin/products" method="get" className="flex items-end gap-2">
         <div className="w-full max-w-md">
@@ -88,9 +115,7 @@ export default function AdminProductsPage() {
                     <th className="px-4 py-3 font-medium text-right">سعر التجزئة</th>
                     <th className="px-4 py-3 font-medium text-right">المخزون</th>
                     <th className="px-4 py-3 font-medium text-right">الحالة</th>
-                    <th className="px-4 py-3 font-medium text-right">
-                      <span className="sr-only">إجراء</span>
-                    </th>
+                    <th className="px-4 py-3 font-medium text-right">الإجراءات</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -139,13 +164,20 @@ export default function AdminProductsPage() {
                               {product.active ? "نشط" : "موقوف"}
                             </span>
                           </td>
-                          <td className="px-4 py-3">
+                          <td className="px-4 py-3 flex gap-3 text-sm">
                             <Link
                               href={`/admin/products/${product.id}/edit`}
                               className="font-semibold text-accent hover:underline"
                             >
                               تعديل
                             </Link>
+                            <button
+                              type="button"
+                              onClick={() => setDeleteTarget(product)}
+                              className="text-red-400 hover:text-red-300"
+                            >
+                              حذف
+                            </button>
                           </td>
                         </tr>
                       );
@@ -189,6 +221,15 @@ export default function AdminProductsPage() {
             </nav>
           )}
         </>
+      )}
+
+      {deleteTarget && (
+        <ConfirmDialog
+          title="حذف المنتج"
+          message={`هل أنت متأكد من حذف المنتج "${deleteTarget.name}"؟`}
+          onConfirm={handleDelete}
+          onCancel={() => setDeleteTarget(null)}
+        />
       )}
     </div>
   );

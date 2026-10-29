@@ -9,12 +9,16 @@ import { Loader2 } from "lucide-react";
 export default function AdminCategoriesPage() {
   const [tree, setTree] = useState<PartCategory[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const refetch = () => setRefreshKey((k) => k + 1);
 
   useEffect(() => {
+    setLoading(true);
     getCategoryTree()
       .then(setTree)
       .finally(() => setLoading(false));
-  }, []);
+  }, [refreshKey]);
 
   return (
     <div className="space-y-6" dir="rtl">
@@ -30,7 +34,7 @@ export default function AdminCategoriesPage() {
           <Loader2 className="w-8 h-8 animate-spin text-[#E63946]" />
         </div>
       ) : (
-        <CategoryManager tree={tree} />
+        <CategoryManager tree={tree} onSuccess={refetch} />
       )}
     </div>
   );

@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { BrandForm } from "@/components/admin/BrandForm";
-import { getBrands } from "@elsaad/api-client";
+import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
+import { FormBanner } from "@/components/admin/FormBanner";
+import { getBrands, deleteBrand } from "@elsaad/api-client";
 import type { Brand } from "@elsaad/shared";
 import { Loader2 } from "lucide-react";
 
@@ -11,12 +13,36 @@ const nf = new Intl.NumberFormat("ar-EG-u-nu-latn");
 export default function AdminBrandsPage() {
   const [brands, setBrands] = useState<Brand[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [editingBrand, setEditingBrand] = useState<Brand | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<Brand | null>(null);
+  const [banner, setBanner] = useState<{ type: "success" | "error"; message: string } | null>(null);
+
+  const refetch = () => setRefreshKey((k) => k + 1);
 
   useEffect(() => {
+    setLoading(true);
     getBrands()
       .then(setBrands)
       .finally(() => setLoading(false));
-  }, []);
+  }, [refreshKey]);
+
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
+    setBanner(null);
+    try {
+      await deleteBrand(deleteTarget.id);
+      setBanner({ type: "success", message: "تم حذف الماركة بنجاح" });
+      setDeleteTarget(null);
+      refetch();
+    } catch (err) {
+      setBanner({
+        type: "error",
+        message: err instanceof Error ? err.message : "تعسّر حذف الماركة",
+      });
+      setDeleteTarget(null);
+    }
+  };
 
   return (
     <div className="space-y-6" dir="rtl">
@@ -27,7 +53,25 @@ export default function AdminBrandsPage() {
         </p>
       </div>
 
-      <BrandForm />
+      {banner && <FormBanner type={banner.type} message={banner.message} onClose={() => setBanner(null)} />}
+
+      <BrandForm onSuccess={refetch} />
+
+      {editingBrand && (
+        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
+          <div className="w-full max-w-lg bg-[#151515] border border-[#262626] rounded-xl p-6">
+            <BrandForm
+              mode="edit"
+              initialData={editingBrand}
+              onSuccess={() => {
+                setEditingBrand(null);
+                refetch();
+              }}
+              onCancel={() => setEditingBrand(null)}
+            />
+          </div>
+        </div>
+      )}
 
       {loading ? (
         <div className="flex items-center justify-center min-h-[40vh]">
@@ -45,12 +89,13 @@ export default function AdminBrandsPage() {
                   <th className="px-4 py-3 font-medium text-right">الموديلات</th>
                   <th className="px-4 py-3 font-medium text-right">المنتجات</th>
                   <th className="px-4 py-3 font-medium text-right">الموقع</th>
+                  <th className="px-4 py-3 font-medium text-right">الإجراءات</th>
                 </tr>
               </thead>
               <tbody>
                 {brands.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="px-4 py-8 text-center text-muted">
+                    <td colSpan={7} className="px-4 py-8 text-center text-muted">
                       لا توجد ماركات بعد.
                     </td>
                   </tr>
@@ -87,6 +132,22 @@ export default function AdminBrandsPage() {
                           "—"
                         )}
                       </td>
+                      <td className="px-4 py-3 flex gap-3 text-sm">
+                        <button
+                          type="button"
+                          onClick={() => setEditingBrand(brand)}
+                          className="font-semibold text-accent hover:underline"
+                        >
+                          تعديل
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setDeleteTarget(brand)}
+                          className="text-red-400 hover:text-red-300"
+                        >
+                          حذف
+                        </button>
+                      </td>
                     </tr>
                   ))
                 )}
@@ -94,6 +155,15 @@ export default function AdminBrandsPage() {
             </table>
           </div>
         </div>
+      )}
+
+      {deleteTarget && (
+        <ConfirmDialog
+          title="حذف الماركة"
+          message={`هل أنت متأكد من حذف الماركة "${deleteTarget.nameAr ?? deleteTarget.name}"؟`}
+          onConfirm={handleDelete}
+          onCancel={() => setDeleteTarget(null)}
+        />
       )}
     </div>
   );

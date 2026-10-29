@@ -1,12 +1,15 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { productFormSchema, type ProductFormValues } from "@elsaad/shared";
-import type { Brand, PartCategory, Product } from "@elsaad/shared";
+import { FormBanner } from "./FormBanner";
+import { productFormSchema, type ProductFormValues, type Brand, type PartCategory, type Product } from "@elsaad/shared";
+import { createProduct, updateProduct } from "@elsaad/api-client";
+import { Loader2 } from "lucide-react";
 
 const toPriceInput = (value: number | null | undefined) =>
   value == null ? "" : String(value);
@@ -22,6 +25,8 @@ const inputClass =
 
 export function ProductForm({ product, brands, categories }: ProductFormProps) {
   const router = useRouter();
+  const [banner, setBanner] = useState<{ type: "success" | "error"; message: string } | null>(null);
+
   const {
     register,
     handleSubmit,
@@ -48,31 +53,27 @@ export function ProductForm({ product, brands, categories }: ProductFormProps) {
     },
   });
 
-  const onSubmit = (values: ProductFormValues) => {
-    const payload = {
-      ...values,
-      costPrice: values.costPrice ? Number(values.costPrice) : null,
-      wholesalePrice: values.wholesalePrice ? Number(values.wholesalePrice) : null,
-      retailPrice: values.retailPrice ? Number(values.retailPrice) : null,
-      vipPrice: values.vipPrice ? Number(values.vipPrice) : null,
-      taxRate: values.taxRate ? Number(values.taxRate) : 0.14,
-      reorderLevel: values.reorderLevel ? Number(values.reorderLevel) : 0,
-      tags: (values.tags ?? "")
-        .split(/[،,]/)
-        .map((tag) => tag.trim())
-        .filter(Boolean),
-      brandId: values.brandId || null,
-      partCategoryId: values.partCategoryId || null,
-      // TODO(Phase 3): supplierId — reason: suppliers have no service/UI yet
-      // (schema column exists), so the field is intentionally not in this form.
-    };
-    // Mock-mode save: log the payload and return to the list so the flow is
-    // demonstrable before any write API exists.
-    console.log("[admin] save product payload:", payload);
-    // TODO(Phase 2D): POST/PATCH /api/admin/products once ADMIN_API_KEY auth
-    // exists (decision 1B) — reason: write endpoints must never ship unauthenticated.
-    router.push("/admin/products");
-    router.refresh();
+  const onSubmit = async (values: ProductFormValues) => {
+    setBanner(null);
+    try {
+      if (product) {
+        await updateProduct(product.id, values);
+        setBanner({ type: "success", message: "تم تحديث المنتج بنجاح" });
+      } else {
+        await createProduct(values);
+        setBanner({ type: "success", message: "تم إضافة المنتج بنجاح" });
+      }
+
+      setTimeout(() => {
+        router.push("/admin/products");
+        router.refresh();
+      }, 1000);
+    } catch (err) {
+      setBanner({
+        type: "error",
+        message: err instanceof Error ? err.message : "حدث خطأ أثناء حفظ المنتج",
+      });
+    }
   };
 
   return (
@@ -80,7 +81,10 @@ export function ProductForm({ product, brands, categories }: ProductFormProps) {
       onSubmit={handleSubmit(onSubmit)}
       noValidate
       className="space-y-6 rounded-xl border border-border bg-card p-6"
+      dir="rtl"
     >
+      {banner && <FormBanner type={banner.type} message={banner.message} onClose={() => setBanner(null)} />}
+
       <div className="grid gap-4 md:grid-cols-2">
         <Input
           label="كود المنتج *"
@@ -235,7 +239,14 @@ export function ProductForm({ product, brands, categories }: ProductFormProps) {
 
       <div className="flex gap-3 border-t border-border pt-4">
         <Button type="submit" disabled={isSubmitting}>
-          حفظ
+          {isSubmitting ? (
+            <>
+              <Loader2 className="w-4 h-4 animate-spin ml-2 inline" />
+              <span>جاري الحفظ...</span>
+            </>
+          ) : (
+            <span>حفظ</span>
+          )}
         </Button>
         <Button type="button" variant="secondary" onClick={() => router.back()}>
           إلغاء
