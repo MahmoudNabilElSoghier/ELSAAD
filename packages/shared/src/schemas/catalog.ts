@@ -12,6 +12,10 @@ export const brandFormSchema = z.object({
 });
 
 export type BrandFormValues = z.infer<typeof brandFormSchema>;
+export const createBrandSchema = brandFormSchema;
+export type CreateBrandInput = z.infer<typeof createBrandSchema>;
+export const updateBrandSchema = brandFormSchema.partial().strict();
+export type UpdateBrandInput = z.infer<typeof updateBrandSchema>;
 
 export const categoryFormSchema = z.object({
   nameAr: z.string().min(1, "اسم التصنيف مطلوب"),
@@ -26,3 +30,7 @@ export const categoryFormSchema = z.object({
 });
 
 export type CategoryFormValues = z.infer<typeof categoryFormSchema>;
+export const createCategorySchema = categoryFormSchema;
+export type CreateCategoryInput = z.infer<typeof createCategorySchema>;
+export const updateCategorySchema = categoryFormSchema.partial().strict();
+export type UpdateCategoryInput = z.infer<typeof updateCategorySchema>;

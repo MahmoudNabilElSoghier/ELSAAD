@@ -124,14 +124,12 @@ export async function apiGetOrNull<T>(path: string): Promise<T | null> {
 }
 
 export async function apiSend<T>(
-  method: "POST" | "PUT" | "DELETE",
+  method: "POST" | "PATCH" | "PUT" | "DELETE",
   path: string,
   body?: unknown,
-): Promise<T> {
-  return (
-    await request<T>(path, {
-      method,
-      body: body === undefined ? undefined : JSON.stringify(body),
-    })
-  ).data;
+): Promise<ApiResponse<T>> {
+  return request<T>(path, {
+    method,
+    body: body === undefined ? undefined : JSON.stringify(body),
+  });
 }

@@ -13,16 +13,18 @@ export const authApi = {
   async login(
     input: LoginInput,
   ): Promise<{ accessToken: string; user: { id: string; email: string; role: string } }> {
-    const res = await apiSend<{
-      accessToken: string;
-      user: { id: string; email: string; role: string };
-    }>("POST", "/auth/login", input);
+    const res = (
+      await apiSend<{
+        accessToken: string;
+        user: { id: string; email: string; role: string };
+      }>("POST", "/auth/login", input)
+    ).data;
     setAccessToken(res.accessToken);
     return res;
   },
 
   async refresh(): Promise<string> {
-    const res = await apiSend<{ accessToken: string }>("POST", "/auth/refresh");
+    const res = (await apiSend<{ accessToken: string }>("POST", "/auth/refresh")).data;
     setAccessToken(res.accessToken);
     return res.accessToken;
   },

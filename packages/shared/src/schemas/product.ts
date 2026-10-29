@@ -34,3 +34,7 @@ export const productFormSchema = z.object({
 });
 
 export type ProductFormValues = z.infer<typeof productFormSchema>;
+export const createProductSchema = productFormSchema;
+export type CreateProductInput = z.infer<typeof createProductSchema>;
+export const updateProductSchema = productFormSchema.partial().strict();
+export type UpdateProductInput = z.infer<typeof updateProductSchema>;

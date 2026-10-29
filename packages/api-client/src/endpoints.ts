@@ -7,8 +7,18 @@ import type {
   Order,
   PartCategory,
   Product,
+  CreateBrandInput,
+  UpdateBrandInput,
+  CreateCategoryInput,
+  UpdateCategoryInput,
+  CreateProductInput,
+  UpdateProductInput,
+  CreateBranchInput,
+  UpdateBranchInput,
+  CreateEmployeeInput,
+  UpdateEmployeeInput,
 } from "@elsaad/shared";
-import { apiGet, apiGetOrNull } from "./client";
+import { apiGet, apiGetOrNull, apiSend, type ApiResponse } from "./client";
 
 export interface ProductFilter {
   q?: string;
@@ -43,6 +53,7 @@ export interface OrderPage {
 
 const encode = encodeURIComponent;
 
+// Queries
 export const getBrands = (): Promise<Brand[]> => apiGet<Brand[]>("/brands");
 
 export const getBrandBySlug = (slug: string): Promise<Brand | null> =>
@@ -118,3 +129,43 @@ export const getOrders = (filter: OrderFilter = {}): Promise<OrderPage> => {
 
 export const getOrderById = (id: string): Promise<Order | null> =>
   apiGetOrNull<Order>(`/orders/${encode(id)}`);
+
+// Mutations
+export const createBrand = (input: CreateBrandInput): Promise<ApiResponse<Brand>> =>
+  apiSend<Brand>("POST", "/brands", input);
+
+export const updateBrand = (id: string, input: UpdateBrandInput): Promise<ApiResponse<Brand>> =>
+  apiSend<Brand>("PUT", `/brands/${encode(id)}`, input);
+
+export const deleteBrand = (id: string): Promise<ApiResponse<{ ok: true }>> =>
+  apiSend<{ ok: true }>("DELETE", `/brands/${encode(id)}`);
+
+export const createCategory = (input: CreateCategoryInput): Promise<ApiResponse<PartCategory>> =>
+  apiSend<PartCategory>("POST", "/categories", input);
+
+export const updateCategory = (id: string, input: UpdateCategoryInput): Promise<ApiResponse<PartCategory>> =>
+  apiSend<PartCategory>("PUT", `/categories/${encode(id)}`, input);
+
+export const deleteCategory = (id: string): Promise<ApiResponse<{ ok: true }>> =>
+  apiSend<{ ok: true }>("DELETE", `/categories/${encode(id)}`);
+
+export const createProduct = (input: CreateProductInput): Promise<ApiResponse<Product>> =>
+  apiSend<Product>("POST", "/products", input);
+
+export const updateProduct = (id: string, input: UpdateProductInput): Promise<ApiResponse<Product>> =>
+  apiSend<Product>("PUT", `/products/${encode(id)}`, input);
+
+export const deleteProduct = (id: string): Promise<ApiResponse<{ ok: true }>> =>
+  apiSend<{ ok: true }>("DELETE", `/products/${encode(id)}`);
+
+export const createBranch = (input: CreateBranchInput): Promise<ApiResponse<Branch>> =>
+  apiSend<Branch>("POST", "/branches", input);
+
+export const updateBranch = (id: string, input: UpdateBranchInput): Promise<ApiResponse<Branch>> =>
+  apiSend<Branch>("PATCH", `/branches/${encode(id)}`, input);
+
+export const createEmployee = (input: CreateEmployeeInput): Promise<ApiResponse<Employee>> =>
+  apiSend<Employee>("POST", "/employees", input);
+
+export const updateEmployee = (id: string, input: UpdateEmployeeInput): Promise<ApiResponse<Employee>> =>
+  apiSend<Employee>("PATCH", `/employees/${encode(id)}`, input);
