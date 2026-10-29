@@ -1,9 +1,9 @@
-import type { Metadata } from "next";
-import { getBranches } from "@elsaad/api-client";
+"use client";
 
-export const metadata: Metadata = {
-  title: "الفروع | السعد للدراجات النارية",
-};
+import { useEffect, useState } from "react";
+import { getBranches } from "@elsaad/api-client";
+import type { Branch } from "@elsaad/shared";
+import { Loader2 } from "lucide-react";
 
 const nf = new Intl.NumberFormat("ar-EG-u-nu-latn");
 
@@ -18,22 +18,30 @@ const hoursLabels: Record<string, string> = {
   fri: "الجمعة",
 };
 
-export default async function AdminBranchesPage() {
-  const branches = await getBranches();
+export default function AdminBranchesPage() {
+  const [branches, setBranches] = useState<Branch[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getBranches()
+      .then(setBranches)
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" dir="rtl">
       <div>
         <h1 className="text-2xl font-extrabold text-white">الفروع</h1>
         <p className="mt-1 text-sm text-muted">
-          {nf.format(branches.length)} فرع — الضمان والموظفين والمخزون لكل فرع.
+          {loading ? "جاري التحميل..." : `${nf.format(branches.length)} فرع — الضمان والموظفين والمخزون لكل فرع.`}
         </p>
       </div>
 
-      {/* TODO(Phase 2D): add/edit branch forms — reason: branch writes must wait
-          for the authenticated admin API (decision 1B). */}
-
-      {branches.length === 0 ? (
+      {loading ? (
+        <div className="flex items-center justify-center min-h-[40vh]">
+          <Loader2 className="w-8 h-8 animate-spin text-[#E63946]" />
+        </div>
+      ) : branches.length === 0 ? (
         <p className="text-muted">لا توجد فروع بعد.</p>
       ) : (
         <ul className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -108,7 +116,7 @@ export default async function AdminBranchesPage() {
                           {hoursLabels[day] ?? day}
                         </span>
                         <span className="text-white" dir="ltr">
-                          {hours}
+                          {hours as string}
                         </span>
                       </li>
                     ))}

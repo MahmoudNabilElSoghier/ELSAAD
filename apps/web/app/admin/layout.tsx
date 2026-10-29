@@ -23,8 +23,6 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
               معاينة بيانات تجريبية
             </span>
           )}
-          {/* TODO(Phase 2D): gate this whole subtree behind ADMIN_API_KEY session
-              auth (decision 1B) — reason: /admin is currently reachable by anyone. */}
         </div>
         <AdminNav />
       </aside>

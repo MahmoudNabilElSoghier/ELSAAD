@@ -146,7 +146,6 @@ export class JwtService {
     }
 
     const now = Math.floor(Date.now() / 1000);
-    console.log("VERIFYING: now =", now, "exp =", payload.exp, "diff =", payload.exp - now);
     if (payload.exp && payload.exp < now) {
       throw new Error("JWT token expired");
     }

@@ -1,10 +1,3 @@
-// Fetch wrapper for the ELSAAD NestJS API (apps/api).
-// Every API response is { data, isMock } — these helpers unwrap `data` so call
-// sites keep the same shapes the old local services returned.
-// Base URL resolution: NEXT_PUBLIC_API_URL (browser) → API_URL (server) →
-// http://localhost:4000/api. Admin writes read ADMIN_API_KEY server-side only —
-// never expose it through NEXT_PUBLIC_* (it would ship to the browser).
-
 export interface ApiResponse<T> {
   data: T;
   isMock: boolean;
@@ -20,19 +13,33 @@ export class ApiError extends Error {
   }
 }
 
+let inMemoryAccessToken: string | null = null;
+let refreshPromise: Promise<string> | null = null;
+
+export const setAccessToken = (token: string | null): void => {
+  inMemoryAccessToken = token;
+};
+
+export const getAccessToken = (): string | null => inMemoryAccessToken;
+
 const baseUrl = (): string =>
   process.env.NEXT_PUBLIC_API_URL ?? process.env.API_URL ?? "http://localhost:4000/api";
 
 async function request<T>(
   path: string,
   init: RequestInit & { method?: string } = {},
+  isRetry = false,
 ): Promise<ApiResponse<T>> {
   const headers = new Headers(init.headers);
   if (init.body && !headers.has("content-type")) {
     headers.set("content-type", "application/json");
   }
-  // Attach the admin key only for mutating calls, and only server-side.
-  if (init.method && init.method !== "GET" && process.env.ADMIN_API_KEY) {
+
+  if (inMemoryAccessToken && !headers.has("authorization")) {
+    headers.set("authorization", `Bearer ${inMemoryAccessToken}`);
+  }
+
+  if (init.method && init.method !== "GET" && typeof window === "undefined" && process.env.ADMIN_API_KEY) {
     headers.set("x-admin-api-key", process.env.ADMIN_API_KEY);
   }
 
@@ -42,12 +49,45 @@ async function request<T>(
       ...init,
       headers,
       cache: "no-store",
+      credentials: "include",
     });
   } catch (error) {
     throw new ApiError(
       0,
       `API unreachable at ${baseUrl()}${path} (${error instanceof Error ? error.message : String(error)}) — is apps/api running?`,
     );
+  }
+
+  if (response.status === 401 && !path.startsWith("/auth/")) {
+    if (!isRetry) {
+      try {
+        if (!refreshPromise) {
+          refreshPromise = (async () => {
+            const res = await fetch(`${baseUrl()}/auth/refresh`, {
+              method: "POST",
+              headers: { "content-type": "application/json" },
+              credentials: "include",
+              cache: "no-store",
+            });
+            if (!res.ok) throw new Error("Refresh failed");
+            const json = (await res.json()) as ApiResponse<{ accessToken: string }>;
+            const newToken = json.data.accessToken;
+            inMemoryAccessToken = newToken;
+            return newToken;
+          })().finally(() => {
+            refreshPromise = null;
+          });
+        }
+        const newToken = await refreshPromise;
+        headers.set("authorization", `Bearer ${newToken}`);
+        return request<T>(path, { ...init, headers }, true);
+      } catch {
+        inMemoryAccessToken = null;
+        if (typeof window !== "undefined") {
+          window.location.href = `/admin/login?next=${encodeURIComponent(window.location.pathname)}`;
+        }
+      }
+    }
   }
 
   if (!response.ok) {
@@ -57,7 +97,7 @@ async function request<T>(
       if (Array.isArray(body.message)) message = body.message.join("; ");
       else if (body.message) message = body.message;
     } catch {
-      // non-JSON error body — keep the default message
+      // non-JSON error body
     }
     throw new ApiError(response.status, message);
   }
@@ -69,8 +109,6 @@ export async function apiGet<T>(path: string): Promise<T> {
   return (await request<T>(path)).data;
 }
 
-// For endpoints the old local services answered with null — a 404 from the API
-// maps back to null so page-level `if (!x) notFound()` checks keep working.
 export async function apiGetOrNull<T>(path: string): Promise<T | null> {
   try {
     return await apiGet<T>(path);

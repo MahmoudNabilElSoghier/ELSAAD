@@ -71,7 +71,6 @@ export class AuthService {
 
     // 5. Generate tokens
     const accessTtl = process.env.JWT_ACCESS_TTL || "15m";
-    console.log("SIGNING WITH accessTtl:", accessTtl);
     const refreshTtlStr = process.env.JWT_REFRESH_TTL || "7d";
     const refreshTtlSeconds = this.jwt.parseTtl(refreshTtlStr);
 
@@ -151,7 +150,6 @@ export class AuthService {
 
     // Create successor in same family
     const accessTtl = process.env.JWT_ACCESS_TTL || "15m";
-    console.log("SIGNING WITH accessTtl:", accessTtl);
     const refreshTtlStr = process.env.JWT_REFRESH_TTL || "7d";
     const refreshTtlSeconds = this.jwt.parseTtl(refreshTtlStr);
 

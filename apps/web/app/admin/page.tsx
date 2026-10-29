@@ -1,11 +1,11 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import { Button } from "@/components/ui/Button";
-import { getBrands, getLowStockItems, getOrders, getProducts } from "@elsaad/api-client";
+"use client";
 
-export const metadata: Metadata = {
-  title: "لوحة التحكم | السعد للدراجات النارية",
-};
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/Button";
+import { getBrands, getLowStockItems, getOrders, getProducts, type ProductPage, type OrderPage } from "@elsaad/api-client";
+import type { Brand, BranchInventory, Order } from "@elsaad/shared";
+import { Loader2 } from "lucide-react";
 
 const nf = new Intl.NumberFormat("ar-EG-u-nu-latn");
 const formatEgp = (value: number) => `${nf.format(value)} ج.م`;
@@ -24,23 +24,46 @@ const statusLabels: Record<string, string> = {
   cancelled: "ملغي",
 };
 
-export default async function AdminHomePage() {
-  const [brands, productPage, lowStockItems, orderPage] = await Promise.all([
-    getBrands(),
-    getProducts({ pageSize: 1 }),
-    getLowStockItems(),
-    getOrders({ pageSize: 5 }),
-  ]);
+export default function AdminHomePage() {
+  const [brands, setBrands] = useState<Brand[]>([]);
+  const [productPage, setProductPage] = useState<ProductPage | null>(null);
+  const [lowStockItems, setLowStockItems] = useState<BranchInventory[]>([]);
+  const [orderPage, setOrderPage] = useState<OrderPage | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    Promise.all([
+      getBrands(),
+      getProducts({ pageSize: 1 }),
+      getLowStockItems(),
+      getOrders({ pageSize: 5 }),
+    ])
+      .then(([b, p, l, o]) => {
+        setBrands(b);
+        setProductPage(p);
+        setLowStockItems(l);
+        setOrderPage(o);
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[50vh]">
+        <Loader2 className="w-8 h-8 animate-spin text-[#E63946]" />
+      </div>
+    );
+  }
 
   const cards = [
     { label: "الماركات", value: brands.length, danger: false },
-    { label: "المنتجات", value: productPage.total, danger: false },
-    { label: "الطلبات", value: orderPage.total, danger: false },
+    { label: "المنتجات", value: productPage?.total ?? 0, danger: false },
+    { label: "الطلبات", value: orderPage?.total ?? 0, danger: false },
     { label: "مخزون منخفض", value: lowStockItems.length, danger: lowStockItems.length > 0 },
   ];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8" dir="rtl">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <h1 className="text-2xl font-extrabold text-white">لوحة التحكم</h1>
         <div className="flex gap-3">
@@ -80,22 +103,22 @@ export default async function AdminHomePage() {
         <h2 id="recent-orders" className="border-b border-border px-5 py-4 font-bold text-white">
           أحدث الطلبات
         </h2>
-        {orderPage.items.length === 0 ? (
+        {!orderPage || orderPage.items.length === 0 ? (
           <p className="px-5 py-6 text-muted">لا توجد طلبات بعد.</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-border text-muted">
-                  <th className="px-5 py-3 font-medium">رقم الطلب</th>
-                  <th className="px-5 py-3 font-medium">العميل</th>
-                  <th className="px-5 py-3 font-medium">الفرع</th>
-                  <th className="px-5 py-3 font-medium">الإجمالي</th>
-                  <th className="px-5 py-3 font-medium">الحالة</th>
+                  <th className="px-5 py-3 font-medium text-right">رقم الطلب</th>
+                  <th className="px-5 py-3 font-medium text-right">العميل</th>
+                  <th className="px-5 py-3 font-medium text-right">الفرع</th>
+                  <th className="px-5 py-3 font-medium text-right">الإجمالي</th>
+                  <th className="px-5 py-3 font-medium text-right">الحالة</th>
                 </tr>
               </thead>
               <tbody>
-                {orderPage.items.map((order) => (
+                {orderPage.items.map((order: Order) => (
                   <tr key={order.id} className="border-b border-border/50 last:border-0">
                     <td className="px-5 py-3 font-mono text-xs text-white" dir="ltr">
                       {order.orderNumber}

@@ -1,9 +1,9 @@
-import type { Metadata } from "next";
-import { getEmployees } from "@elsaad/api-client";
+"use client";
 
-export const metadata: Metadata = {
-  title: "الموظفون | السعد للدراجات النارية",
-};
+import { useEffect, useState } from "react";
+import { getEmployees } from "@elsaad/api-client";
+import type { Employee } from "@elsaad/shared";
+import { Loader2 } from "lucide-react";
 
 const nf = new Intl.NumberFormat("ar-EG-u-nu-latn");
 
@@ -21,96 +21,106 @@ const roleStyles: Record<string, string> = {
   warehouse: "bg-violet-500/15 text-violet-400",
 };
 
-export default async function AdminEmployeesPage() {
-  const employees = await getEmployees();
+export default function AdminEmployeesPage() {
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getEmployees()
+      .then(setEmployees)
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" dir="rtl">
       <div>
         <h1 className="text-2xl font-extrabold text-white">الموظفون</h1>
         <p className="mt-1 text-sm text-muted">
-          {nf.format(employees.length)} موظف مسجل، مع فرع وكل صلاحية.
+          {loading ? "جاري التحميل..." : `${nf.format(employees.length)} موظف مسجل، مع فرع وكل صلاحية.`}
         </p>
       </div>
 
-      {/* TODO(Phase 2D): add/edit employee forms — reason: employee writes must
-          wait for the authenticated admin API (decision 1B). */}
-
-      <div className="overflow-hidden rounded-xl border border-border bg-card">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-border text-muted">
-                <th className="px-4 py-3 font-medium">رقم الموظف</th>
-                <th className="px-4 py-3 font-medium">الاسم</th>
-                <th className="px-4 py-3 font-medium">الموبايل</th>
-                <th className="px-4 py-3 font-medium">الصلاحية</th>
-                <th className="px-4 py-3 font-medium">الفرع</th>
-                <th className="px-4 py-3 font-medium">الطلبات</th>
-                <th className="px-4 py-3 font-medium">الحالة</th>
-              </tr>
-            </thead>
-            <tbody>
-              {employees.length === 0 ? (
-                <tr>
-                  <td colSpan={7} className="px-4 py-8 text-center text-muted">
-                    لا يوجد موظفون بعد.
-                  </td>
+      {loading ? (
+        <div className="flex items-center justify-center min-h-[40vh]">
+          <Loader2 className="w-8 h-8 animate-spin text-[#E63946]" />
+        </div>
+      ) : (
+        <div className="overflow-hidden rounded-xl border border-border bg-card">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-border text-muted">
+                  <th className="px-4 py-3 font-medium text-right">رقم الموظف</th>
+                  <th className="px-4 py-3 font-medium text-right">الاسم</th>
+                  <th className="px-4 py-3 font-medium text-right">الموبايل</th>
+                  <th className="px-4 py-3 font-medium text-right">الصلاحية</th>
+                  <th className="px-4 py-3 font-medium text-right">الفرع</th>
+                  <th className="px-4 py-3 font-medium text-right">الطلبات</th>
+                  <th className="px-4 py-3 font-medium text-right">الحالة</th>
                 </tr>
-              ) : (
-                employees.map((employee) => (
-                  <tr
-                    key={employee.id}
-                    className="border-b border-border/50 last:border-0"
-                  >
-                    <td className="px-4 py-3 font-mono text-xs text-white" dir="ltr">
-                      {employee.employeeNumber}
-                    </td>
-                    <td className="px-4 py-3 font-semibold text-white">
-                      {employee.nameAr}
-                    </td>
-                    <td className="px-4 py-3">
-                      <a
-                        href={`tel:${employee.phone}`}
-                        className="text-white hover:text-accent"
-                        dir="ltr"
-                      >
-                        {employee.phone}
-                      </a>
-                    </td>
-                    <td className="px-4 py-3">
-                      <span
-                        className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                          roleStyles[employee.role] ?? "bg-bg text-muted"
-                        }`}
-                      >
-                        {roleLabels[employee.role] ?? employee.role}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 text-muted">
-                      {employee.branch?.nameAr ?? "—"}
-                    </td>
-                    <td className="px-4 py-3 text-white">
-                      {nf.format(employee._count?.orders ?? 0)}
-                    </td>
-                    <td className="px-4 py-3">
-                      <span
-                        className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                          employee.active
-                            ? "bg-emerald-500/15 text-emerald-400"
-                            : "bg-bg text-muted"
-                        }`}
-                      >
-                        {employee.active ? "نشط" : "موقوف"}
-                      </span>
+              </thead>
+              <tbody>
+                {employees.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="px-4 py-8 text-center text-muted">
+                      لا يوجد موظفون بعد.
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                ) : (
+                  employees.map((employee) => (
+                    <tr
+                      key={employee.id}
+                      className="border-b border-border/50 last:border-0"
+                    >
+                      <td className="px-4 py-3 font-mono text-xs text-white" dir="ltr">
+                        {employee.employeeNumber}
+                      </td>
+                      <td className="px-4 py-3 font-semibold text-white">
+                        {employee.nameAr}
+                      </td>
+                      <td className="px-4 py-3">
+                        <a
+                          href={`tel:${employee.phone}`}
+                          className="text-white hover:text-accent"
+                          dir="ltr"
+                        >
+                          {employee.phone}
+                        </a>
+                      </td>
+                      <td className="px-4 py-3">
+                        <span
+                          className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                            roleStyles[employee.role] ?? "bg-bg text-muted"
+                          }`}
+                        >
+                          {roleLabels[employee.role] ?? employee.role}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 text-muted">
+                        {employee.branch?.nameAr ?? "—"}
+                      </td>
+                      <td className="px-4 py-3 text-white">
+                        {nf.format(employee._count?.orders ?? 0)}
+                      </td>
+                      <td className="px-4 py-3">
+                        <span
+                          className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                            employee.active
+                              ? "bg-emerald-500/15 text-emerald-400"
+                              : "bg-bg text-muted"
+                          }`}
+                        >
+                          {employee.active ? "نشط" : "موقوف"}
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
