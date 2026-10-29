@@ -22,8 +22,13 @@ export const setAccessToken = (token: string | null): void => {
 
 export const getAccessToken = (): string | null => inMemoryAccessToken;
 
-const baseUrl = (): string =>
-  process.env.NEXT_PUBLIC_API_URL ?? process.env.API_URL ?? "http://localhost:4000/api";
+const baseUrl = (): string => {
+  if (typeof window !== "undefined") {
+    return process.env.NEXT_PUBLIC_API_URL ?? "/api";
+  }
+  const origin = process.env.API_ORIGIN ?? process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+  return origin.startsWith("http") ? `${origin}/api` : origin;
+};
 
 async function request<T>(
   path: string,

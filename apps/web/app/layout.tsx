@@ -52,8 +52,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html dir="rtl" lang="ar" className={cairo.variable}>
-      <body className="font-sans antialiased bg-bg text-white min-h-screen flex flex-col">
+    <html dir="rtl" lang="ar" className={cairo.variable} suppressHydrationWarning>
+      <body className="font-sans antialiased bg-bg text-white min-h-screen flex flex-col" suppressHydrationWarning>
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:right-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-accent-strong focus:text-white focus:rounded-lg"
