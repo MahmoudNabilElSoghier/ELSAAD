@@ -2,6 +2,7 @@
 // (default: local). For minio it exits 0 with SKIPPED when the server is
 // unreachable, so CI/dev machines without Docker stay green:
 //   pnpm --filter @elsaad/api test:storage
+import "dotenv/config";
 import { ConfigService } from "@nestjs/config";
 import { LocalStorageProvider } from "../src/storage/local.provider";
 import { MinioStorageProvider } from "../src/storage/minio.provider";
