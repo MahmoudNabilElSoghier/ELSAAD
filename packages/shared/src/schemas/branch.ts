@@ -31,8 +31,12 @@ export const createBranchSchema = z.object({
   latitude: z.number().optional(),
   longitude: z.number().optional(),
   openingHours: z.record(z.string(), z.string()).optional(),
+  managerId: z.string().optional().nullable(),
   displayOrder: z.number().int().optional(),
   active: z.boolean().optional(),
 });
 
 export type CreateBranchInput = z.infer<typeof createBranchSchema>;
+
+export const updateBranchSchema = createBranchSchema.partial().strict();
+export type UpdateBranchInput = z.infer<typeof updateBranchSchema>;

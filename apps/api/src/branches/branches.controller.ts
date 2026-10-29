@@ -5,11 +5,12 @@ import {
   Inject,
   NotFoundException,
   Param,
+  Patch,
   Post,
   UseGuards,
 } from "@nestjs/common";
 import { ApiHeader, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
-import { createBranchSchema, type CreateBranchInput } from "@elsaad/shared";
+import { createBranchSchema, updateBranchSchema, type CreateBranchInput, type UpdateBranchInput } from "@elsaad/shared";
 import { AdminAuthGuard } from "../common/guards/admin-auth.guard";
 import { ZodValidationPipe } from "../common/pipes/zod-validation.pipe";
 import { BranchesService } from "./branches.service";
@@ -37,10 +38,22 @@ export class BranchesController {
   @Post()
   @UseGuards(AdminAuthGuard)
   @ApiHeader({ name: "x-admin-api-key", required: false })
-  @ApiOperation({ summary: "Create branch (admin, requires x-admin-api-key)" })
+  @ApiOperation({ summary: "Create branch (admin, requires x-admin-api-key or Bearer JWT)" })
   create(
     @Body(new ZodValidationPipe(createBranchSchema)) body: CreateBranchInput,
   ) {
     return this.branches.create(body);
+  }
+
+  @Patch(":id")
+  @UseGuards(AdminAuthGuard)
+  @ApiHeader({ name: "x-admin-api-key", required: false })
+  @ApiParam({ name: "id" })
+  @ApiOperation({ summary: "Update branch (admin, requires x-admin-api-key or Bearer JWT)" })
+  update(
+    @Param("id") id: string,
+    @Body(new ZodValidationPipe(updateBranchSchema)) body: UpdateBranchInput,
+  ) {
+    return this.branches.update(id, body);
   }
 }
