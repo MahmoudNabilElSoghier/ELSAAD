@@ -13,7 +13,7 @@ import {
 } from "@nestjs/common";
 import { ApiHeader, ApiOperation, ApiParam, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { productFormSchema, type ProductFormValues } from "@elsaad/shared";
-import { AdminApiKeyGuard } from "../common/guards/admin-api-key.guard";
+import { AdminAuthGuard } from "../common/guards/admin-auth.guard";
 import { ZodValidationPipe } from "../common/pipes/zod-validation.pipe";
 import { ProductsService, type ProductBody, type ProductFilter } from "./products.service";
 
@@ -102,7 +102,7 @@ export class ProductsController {
   }
 
   @Post()
-  @UseGuards(AdminApiKeyGuard)
+  @UseGuards(AdminAuthGuard)
   @ApiHeader({ name: "x-admin-api-key", required: false })
   @ApiOperation({ summary: "Create product (admin, requires x-admin-api-key)" })
   create(@Body(productBody()) body: ProductFormValues) {
@@ -110,7 +110,7 @@ export class ProductsController {
   }
 
   @Put(":id")
-  @UseGuards(AdminApiKeyGuard)
+  @UseGuards(AdminAuthGuard)
   @ApiHeader({ name: "x-admin-api-key", required: false })
   @ApiParam({ name: "id" })
   @ApiOperation({ summary: "Update product (admin, requires x-admin-api-key)" })
@@ -119,7 +119,7 @@ export class ProductsController {
   }
 
   @Delete(":id")
-  @UseGuards(AdminApiKeyGuard)
+  @UseGuards(AdminAuthGuard)
   @ApiHeader({ name: "x-admin-api-key", required: false })
   @ApiParam({ name: "id" })
   @ApiOperation({

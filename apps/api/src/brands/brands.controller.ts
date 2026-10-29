@@ -17,7 +17,7 @@ import {
   ApiTags,
 } from "@nestjs/swagger";
 import { brandFormSchema, type BrandFormValues } from "@elsaad/shared";
-import { AdminApiKeyGuard } from "../common/guards/admin-api-key.guard";
+import { AdminAuthGuard } from "../common/guards/admin-auth.guard";
 import { ZodValidationPipe } from "../common/pipes/zod-validation.pipe";
 import { BrandsService } from "./brands.service";
 
@@ -44,7 +44,7 @@ export class BrandsController {
   }
 
   @Post()
-  @UseGuards(AdminApiKeyGuard)
+  @UseGuards(AdminAuthGuard)
   @ApiHeader({ name: "x-admin-api-key", required: false })
   @ApiOperation({ summary: "Create brand (admin, requires x-admin-api-key)" })
   create(@Body(brandBody()) body: BrandFormValues) {
@@ -52,7 +52,7 @@ export class BrandsController {
   }
 
   @Put(":id")
-  @UseGuards(AdminApiKeyGuard)
+  @UseGuards(AdminAuthGuard)
   @ApiHeader({ name: "x-admin-api-key", required: false })
   @ApiParam({ name: "id" })
   @ApiOperation({ summary: "Update brand (admin, requires x-admin-api-key)" })
@@ -61,7 +61,7 @@ export class BrandsController {
   }
 
   @Delete(":id")
-  @UseGuards(AdminApiKeyGuard)
+  @UseGuards(AdminAuthGuard)
   @ApiHeader({ name: "x-admin-api-key", required: false })
   @ApiParam({ name: "id" })
   @ApiOperation({ summary: "Delete brand (admin, requires x-admin-api-key)" })

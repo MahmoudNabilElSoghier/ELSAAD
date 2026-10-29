@@ -30,6 +30,7 @@ uploads/
 # misc
 .DS_Store
 *.pem
+apps/api/keys/
 
 # debug
 npm-debug.log*

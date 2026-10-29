@@ -8,6 +8,12 @@ async function bootstrap() {
   app.setGlobalPrefix("api");
   app.enableShutdownHooks();
 
+  const corsOrigins = (process.env.CORS_ORIGINS || "http://localhost:3000").split(",");
+  app.enableCors({
+    origin: corsOrigins,
+    credentials: true,
+  });
+
   const config = new DocumentBuilder()
     .setTitle("ELSAAD API")
     .setDescription("Business API for the ELSAAD motorcycle platform")

@@ -13,7 +13,7 @@ import {
 import { ApiHeader, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 import { z } from "zod";
 import { categoryFormSchema } from "@elsaad/shared";
-import { AdminApiKeyGuard } from "../common/guards/admin-api-key.guard";
+import { AdminAuthGuard } from "../common/guards/admin-auth.guard";
 import { ZodValidationPipe } from "../common/pipes/zod-validation.pipe";
 import { CategoriesService, type CategoryBody } from "./categories.service";
 
@@ -54,7 +54,7 @@ export class CategoriesController {
   }
 
   @Post()
-  @UseGuards(AdminApiKeyGuard)
+  @UseGuards(AdminAuthGuard)
   @ApiHeader({ name: "x-admin-api-key", required: false })
   @ApiOperation({ summary: "Create category (admin, requires x-admin-api-key)" })
   create(@Body(categoryBody()) body: z.infer<typeof categoryBodySchema>) {
@@ -62,7 +62,7 @@ export class CategoriesController {
   }
 
   @Put(":id")
-  @UseGuards(AdminApiKeyGuard)
+  @UseGuards(AdminAuthGuard)
   @ApiHeader({ name: "x-admin-api-key", required: false })
   @ApiParam({ name: "id" })
   @ApiOperation({ summary: "Update category (admin, requires x-admin-api-key)" })
@@ -74,7 +74,7 @@ export class CategoriesController {
   }
 
   @Delete(":id")
-  @UseGuards(AdminApiKeyGuard)
+  @UseGuards(AdminAuthGuard)
   @ApiHeader({ name: "x-admin-api-key", required: false })
   @ApiParam({ name: "id" })
   @ApiOperation({ summary: "Delete category (admin, requires x-admin-api-key)" })

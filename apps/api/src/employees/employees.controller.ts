@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Inject, Post, UseGuards } from "@nestjs/common";
 import { ApiHeader, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { createEmployeeSchema, type CreateEmployeeInput } from "@elsaad/shared";
-import { AdminApiKeyGuard } from "../common/guards/admin-api-key.guard";
+import { AdminAuthGuard } from "../common/guards/admin-auth.guard";
 import { ZodValidationPipe } from "../common/pipes/zod-validation.pipe";
 import { EmployeesService } from "./employees.service";
 
@@ -17,7 +17,7 @@ export class EmployeesController {
   }
 
   @Post()
-  @UseGuards(AdminApiKeyGuard)
+  @UseGuards(AdminAuthGuard)
   @ApiHeader({ name: "x-admin-api-key", required: false })
   @ApiOperation({ summary: "Create employee (admin, requires x-admin-api-key)" })
   create(

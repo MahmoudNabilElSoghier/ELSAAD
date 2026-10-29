@@ -10,7 +10,7 @@ import {
 } from "@nestjs/common";
 import { ApiHeader, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 import { createBranchSchema, type CreateBranchInput } from "@elsaad/shared";
-import { AdminApiKeyGuard } from "../common/guards/admin-api-key.guard";
+import { AdminAuthGuard } from "../common/guards/admin-auth.guard";
 import { ZodValidationPipe } from "../common/pipes/zod-validation.pipe";
 import { BranchesService } from "./branches.service";
 
@@ -35,7 +35,7 @@ export class BranchesController {
   }
 
   @Post()
-  @UseGuards(AdminApiKeyGuard)
+  @UseGuards(AdminAuthGuard)
   @ApiHeader({ name: "x-admin-api-key", required: false })
   @ApiOperation({ summary: "Create branch (admin, requires x-admin-api-key)" })
   create(

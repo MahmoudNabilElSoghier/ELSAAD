@@ -22,7 +22,7 @@ import {
   ApiQuery,
   ApiTags,
 } from "@nestjs/swagger";
-import { AdminApiKeyGuard } from "../common/guards/admin-api-key.guard";
+import { AdminAuthGuard } from "../common/guards/admin-auth.guard";
 import { ZodValidationPipe } from "../common/pipes/zod-validation.pipe";
 import {
   DOCUMENT_MIME_TYPES,
@@ -69,7 +69,7 @@ export class DocumentsController {
   constructor(@Inject(DocumentsService) private readonly docs: DocumentsService) {}
 
   @Post()
-  @UseGuards(AdminApiKeyGuard)
+  @UseGuards(AdminAuthGuard)
   @uploadInterceptor()
   @ApiConsumes("multipart/form-data")
   @ApiHeader({ name: "x-admin-api-key", required: false })
@@ -151,7 +151,7 @@ export class DocumentsController {
   }
 
   @Delete(":id")
-  @UseGuards(AdminApiKeyGuard)
+  @UseGuards(AdminAuthGuard)
   @ApiHeader({ name: "x-admin-api-key", required: false })
   @ApiParam({ name: "id" })
   @ApiOperation({ summary: "Soft-delete a document (admin)" })
@@ -160,7 +160,7 @@ export class DocumentsController {
   }
 
   @Post(":id/purge")
-  @UseGuards(AdminApiKeyGuard)
+  @UseGuards(AdminAuthGuard)
   @ApiHeader({ name: "x-admin-api-key", required: false })
   @ApiParam({ name: "id" })
   @ApiOperation({
@@ -172,7 +172,7 @@ export class DocumentsController {
   }
 
   @Post(":id/immutable")
-  @UseGuards(AdminApiKeyGuard)
+  @UseGuards(AdminAuthGuard)
   @ApiHeader({ name: "x-admin-api-key", required: false })
   @ApiParam({ name: "id" })
   @ApiOperation({
