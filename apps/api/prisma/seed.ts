@@ -31,6 +31,7 @@ import type {
   ModelOut,
   ProductOut,
 } from "../scripts/migrate-excel";
+import { hashPassword } from "../src/common/crypto/password";
 
 if (!process.env.DATABASE_URL) {
   console.error(
@@ -286,6 +287,22 @@ const seedCompats: SeedCompat[] = jsonProducts
         },
       ];
     });
+
+// Sprint 2D bootstrap: create the first admin login (JWT auth). Skipped
+// unless both env vars are set — no hardcoded credentials, ever. Upsert with
+// an empty update so an existing user's password survives re-seeds.
+async function seedAdminUser(): Promise<string> {
+  const email = process.env.ADMIN_BOOTSTRAP_EMAIL?.trim().toLowerCase();
+  const password = process.env.ADMIN_BOOTSTRAP_PASSWORD;
+  if (!email || !password) return "skipped (ADMIN_BOOTSTRAP_* not set)";
+  const passwordHash = hashPassword(password);
+  await prisma.user.upsert({
+    where: { email },
+    update: {},
+    create: { email, passwordHash, role: "admin" },
+  });
+  return `ready (${email})`;
+}
 
 async function main() {
   for (const [index, category] of contentCategories.entries()) {
@@ -626,6 +643,8 @@ async function main() {
     seededDocuments += 1;
   }
 
+  const adminUser = await seedAdminUser();
+
   console.log("Seed complete:", {
     source: jsonBrands || jsonProducts ? "prisma/data/*.json" : "lib/mock (demo)",
     landingCategories: contentCategories.length,
@@ -643,6 +662,7 @@ async function main() {
     skippedInventory,
     managersLinked,
     seededDocuments,
+    adminUser,
   });
 }
 

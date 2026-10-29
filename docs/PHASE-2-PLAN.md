@@ -61,6 +61,11 @@ Deliverables:
 - [ ] Suppliers
 - [ ] Purchase orders
 - [ ] Reports
+- [ ] Password reset via email (Resend), magic link fallback
+- [ ] Active sessions list + revoke in user profile (refresh-family design
+      already supports it — no UI yet)
+- [ ] Jest unit tests for auth module (login, rotation, reuse detection,
+      rate-limit) + integration tests. Currently verified via curl matrix only.
 
 ## Tech decisions to confirm
 1. Hosted Postgres: Vercel Postgres vs Neon vs Supabase

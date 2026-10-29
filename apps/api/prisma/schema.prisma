@@ -1,6 +1,7 @@
 // ELSAAD — Phase 2 foundation schema.
 // Phase 2 decisions applied:
-//   1B — no User model yet (Phase 2D); temporary ADMIN_API_KEY auth until then
+//   1B — superseded by Sprint 2D: User model added below; ADMIN_API_KEY kept
+//        as a dual-auth alternative to JWT (AdminAuthGuard accepts either)
 //   2C — guest checkout: customerId nullable, phone required via Customer
 //   3C — soft delete (deletedAt) on Product + Order only
 //   4B — prices exclusive of VAT: Product.taxRate default 0.14, Order.taxAmount stored
@@ -250,6 +251,7 @@ model Employee {
   managedBranches   Branch[]                   @relation("BranchManager")
   branchAssignments EmployeeBranchAssignment[]
   orders            Order[]
+  user              User?
 
   @@index([role])
 }
@@ -389,4 +391,36 @@ model OrderItem {
 
   @@index([orderId])
   @@index([productId])
+}
+
+// ---------- Auth (Sprint 2D — JWT RS256 + refresh rotation) ----------
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String // scrypt: N:saltB64:hashB64
+  role         String    @default("admin") // "admin" | "manager"
+  employeeId   String?   @unique
+  employee     Employee? @relation(fields: [employeeId], references: [id])
+  active       Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  refreshTokens RefreshToken[]
+
+  @@index([role])
+}
+
+model RefreshToken {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  familyId  String // rotation family — reuse of a revoked token revokes the family
+  tokenHash String    @unique // sha256 of the opaque token; raw token never stored
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+  @@index([familyId])
 }
