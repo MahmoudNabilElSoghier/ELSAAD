@@ -1,19 +1,22 @@
 import { brands } from "@/lib/content";
+import { useTranslations } from "next-intl";
 import { Container } from "@/components/ui/Container";
 import { Card } from "@/components/ui/Card";
 import { FadeIn } from "@/components/ui/FadeIn";
 
 export function Brands() {
+  const t = useTranslations("brands");
+
   return (
     <section className="py-20 md:py-28 bg-bg">
       <Container size="xl">
         <FadeIn>
           <div className="text-center max-w-2xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
-              الماركات العالمية المعتمدة
+              {t("title")}
             </h2>
             <p className="text-muted text-lg">
-              نوفر قطع غيار ودراجات أصلية من أشهر الماركات العالمية الموثوقة
+              {t("subtitle")}
             </p>
           </div>
         </FadeIn>

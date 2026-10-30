@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { contactSchema, type ContactInput } from "@elsaad/shared";
-import { contactForm } from "@/lib/content";
+import { useTranslations } from "next-intl";
 import { company } from "@/lib/config";
 import { Container } from "@/components/ui/Container";
 import { Card } from "@/components/ui/Card";
@@ -14,6 +14,7 @@ import { MessageCircle, Phone, Send, CheckCircle2, AlertCircle, Clock, MapPin, E
 import { FadeIn } from "@/components/ui/FadeIn";
 
 export function Contact() {
+  const t = useTranslations("contact");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [serverError, setServerError] = useState("");
 
@@ -40,14 +41,14 @@ export function Contact() {
       const json = await res.json();
 
       if (!res.ok) {
-        throw new Error(json.error || contactForm.errorMessage);
+        throw new Error(json.error || t("errorMessage"));
       }
 
       setStatus("success");
       reset();
     } catch (err: unknown) {
       setStatus("error");
-      setServerError(err instanceof Error ? err.message : contactForm.errorMessage);
+      setServerError(err instanceof Error ? err.message : t("errorMessage"));
     }
   };
 
@@ -62,10 +63,10 @@ export function Contact() {
         <FadeIn>
           <div className="text-center max-w-2xl mx-auto mb-8 pb-6 border-b border-border/50">
             <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
-              {contactForm.title}
+              {t("title")}
             </h2>
             <p className="text-muted text-lg">
-              {contactForm.subtitle}
+              {t("subtitle")}
             </p>
           </div>
         </FadeIn>
@@ -76,15 +77,15 @@ export function Contact() {
             <Card padding="lg" className="bg-card border-border md:p-10">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <Input
-                label={contactForm.fields.name.label}
-                placeholder={contactForm.fields.name.placeholder}
+                label={t("fields.name.label")}
+                placeholder={t("fields.name.placeholder")}
                 error={errors.name?.message}
                 {...register("name")}
               />
 
               <Input
-                label={contactForm.fields.phone.label}
-                placeholder={contactForm.fields.phone.placeholder}
+                label={t("fields.phone.label")}
+                placeholder={t("fields.phone.placeholder")}
                 type="tel"
                 dir="ltr"
                 error={errors.phone?.message}
@@ -93,12 +94,12 @@ export function Contact() {
 
               <div className="flex flex-col gap-1.5">
                 <label htmlFor="contact-message" className="text-sm font-medium text-fg">
-                  {contactForm.fields.message.label}
+                  {t("fields.message.label")}
                 </label>
                 <textarea
                   id="contact-message"
                   rows={4}
-                  placeholder={contactForm.fields.message.placeholder}
+                  placeholder={t("fields.message.placeholder")}
                   className="bg-bg border border-border rounded-lg px-4 py-3 text-fg placeholder:text-muted focus:border-accent focus:outline-none resize-none"
                   {...register("message")}
                 />
@@ -110,14 +111,14 @@ export function Contact() {
               {status === "success" && (
                 <div className="flex items-center gap-2 p-4 rounded-lg bg-emerald-500/10 text-emerald-400 text-sm">
                   <CheckCircle2 className="w-5 h-5 shrink-0" />
-                  <span>{contactForm.successMessage}</span>
+                  <span>{t("successMessage")}</span>
                 </div>
               )}
 
               {status === "error" && (
                 <div className="flex items-center gap-2 p-4 rounded-lg bg-red-500/10 text-red-400 text-sm">
                   <AlertCircle className="w-5 h-5 shrink-0" />
-                  <span>{serverError || contactForm.errorMessage}</span>
+                  <span>{serverError || t("errorMessage")}</span>
                 </div>
               )}
 
@@ -130,7 +131,7 @@ export function Contact() {
                 className="inline-flex items-center justify-center gap-2"
               >
                 <Send className="w-4 h-4" />
-                <span>{status === "loading" ? "جاري الإرسال..." : contactForm.submitButton}</span>
+                <span>{status === "loading" ? t("sending") : t("submitButton")}</span>
               </Button>
             </form>
             </Card>
@@ -139,9 +140,9 @@ export function Contact() {
           {/* Quick Contact & WhatsApp info */}
           <FadeIn delay={0.1}>
             <div className="space-y-6 lg:py-8">
-            <h3 className="text-2xl font-bold mb-4">تواصل مباشر</h3>
+            <h3 className="text-2xl font-bold mb-4">{t("directTitle")}</h3>
             <p className="text-muted leading-relaxed mb-6">
-              فريق خدمة العملاء جاهز للرد على استفساراتكم وتلقي طلبات الشراء والصيانة طوال أيام الأسبوع.
+              {t("directText")}
             </p>
 
             <div className="space-y-4">
@@ -151,7 +152,7 @@ export function Contact() {
                     <MessageCircle className="w-6 h-6" />
                   </div>
                   <div>
-                    <div className="text-sm text-muted">واتساب السريع</div>
+                    <div className="text-sm text-muted">{t("whatsappQuick")}</div>
                     <div className="font-bold text-fg" dir="ltr">
                       {company.whatsappNumber}
                     </div>
@@ -159,7 +160,7 @@ export function Contact() {
                 </div>
                 <Button variant="secondary" size="sm" asChild>
                   <a href={company.whatsappUrl} target="_blank" rel="noopener noreferrer">
-                    راسلنا
+                    {t("messageUs")}
                   </a>
                 </Button>
               </Card>
@@ -170,14 +171,14 @@ export function Contact() {
                     <Phone className="w-6 h-6" />
                   </div>
                   <div>
-                    <div className="text-sm text-muted">الخط الساخن</div>
+                    <div className="text-sm text-muted">{t("hotline")}</div>
                     <div className="font-bold text-fg" dir="ltr">
                       {company.phoneDisplay}
                     </div>
                   </div>
                 </div>
                 <Button variant="secondary" size="sm" asChild>
-                  <a href={`tel:${company.phone}`}>اتصل بنا</a>
+                  <a href={`tel:${company.phone}`}>{t("callUs")}</a>
                 </Button>
               </Card>
 
@@ -187,12 +188,12 @@ export function Contact() {
                     <Clock className="w-6 h-6" />
                   </div>
                   <div className="space-y-1">
-                    <div className="text-sm text-muted">مواعيد العمل</div>
+                    <div className="text-sm text-muted">{t("hours.title")}</div>
                     <div className="font-bold text-fg">
-                      السبت - الخميس: 10 ص - 10 م
+                      {t("hours.weekdays")}
                     </div>
                     <div className="font-bold text-fg">
-                      الجمعة: 2 م - 10 م
+                      {t("hours.friday")}
                     </div>
                   </div>
                 </div>
@@ -204,7 +205,7 @@ export function Contact() {
                     <MapPin className="w-6 h-6" />
                   </div>
                   <div>
-                    <div className="text-sm text-muted">العنوان الرئيسي</div>
+                    <div className="text-sm text-muted">{t("address.title")}</div>
                     <div className="font-bold text-fg leading-relaxed">
                       {company.address}
                     </div>
@@ -217,7 +218,7 @@ export function Contact() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5"
                   >
-                    <span>الخريطة</span>
+                    <span>{t("address.map")}</span>
                     <ExternalLink className="w-3.5 h-3.5" />
                   </a>
                 </Button>

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { branches } from "@/lib/content";
+import { useTranslations } from "next-intl";
 import { Container } from "@/components/ui/Container";
 import { Card } from "@/components/ui/Card";
 import { MapPin, Phone, Clock, ExternalLink } from "lucide-react";
@@ -16,7 +17,11 @@ function embedUrl(address: string) {
 }
 
 export function Branches() {
+  const t = useTranslations("branches");
   const [selectedBranch, setSelectedBranch] = useState(branches[0]);
+
+  const selectedName = t(`items.${selectedBranch.id}.name`);
+  const selectedAddress = t(`items.${selectedBranch.id}.address`);
 
   return (
     <section id="branches" className="py-20 md:py-28 bg-card border-y border-border scroll-mt-20">
@@ -24,10 +29,10 @@ export function Branches() {
         <FadeIn>
           <div className="text-center max-w-2xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
-              فروعنا ومراكز الخدمة
+              {t("title")}
             </h2>
             <p className="text-muted text-lg">
-              زوروا أقرب فرع إليكم لتتعرفوا على أحدث الموديلات وتحصلوا على أفضل خدمات الصيانة
+              {t("subtitle")}
             </p>
           </div>
         </FadeIn>
@@ -39,8 +44,8 @@ export function Branches() {
               <div className="aspect-video rounded-lg overflow-hidden border border-border bg-bg">
                 <iframe
                   key={selectedBranch.id}
-                  src={embedUrl(selectedBranch.address)}
-                  title={`خريطة ${selectedBranch.name}`}
+                  src={embedUrl(selectedAddress)}
+                  title={t("mapTitle", { name: selectedName })}
                   loading="lazy"
                   allowFullScreen
                   referrerPolicy="no-referrer-when-downgrade"
@@ -48,7 +53,7 @@ export function Branches() {
                 />
               </div>
               <p className="mt-3 text-sm text-muted text-center">
-                {selectedBranch.name}
+                {selectedName}
               </p>
             </FadeIn>
           </div>
@@ -56,6 +61,10 @@ export function Branches() {
           <div className="md:order-1 space-y-4">
             {branches.map((branch, index) => {
               const isSelected = branch.id === selectedBranch.id;
+              const branchName = t(`items.${branch.id}.name`);
+              const branchAddress = t(`items.${branch.id}.address`);
+              const branchHours = t(`items.${branch.id}.hours`);
+
               return (
                 <FadeIn key={branch.id} delay={Math.min(index * 0.05, 0.3)}>
                   <Card
@@ -78,12 +87,12 @@ export function Branches() {
                   >
                     <div>
                       <h3 className="text-xl font-bold text-accent mb-4">
-                        {branch.name}
+                        {branchName}
                       </h3>
                       <div className="space-y-3 text-sm text-muted">
                         <div className="flex items-start gap-3">
                           <MapPin className="w-5 h-5 text-accent shrink-0 mt-0.5" />
-                          <span>{branch.address}</span>
+                          <span>{branchAddress}</span>
                         </div>
                         <div className="flex items-center gap-3">
                           <Phone className="w-5 h-5 text-accent shrink-0" />
@@ -91,18 +100,18 @@ export function Branches() {
                         </div>
                         <div className="flex items-center gap-3">
                           <Clock className="w-5 h-5 text-accent shrink-0" />
-                          <span>{branch.hours}</span>
+                          <span>{branchHours}</span>
                         </div>
                       </div>
                     </div>
                     <a
-                      href={mapsSearchUrl(branch.address)}
+                      href={mapsSearchUrl(branchAddress)}
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => e.stopPropagation()}
                       className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-fg hover:text-accent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm self-start"
                     >
-                      <span>افتح في خرائط جوجل</span>
+                      <span>{t("openInMaps")}</span>
                       <ExternalLink className="w-4 h-4" />
                     </a>
                   </Card>

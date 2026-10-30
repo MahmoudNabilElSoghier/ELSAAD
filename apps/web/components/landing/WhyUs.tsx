@@ -1,4 +1,5 @@
 import { whyUs } from "@/lib/content";
+import { useTranslations } from "next-intl";
 import { Container } from "@/components/ui/Container";
 import { Card } from "@/components/ui/Card";
 import { ShieldCheck, Wrench, CreditCard, Truck, Award, Headphones } from "lucide-react";
@@ -7,16 +8,18 @@ import { FadeIn } from "@/components/ui/FadeIn";
 const icons = [ShieldCheck, Wrench, CreditCard, Truck, Award, Headphones];
 
 export function WhyUs() {
+  const t = useTranslations("whyUs");
+
   return (
     <section className="py-20 md:py-28 bg-card border-y border-border">
       <Container size="xl">
         <FadeIn>
           <div className="text-center max-w-2xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
-              لماذا يختارنا العملاء؟
+              {t("title")}
             </h2>
             <p className="text-muted text-lg">
-              نلتزم بتقديم أعلى معايير الجودة والخدمة لضمان رضاك الكامل على مدار الساعة
+              {t("subtitle")}
             </p>
           </div>
         </FadeIn>
@@ -33,9 +36,9 @@ export function WhyUs() {
                   <div className="w-14 h-14 rounded-lg bg-accent/10 text-accent flex items-center justify-center mb-5">
                     <Icon className="w-7 h-7" />
                   </div>
-                  <h3 className="text-2xl font-bold mb-3">{feature.title}</h3>
+                  <h3 className="text-2xl font-bold mb-3">{t(`items.${feature.id}.title`)}</h3>
                   <p className="text-muted text-base leading-7">
-                    {feature.description}
+                    {t(`items.${feature.id}.description`)}
                   </p>
                 </Card>
               </FadeIn>

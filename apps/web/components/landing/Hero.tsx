@@ -1,10 +1,12 @@
 import Link from "next/link";
-import { hero } from "@/lib/content";
+import { useTranslations } from "next-intl";
 import { company } from "@/lib/config";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 
 export function Hero() {
+  const t = useTranslations("hero");
+
   return (
     <section
       id="home"
@@ -21,14 +23,14 @@ export function Hero() {
       <Container size="xl" className="relative z-10 py-20 md:py-32">
         <div className="max-w-2xl text-center md:text-right">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight mb-6">
-            {hero.headline}
+            {t("headline")}
           </h1>
           <p className="text-lg md:text-xl text-muted leading-relaxed mb-8 max-w-xl">
-            {hero.subheadline}
+            {t("subheadline")}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-8 justify-center sm:justify-start">
             <Button variant="primary" size="lg" asChild>
-              <Link href="#categories">{hero.ctaPrimary}</Link>
+              <Link href="#categories">{t("ctaPrimary")}</Link>
             </Button>
             <Button variant="secondary" size="lg" asChild>
               <a
@@ -36,7 +38,7 @@ export function Hero() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                {hero.ctaSecondary}
+                {t("ctaSecondary")}
               </a>
             </Button>
           </div>

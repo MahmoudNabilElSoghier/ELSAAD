@@ -1,10 +1,22 @@
 import Link from "next/link";
-import { footer, navigation } from "@/lib/content";
+import { useTranslations } from "next-intl";
 import { company } from "@/lib/config";
 import { Container } from "@/components/ui/Container";
 import { MessageCircle } from "lucide-react";
 
 export function Footer() {
+  const tFooter = useTranslations("footer");
+  const tNav = useTranslations("navigation");
+
+  const navItems = [
+    { label: tNav("home"), href: "/#home" },
+    { label: tNav("models"), href: "/#categories" },
+    { label: tNav("parts"), href: "/products" },
+    { label: tNav("brands"), href: "/brands" },
+    { label: tNav("branches"), href: "/#branches" },
+    { label: tNav("contact"), href: "/#contact" },
+  ];
+
   return (
     <footer className="bg-card border-t border-border py-16">
       <Container size="xl">
@@ -20,16 +32,16 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-muted text-sm leading-relaxed max-w-sm">
-              {footer.tagline}
+              {tFooter("tagline")}
             </p>
           </div>
 
           {/* Quick Links */}
           <div className="space-y-4">
-            <h3 className="text-fg font-bold text-base">روابط سريعة</h3>
-            <nav aria-label="روابط سريعة">
+            <h3 className="text-fg font-bold text-base">{tFooter("quickLinks")}</h3>
+            <nav aria-label={tFooter("quickLinks")}>
               <ul className="space-y-2.5">
-              {navigation.map((item) => (
+              {navItems.map((item) => (
                 <li key={item.href + item.label}>
                   <Link
                     href={item.href}
@@ -44,7 +56,7 @@ export function Footer() {
                   href="/privacy"
                   className="text-sm text-muted hover:text-fg transition-colors"
                 >
-                  سياسة الخصوصية
+                  {tFooter("privacy")}
                 </Link>
               </li>
               <li>
@@ -52,7 +64,7 @@ export function Footer() {
                   href="/terms"
                   className="text-sm text-muted hover:text-fg transition-colors"
                 >
-                  الشروط والأحكام
+                  {tFooter("terms")}
                 </Link>
               </li>
               </ul>
@@ -61,22 +73,22 @@ export function Footer() {
 
           {/* Social & Contact */}
           <div className="space-y-4">
-            <h3 className="text-fg font-bold text-base">تابعنا</h3>
+            <h3 className="text-fg font-bold text-base">{tFooter("followUs")}</h3>
             <div className="flex items-center gap-3">
               <a
-                href={footer.social.whatsapp}
+                href={company.whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="واتساب"
+                aria-label={tFooter("social.whatsapp")}
                 className="w-10 h-10 rounded-lg bg-bg border border-border flex items-center justify-center text-muted hover:text-accent hover:border-accent transition-colors"
               >
                 <MessageCircle className="w-5 h-5" />
               </a>
               <a
-                href={footer.social.facebook}
+                href="https://facebook.com/elsaad"
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="فيسبوك"
+                aria-label={tFooter("social.facebook")}
                 className="w-10 h-10 rounded-lg bg-bg border border-border flex items-center justify-center text-muted hover:text-accent hover:border-accent transition-colors"
               >
                 <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -84,10 +96,10 @@ export function Footer() {
                 </svg>
               </a>
               <a
-                href={footer.social.instagram}
+                href="https://instagram.com/elsaad"
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="انستجرام"
+                aria-label={tFooter("social.instagram")}
                 className="w-10 h-10 rounded-lg bg-bg border border-border flex items-center justify-center text-muted hover:text-accent hover:border-accent transition-colors"
               >
                 <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -95,10 +107,10 @@ export function Footer() {
                 </svg>
               </a>
               <a
-                href={footer.social.youtube}
+                href="https://youtube.com/@elsaad"
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="يوتيوب"
+                aria-label={tFooter("social.youtube")}
                 className="w-10 h-10 rounded-lg bg-bg border border-border flex items-center justify-center text-muted hover:text-accent hover:border-accent transition-colors"
               >
                 <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -110,7 +122,7 @@ export function Footer() {
         </div>
 
         <div className="border-t border-border pt-8 text-center text-sm text-muted">
-          {footer.copyright}
+          {tFooter("copyright")}
         </div>
       </Container>
     </footer>

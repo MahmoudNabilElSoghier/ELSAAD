@@ -1,14 +1,19 @@
 "use client";
 
 import { trustBar } from "@/lib/content";
+import { useTranslations } from "next-intl";
 import { Container } from "@/components/ui/Container";
 import { Card } from "@/components/ui/Card";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { useCountUp } from "@/components/ui/useCountUp";
-import type { TrustBarItem } from "@/types";
 
-function Stat({ item, index }: { item: TrustBarItem; index: number }) {
-  // "35+" -> target 35, suffix "+"; "10K+" -> target 10, suffix "K+"
+interface TrustItem {
+  id: string;
+  value: string;
+}
+
+function Stat({ item, index }: { item: TrustItem; index: number }) {
+  const t = useTranslations("trustBar");
   const match = /^(\d+)(.*)$/.exec(item.value);
   const target = match ? Number(match[1]) : 0;
   const suffix = match ? match[2] : "";
@@ -25,7 +30,7 @@ function Stat({ item, index }: { item: TrustBarItem; index: number }) {
           {suffix}
         </div>
         <div className="text-sm md:text-base text-muted font-medium">
-          {item.label}
+          {t(`${item.id}.label`)}
         </div>
       </Card>
     </FadeIn>
@@ -38,7 +43,7 @@ export function TrustBar() {
       <Container size="xl">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
           {trustBar.map((item, index) => (
-            <Stat key={index} item={item} index={index} />
+            <Stat key={item.id} item={item} index={index} />
           ))}
         </div>
       </Container>

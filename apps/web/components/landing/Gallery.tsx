@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { gallery } from "@/lib/content";
+import { useTranslations } from "next-intl";
 import { Container } from "@/components/ui/Container";
 import { Card } from "@/components/ui/Card";
 import { Image as ImageIcon } from "lucide-react";
@@ -9,6 +10,8 @@ import { FadeIn } from "@/components/ui/FadeIn";
 import { Lightbox } from "@/components/ui/Lightbox";
 
 export function Gallery() {
+  const t = useTranslations("gallery");
+  const tCommon = useTranslations("common");
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   return (
@@ -17,10 +20,10 @@ export function Gallery() {
         <FadeIn>
           <div className="text-center max-w-2xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
-              معرض الصور
+              {t("title")}
             </h2>
             <p className="text-muted text-lg">
-              لمحات من معارضنا، موديلاتنا، ومراكز الصيانة المنتشرة في أنحاء الجمهورية
+              {t("subtitle")}
             </p>
           </div>
         </FadeIn>
@@ -31,7 +34,7 @@ export function Gallery() {
               <button
                 type="button"
                 onClick={() => setSelectedIndex(index)}
-                aria-label={`عرض صورة ${index + 1}`}
+                aria-label={t("viewImage", { n: index + 1 })}
                 className="group relative block w-full h-full rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
               >
                 <Card
@@ -42,7 +45,7 @@ export function Gallery() {
                   <div className="absolute inset-0 bg-gradient-to-br from-bg to-card flex flex-col items-center justify-center p-6 text-center group-hover:scale-105 transition-transform duration-500">
                     <ImageIcon className="w-12 h-12 text-muted mb-3 group-hover:text-accent transition-colors" />
                     <span className="text-sm font-medium text-muted">
-                      السعد للدراجات النارية
+                      {tCommon("brandName")}
                     </span>
                   </div>
                   {/* Hover overlay + caption */}
@@ -51,7 +54,7 @@ export function Gallery() {
                     className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                   />
                   <span className="absolute bottom-4 right-4 text-white font-bold translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                    السعد للدراجات النارية
+                    {tCommon("brandName")}
                   </span>
                 </Card>
               </button>
