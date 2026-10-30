@@ -5,26 +5,29 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { getBrands, getLowStockItems, getOrders, getProducts, type ProductPage, type OrderPage } from "@elsaad/api-client";
 import type { Brand, BranchInventory, Order } from "@elsaad/shared";
+import { useLocale, useTranslations } from "next-intl";
 import { Loader2 } from "lucide-react";
 
-const nf = new Intl.NumberFormat("ar-EG-u-nu-latn");
-const formatEgp = (value: number) => `${nf.format(value)} ج.م`;
-
-const statusStyles: Record<string, string> = {
-  pending: "bg-amber-500/15 text-amber-400",
-  confirmed: "bg-sky-500/15 text-sky-400",
-  delivered: "bg-emerald-500/15 text-emerald-400",
-  cancelled: "bg-red-500/15 text-red-400",
-};
-
-const statusLabels: Record<string, string> = {
-  pending: "قيد الانتظار",
-  confirmed: "مؤكد",
-  delivered: "تم التسليم",
-  cancelled: "ملغي",
-};
-
 export default function AdminHomePage() {
+  const t = useTranslations("admin.dashboard");
+  const locale = useLocale();
+  const nf = new Intl.NumberFormat(locale === "ar" ? "ar-EG-u-nu-latn" : "en-US");
+  const formatEgp = (value: number) => `${nf.format(value)} EGP`;
+
+  const statusStyles: Record<string, string> = {
+    pending: "bg-amber-500/15 text-amber-400",
+    confirmed: "bg-sky-500/15 text-sky-400",
+    delivered: "bg-emerald-500/15 text-emerald-400",
+    cancelled: "bg-red-500/15 text-red-400",
+  };
+
+  const statusLabels: Record<string, string> = {
+    pending: t("statusPending"),
+    confirmed: t("statusConfirmed"),
+    delivered: t("statusDelivered"),
+    cancelled: t("statusCancelled"),
+  };
+
   const [brands, setBrands] = useState<Brand[]>([]);
   const [productPage, setProductPage] = useState<ProductPage | null>(null);
   const [lowStockItems, setLowStockItems] = useState<BranchInventory[]>([]);
@@ -56,27 +59,27 @@ export default function AdminHomePage() {
   }
 
   const cards = [
-    { label: "الماركات", value: brands.length, danger: false },
-    { label: "المنتجات", value: productPage?.total ?? 0, danger: false },
-    { label: "الطلبات", value: orderPage?.total ?? 0, danger: false },
-    { label: "مخزون منخفض", value: lowStockItems.length, danger: lowStockItems.length > 0 },
+    { label: t("cardBrands"), value: brands.length, danger: false },
+    { label: t("cardProducts"), value: productPage?.total ?? 0, danger: false },
+    { label: t("cardOrders"), value: orderPage?.total ?? 0, danger: false },
+    { label: t("cardLowStock"), value: lowStockItems.length, danger: lowStockItems.length > 0 },
   ];
 
   return (
-    <div className="space-y-8" dir="rtl">
+    <div className="space-y-8">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-2xl font-extrabold text-fg">لوحة التحكم</h1>
+        <h1 className="text-2xl font-extrabold text-fg">{t("title")}</h1>
         <div className="flex gap-3">
           <Button asChild size="sm">
-            <Link href="/admin/products/new">منتج جديد</Link>
+            <Link href="/admin/products/new">{t("newProduct")}</Link>
           </Button>
           <Button asChild size="sm" variant="secondary">
-            <Link href="/products">عرض الموقع</Link>
+            <Link href="/">{t("viewSite")}</Link>
           </Button>
         </div>
       </div>
 
-      <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4" aria-label="إحصائيات المتجر">
+      <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4" aria-label={t("statsAria")}>
         {cards.map((card) => (
           <li
             key={card.label}
@@ -101,20 +104,20 @@ export default function AdminHomePage() {
         className="overflow-hidden rounded-xl border border-border bg-card"
       >
         <h2 id="recent-orders" className="border-b border-border px-5 py-4 font-bold text-fg">
-          أحدث الطلبات
+          {t("recentOrders")}
         </h2>
         {!orderPage || orderPage.items.length === 0 ? (
-          <p className="px-5 py-6 text-muted">لا توجد طلبات بعد.</p>
+          <p className="px-5 py-6 text-muted">{t("noOrders")}</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-border text-muted">
-                  <th className="px-5 py-3 font-medium text-right">رقم الطلب</th>
-                  <th className="px-5 py-3 font-medium text-right">العميل</th>
-                  <th className="px-5 py-3 font-medium text-right">الفرع</th>
-                  <th className="px-5 py-3 font-medium text-right">الإجمالي</th>
-                  <th className="px-5 py-3 font-medium text-right">الحالة</th>
+                  <th className="px-5 py-3 font-medium text-start">{t("orderNo")}</th>
+                  <th className="px-5 py-3 font-medium text-start">{t("customer")}</th>
+                  <th className="px-5 py-3 font-medium text-start">{t("branchCol")}</th>
+                  <th className="px-5 py-3 font-medium text-start">{t("total")}</th>
+                  <th className="px-5 py-3 font-medium text-start">{t("status")}</th>
                 </tr>
               </thead>
               <tbody>

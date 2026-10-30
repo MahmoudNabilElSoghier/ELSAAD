@@ -5,22 +5,24 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { authApi, type AuthUser } from "@elsaad/api-client";
+import { useTranslations } from "next-intl";
 import { LogOut, User } from "lucide-react";
 
-const navItems = [
-  { href: "/admin", label: "لوحة التحكم" },
-  { href: "/admin/products", label: "المنتجات" },
-  { href: "/admin/categories", label: "التصنيفات" },
-  { href: "/admin/brands", label: "الماركات" },
-  { href: "/admin/employees", label: "الموظفون" },
-  { href: "/admin/branches", label: "الفروع" },
-  { href: "/admin/inventory", label: "المخزون" },
-];
-
 export function AdminNav() {
+  const t = useTranslations("admin.nav");
   const pathname = usePathname();
   const router = useRouter();
   const [user, setUser] = useState<AuthUser | null>(null);
+
+  const navItems = [
+    { href: "/admin", label: t("dashboard") },
+    { href: "/admin/products", label: t("products") },
+    { href: "/admin/categories", label: t("categories") },
+    { href: "/admin/brands", label: t("brands") },
+    { href: "/admin/employees", label: t("employees") },
+    { href: "/admin/branches", label: t("branches") },
+    { href: "/admin/inventory", label: t("inventory") },
+  ];
 
   useEffect(() => {
     authApi.me().then(setUser).catch(() => {});
@@ -35,12 +37,12 @@ export function AdminNav() {
   };
 
   return (
-    <div className="flex flex-col h-full justify-between p-3" dir="rtl">
-      <nav aria-label="قائمة الإدارة" className="flex flex-col gap-1">
+    <div className="flex flex-col h-full justify-between p-3">
+      <nav aria-label={t("aria")} className="flex flex-col gap-1">
         {navItems.map((item) => {
           const active =
             item.href === "/admin"
-              ? pathname === "/admin"
+              ? pathname.endsWith("/admin")
               : pathname === item.href || pathname.startsWith(`${item.href}/`);
           return (
             <Link
@@ -72,7 +74,7 @@ export function AdminNav() {
           className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-red-400 hover:bg-red-500/10 transition-colors"
         >
           <LogOut className="w-4 h-4" />
-          <span>تسجيل الخروج</span>
+          <span>{t("logout")}</span>
         </button>
       </div>
     </div>

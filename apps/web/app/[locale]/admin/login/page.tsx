@@ -6,9 +6,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, type LoginInput } from "@elsaad/shared";
 import { authApi } from "@elsaad/api-client";
+import { useTranslations } from "next-intl";
 import { Lock, Mail, Loader2, AlertCircle } from "lucide-react";
 
 export default function AdminLoginPage() {
+  const t = useTranslations("admin.login");
   const router = useRouter();
   const searchParams = useSearchParams();
   const next = searchParams.get("next") ?? "/admin";
@@ -31,7 +33,7 @@ export default function AdminLoginPage() {
       router.push(next);
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "حدث خطأ أثناء تسجيل الدخول");
+      setError(err instanceof Error ? err.message : t("loginError"));
       setLoading(false);
     }
   };
@@ -40,8 +42,8 @@ export default function AdminLoginPage() {
     <div className="min-h-screen bg-bg flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-card border border-border rounded-xl p-8 shadow-2xl">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-fg mb-2">لوحة تحكم السعد</h1>
-          <p className="text-sm text-muted">تسجيل الدخول للإدارة ونظام التخطيط</p>
+          <h1 className="text-2xl font-bold text-fg mb-2">{t("heading")}</h1>
+          <p className="text-sm text-muted">{t("subtitle")}</p>
         </div>
 
         {error && (
@@ -51,17 +53,17 @@ export default function AdminLoginPage() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" dir="rtl">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <div>
-            <label className="block text-xs font-medium text-muted mb-1.5">البريد الإلكتروني</label>
+            <label className="block text-xs font-medium text-muted mb-1.5">{t("emailLabel")}</label>
             <div className="relative">
-              <span className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-muted">
+              <span className="absolute inset-y-0 start-0 ps-3 flex items-center pointer-events-none text-muted">
                 <Mail className="w-4 h-4" />
               </span>
               <input
                 type="email"
                 {...register("email")}
-                className="w-full bg-bg border border-border rounded-lg py-2.5 pr-10 pl-4 text-fg text-sm focus:outline-none focus:border-accent transition-colors"
+                className="w-full bg-bg border border-border rounded-lg py-2.5 ps-10 pe-4 text-fg text-sm focus:outline-none focus:border-accent transition-colors"
                 placeholder="admin@elsaad.com"
               />
             </div>
@@ -69,15 +71,15 @@ export default function AdminLoginPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-muted mb-1.5">كلمة المرور</label>
+            <label className="block text-xs font-medium text-muted mb-1.5">{t("passwordLabel")}</label>
             <div className="relative">
-              <span className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-muted">
+              <span className="absolute inset-y-0 start-0 ps-3 flex items-center pointer-events-none text-muted">
                 <Lock className="w-4 h-4" />
               </span>
               <input
                 type="password"
                 {...register("password")}
-                className="w-full bg-bg border border-border rounded-lg py-2.5 pr-10 pl-4 text-fg text-sm focus:outline-none focus:border-accent transition-colors"
+                className="w-full bg-bg border border-border rounded-lg py-2.5 ps-10 pe-4 text-fg text-sm focus:outline-none focus:border-accent transition-colors"
                 placeholder="••••••••"
               />
             </div>
@@ -92,10 +94,10 @@ export default function AdminLoginPage() {
             {loading ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
-                <span>جاري تسجيل الدخول...</span>
+                <span>{t("loggingIn")}</span>
               </>
             ) : (
-              <span>تسجيل الدخول</span>
+              <span>{t("submit")}</span>
             )}
           </button>
         </form>
