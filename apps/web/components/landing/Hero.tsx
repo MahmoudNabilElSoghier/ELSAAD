@@ -8,7 +8,7 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="relative min-h-[85vh] md:min-h-[90vh] flex items-center overflow-hidden"
+      className="relative min-h-[85vh] md:min-h-[90vh] flex items-center overflow-hidden scroll-mt-20"
     >
       {/* BackgroundImage placeholder */}
       <div className="absolute inset-0 bg-gradient-to-l from-bg via-bg/70 to-bg/30">

@@ -52,7 +52,7 @@ export function Contact() {
   };
 
   return (
-    <section id="contact" className="py-20 md:py-28 bg-bg">
+    <section id="contact" className="py-20 md:py-28 bg-bg scroll-mt-20">
       <Container size="xl">
         <FadeIn>
           <div className="text-center max-w-2xl mx-auto mb-16">
