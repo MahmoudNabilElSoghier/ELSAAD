@@ -26,12 +26,15 @@ export function WhyUs() {
             const Icon = icons[index % icons.length];
             return (
               <FadeIn key={feature.id} delay={Math.min(index * 0.05, 0.3)} className="h-full">
-                <Card padding="lg" className="bg-bg/50 border-border h-full">
-                  <div className="w-12 h-12 rounded-lg bg-accent/10 text-accent flex items-center justify-center mb-6">
-                    <Icon className="w-6 h-6" />
+                <Card
+                  padding="lg"
+                  className="bg-bg/50 border-border h-full flex flex-col transition-all duration-300 hover:border-accent/40 hover:-translate-y-1 hover:shadow-lg hover:shadow-accent/10"
+                >
+                  <div className="w-14 h-14 rounded-lg bg-accent/10 text-accent flex items-center justify-center mb-5">
+                    <Icon className="w-7 h-7" />
                   </div>
-                  <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
-                  <p className="text-muted text-sm leading-relaxed">
+                  <h3 className="text-2xl font-bold mb-3">{feature.title}</h3>
+                  <p className="text-muted text-base leading-7">
                     {feature.description}
                   </p>
                 </Card>

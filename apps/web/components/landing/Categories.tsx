@@ -1,7 +1,8 @@
 import { categories } from "@/lib/content";
+import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Card } from "@/components/ui/Card";
-import { Bike, Wrench, Shield, Compass } from "lucide-react";
+import { ArrowLeft, Bike, Wrench, Shield, Compass } from "lucide-react";
 import { FadeIn } from "@/components/ui/FadeIn";
 
 const icons = [Bike, Compass, Wrench, Shield];
@@ -26,24 +27,34 @@ export function Categories() {
             const Icon = icons[index % icons.length];
             return (
               <FadeIn key={category.id} delay={Math.min(index * 0.05, 0.3)} className="h-full">
-                <Card
-                  hover
-                  padding="lg"
-                  className="flex flex-col justify-between group h-full"
+                {/* TODO: landing categories have no slug mapping to product
+                    part-category slugs (the products page filters by
+                    ?cat=<partCategory.slug>) — link to the full catalog until a
+                    real mapping exists. */}
+                <Link
+                  href="/products"
+                  className="group block h-full rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
                 >
-                  <div>
-                    <div className="w-12 h-12 rounded-lg bg-accent/10 text-accent flex items-center justify-center mb-6 group-hover:bg-accent group-hover:text-white transition-colors">
-                      <Icon className="w-6 h-6" />
+                  <Card
+                    hover
+                    padding="lg"
+                    className="flex flex-col justify-between h-full cursor-pointer"
+                  >
+                    <div>
+                      <div className="w-12 h-12 rounded-lg bg-accent/10 text-accent flex items-center justify-center mb-6 group-hover:bg-accent group-hover:text-white transition-colors">
+                        <Icon className="w-6 h-6" />
+                      </div>
+                      <h3 className="text-xl font-bold mb-3">{category.title}</h3>
+                      <p className="text-muted text-sm leading-relaxed mb-6">
+                        {category.description}
+                      </p>
                     </div>
-                    <h3 className="text-xl font-bold mb-3">{category.title}</h3>
-                    <p className="text-muted text-sm leading-relaxed mb-6">
-                      {category.description}
-                    </p>
-                  </div>
-                  <div className="text-accent text-sm font-semibold">
-                    <span>متاح في الفروع</span>
-                  </div>
-                </Card>
+                    <div className="flex items-center justify-between text-accent text-sm font-semibold">
+                      <span>متاح في الفروع</span>
+                      <ArrowLeft className="w-4 h-4 shrink-0 transition-transform duration-300 group-hover:-translate-x-1" />
+                    </div>
+                  </Card>
+                </Link>
               </FadeIn>
             );
           })}

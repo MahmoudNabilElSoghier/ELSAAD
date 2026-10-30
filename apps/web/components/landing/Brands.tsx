@@ -21,11 +21,17 @@ export function Brands() {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
           {brands.map((brand, index) => (
             <FadeIn key={brand.name} delay={Math.min(index * 0.05, 0.3)} className="h-full">
+              {/* TODO: replace with real logo */}
               <Card
                 padding="md"
-                className="bg-card/55 border-border flex items-center justify-center h-24 text-center hover:border-accent/40 transition-colors"
+                className="group bg-card/55 border-border flex flex-col items-center justify-center text-center min-h-[160px] h-full hover:border-accent/40 transition-colors"
               >
-                <span className="font-bold text-lg md:text-xl text-white tracking-wide">
+                <div className="w-16 h-16 rounded-lg bg-accent/10 flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-105">
+                  <span className="text-3xl font-extrabold text-accent">
+                    {brand.name.charAt(0).toUpperCase()}
+                  </span>
+                </div>
+                <span className="font-bold text-base text-white tracking-wide">
                   {brand.name}
                 </span>
               </Card>
