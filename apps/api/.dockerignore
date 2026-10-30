@@ -1,0 +1,10 @@
+node_modules
+dist
+.env*
+keys/
+uploads/
+*.log
+.turbo
+.git
+prisma/data/
+scripts/test-*.ts

@@ -187,6 +187,21 @@ No code action now — scheduled for the next minor-upgrade checkpoint:
 - ⚠️ Do **not** run `npm audit fix --force`: the offered fixes install
   breaking majors (`next@16`, `prisma@7`).
 
+## Deployment
+
+Production targets: **Vercel** (web, `apps/web`), **Railway** (API,
+`apps/api` via Dockerfile), **Neon** (Postgres), optional **MinIO/Hetzner**
+(document storage). The full step-by-step guide — providers, costs, env vars,
+migrations/seed caveats, smoke test, rollback — lives in
+[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md). Variable reference:
+[.env.production.example](.env.production.example).
+
+- API container: `docker build -t elsaad-api -f apps/api/Dockerfile .`
+  (JWT keys are passed as env vars `JWT_PRIVATE_KEY`/`JWT_PUBLIC_KEY` — the
+  `keys/` folder is never baked into the image).
+- **Back up `apps/api/keys/{private,public}.pem` before deploying** — losing
+  them invalidates every issued session.
+
 ## Development
 
 ### Root scripts (turbo)
