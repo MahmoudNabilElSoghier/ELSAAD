@@ -92,14 +92,14 @@ export function Contact() {
               />
 
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="contact-message" className="text-sm font-medium text-white">
+                <label htmlFor="contact-message" className="text-sm font-medium text-fg">
                   {contactForm.fields.message.label}
                 </label>
                 <textarea
                   id="contact-message"
                   rows={4}
                   placeholder={contactForm.fields.message.placeholder}
-                  className="bg-bg border border-border rounded-lg px-4 py-3 text-white placeholder:text-muted focus:border-accent focus:outline-none resize-none"
+                  className="bg-bg border border-border rounded-lg px-4 py-3 text-fg placeholder:text-muted focus:border-accent focus:outline-none resize-none"
                   {...register("message")}
                 />
                 {errors.message?.message && (
@@ -152,7 +152,7 @@ export function Contact() {
                   </div>
                   <div>
                     <div className="text-sm text-muted">واتساب السريع</div>
-                    <div className="font-bold text-white" dir="ltr">
+                    <div className="font-bold text-fg" dir="ltr">
                       {company.whatsappNumber}
                     </div>
                   </div>
@@ -171,7 +171,7 @@ export function Contact() {
                   </div>
                   <div>
                     <div className="text-sm text-muted">الخط الساخن</div>
-                    <div className="font-bold text-white" dir="ltr">
+                    <div className="font-bold text-fg" dir="ltr">
                       {company.phoneDisplay}
                     </div>
                   </div>
@@ -188,10 +188,10 @@ export function Contact() {
                   </div>
                   <div className="space-y-1">
                     <div className="text-sm text-muted">مواعيد العمل</div>
-                    <div className="font-bold text-white">
+                    <div className="font-bold text-fg">
                       السبت - الخميس: 10 ص - 10 م
                     </div>
-                    <div className="font-bold text-white">
+                    <div className="font-bold text-fg">
                       الجمعة: 2 م - 10 م
                     </div>
                   </div>
@@ -205,7 +205,7 @@ export function Contact() {
                   </div>
                   <div>
                     <div className="text-sm text-muted">العنوان الرئيسي</div>
-                    <div className="font-bold text-white leading-relaxed">
+                    <div className="font-bold text-fg leading-relaxed">
                       {company.address}
                     </div>
                   </div>

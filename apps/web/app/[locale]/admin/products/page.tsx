@@ -70,7 +70,7 @@ export default function AdminProductsPage() {
     <div className="space-y-6" dir="rtl">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-white">المنتجات</h1>
+          <h1 className="text-2xl font-extrabold text-fg">المنتجات</h1>
           <p className="mt-1 text-sm text-muted">
             {result ? `${nf.format(result.total)} منتج في القائمة` : "جاري التحميل..."}
           </p>
@@ -98,7 +98,7 @@ export default function AdminProductsPage() {
 
       {loading ? (
         <div className="flex items-center justify-center min-h-[40vh]">
-          <Loader2 className="w-8 h-8 animate-spin text-[#E63946]" />
+          <Loader2 className="w-8 h-8 animate-spin text-accent" />
         </div>
       ) : (
         <>
@@ -131,23 +131,23 @@ export default function AdminProductsPage() {
                       const low = stock <= product.reorderLevel;
                       return (
                         <tr key={product.id} className="border-b border-border/50 last:border-0">
-                          <td className="px-4 py-3 font-mono text-xs text-white" dir="ltr">
+                          <td className="px-4 py-3 font-mono text-xs text-fg" dir="ltr">
                             {product.code}
                           </td>
-                          <td className="px-4 py-3 text-white">{product.name}</td>
+                          <td className="px-4 py-3 text-fg">{product.name}</td>
                           <td className="px-4 py-3 text-muted">{product.brand?.name ?? "—"}</td>
                           <td className="px-4 py-3 text-muted">
                             {product.partCategory?.nameAr ?? "—"}
                           </td>
-                          <td className="px-4 py-3 text-white">
+                          <td className="px-4 py-3 text-fg">
                             {formatEgp(product.wholesalePrice)}
                           </td>
-                          <td className="px-4 py-3 text-white">
+                          <td className="px-4 py-3 text-fg">
                             {formatEgp(product.retailPrice)}
                           </td>
                           <td
                             className={`px-4 py-3 font-semibold ${
-                              low ? "text-red-400" : "text-white"
+                              low ? "text-red-400" : "text-fg"
                             }`}
                           >
                             {nf.format(stock)}
@@ -199,7 +199,7 @@ export default function AdminProductsPage() {
                 className={`rounded-lg border border-border px-4 py-2 font-semibold ${
                   result.page <= 1
                     ? "pointer-events-none opacity-40"
-                    : "text-white hover:border-accent"
+                    : "text-fg hover:border-accent"
                 }`}
               >
                 السابق
@@ -213,7 +213,7 @@ export default function AdminProductsPage() {
                 className={`rounded-lg border border-border px-4 py-2 font-semibold ${
                   result.page >= result.totalPages
                     ? "pointer-events-none opacity-40"
-                    : "text-white hover:border-accent"
+                    : "text-fg hover:border-accent"
                 }`}
               >
                 التالي

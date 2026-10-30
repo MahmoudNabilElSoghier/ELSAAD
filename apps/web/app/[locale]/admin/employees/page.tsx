@@ -45,7 +45,7 @@ export default function AdminEmployeesPage() {
     <div className="space-y-6" dir="rtl">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-white">الموظفون</h1>
+          <h1 className="text-2xl font-extrabold text-fg">الموظفون</h1>
           <p className="mt-1 text-sm text-muted">
             {loading ? "جاري التحميل..." : `${nf.format(employees.length)} موظف مسجل، مع فرع وكل صلاحية.`}
           </p>
@@ -73,7 +73,7 @@ export default function AdminEmployeesPage() {
 
       {editingEmployee && (
         <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
-          <div className="w-full max-w-2xl bg-[#151515] border border-[#262626] rounded-xl p-6 max-h-[90vh] overflow-y-auto">
+          <div className="w-full max-w-2xl bg-card border border-border rounded-xl p-6 max-h-[90vh] overflow-y-auto">
             <EmployeeForm
               mode="edit"
               initialData={editingEmployee}
@@ -90,7 +90,7 @@ export default function AdminEmployeesPage() {
 
       {loading ? (
         <div className="flex items-center justify-center min-h-[40vh]">
-          <Loader2 className="w-8 h-8 animate-spin text-[#E63946]" />
+          <Loader2 className="w-8 h-8 animate-spin text-accent" />
         </div>
       ) : (
         <div className="overflow-hidden rounded-xl border border-border bg-card">
@@ -121,16 +121,16 @@ export default function AdminEmployeesPage() {
                       key={employee.id}
                       className="border-b border-border/50 last:border-0"
                     >
-                      <td className="px-4 py-3 font-mono text-xs text-white" dir="ltr">
+                      <td className="px-4 py-3 font-mono text-xs text-fg" dir="ltr">
                         {employee.employeeNumber}
                       </td>
-                      <td className="px-4 py-3 font-semibold text-white">
+                      <td className="px-4 py-3 font-semibold text-fg">
                         {employee.nameAr}
                       </td>
                       <td className="px-4 py-3">
                         <a
                           href={`tel:${employee.phone}`}
-                          className="text-white hover:text-accent"
+                          className="text-fg hover:text-accent"
                           dir="ltr"
                         >
                           {employee.phone}
@@ -148,7 +148,7 @@ export default function AdminEmployeesPage() {
                       <td className="px-4 py-3 text-muted">
                         {employee.branch?.nameAr ?? "—"}
                       </td>
-                      <td className="px-4 py-3 text-white">
+                      <td className="px-4 py-3 text-fg">
                         {nf.format(employee._count?.orders ?? 0)}
                       </td>
                       <td className="px-4 py-3">

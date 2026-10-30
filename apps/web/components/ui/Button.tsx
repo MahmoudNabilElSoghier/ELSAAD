@@ -10,8 +10,8 @@ type ButtonProps = {
 
 const variantClasses = {
   primary: "bg-accent-strong text-white hover:bg-accent-strong/90",
-  secondary: "border border-border bg-card text-white hover:border-accent",
-  ghost: "text-white hover:bg-card",
+  secondary: "border border-border bg-card text-fg hover:border-accent",
+  ghost: "text-fg hover:bg-card",
 } as const;
 
 const sizeClasses = {

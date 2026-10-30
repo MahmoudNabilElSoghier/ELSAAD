@@ -1,38 +1,39 @@
 @import "tailwindcss";
 
-@theme inline {
-  --color-bg: #0A0A0A;
-  --color-card: #151515;
-  --color-border: #262626;
-  --color-accent: #E63946;
-  --color-accent-strong: #C1121F;
-  --color-muted: #9CA3AF;
-  --font-sans: var(--font-cairo), system-ui, sans-serif;
-}
+@custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* LIGHT MODE defaults */
+  --color-bg: #ffffff;
+  --color-card: #f9fafb;
+  --color-border: #e5e7eb;
+  --color-muted: #6b7280;
+  --color-fg: #111827;
+
+  /* Brand colors — same in both modes */
+  --color-accent: #e63946;
+  --color-accent-strong: #c1121f;
+}
+
+.dark {
+  /* DARK MODE overrides */
+  --color-bg: #0a0a0a;
+  --color-card: #151515;
+  --color-border: #262626;
+  --color-muted: #9ca3af;
+  --color-fg: #ffffff;
+  /* accent, accent-strong inherited from :root */
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  --color-bg: var(--color-bg);
+  --color-card: var(--color-card);
+  --color-border: var(--color-border);
+  --color-accent: var(--color-accent);
+  --color-accent-strong: var(--color-accent-strong);
+  --color-muted: var(--color-muted);
+  --color-fg: var(--color-fg);
+  --font-sans: var(--font-cairo), system-ui, sans-serif;
 }
 
 html {
@@ -42,5 +43,20 @@ html {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+}
+
+/* Theme cross-fade: surfaces + text only (never transform/opacity —
+   those stay per-component so hover/entrance animations keep their
+   own durations). Disabled entirely under prefers-reduced-motion. */
+* {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-duration: 200ms;
+  transition-timing-function: ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 0ms !important;
   }
 }

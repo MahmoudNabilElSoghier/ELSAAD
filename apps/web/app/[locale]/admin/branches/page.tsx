@@ -44,7 +44,7 @@ export default function AdminBranchesPage() {
     <div className="space-y-6" dir="rtl">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-white">الفروع</h1>
+          <h1 className="text-2xl font-extrabold text-fg">الفروع</h1>
           <p className="mt-1 text-sm text-muted">
             {loading ? "جاري التحميل..." : `${nf.format(branches.length)} فرع — الضمان والموظفين والمخزون لكل فرع.`}
           </p>
@@ -72,7 +72,7 @@ export default function AdminBranchesPage() {
 
       {editingBranch && (
         <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
-          <div className="w-full max-w-2xl bg-[#151515] border border-[#262626] rounded-xl p-6 max-h-[90vh] overflow-y-auto">
+          <div className="w-full max-w-2xl bg-card border border-border rounded-xl p-6 max-h-[90vh] overflow-y-auto">
             <BranchForm
               mode="edit"
               initialData={editingBranch}
@@ -89,7 +89,7 @@ export default function AdminBranchesPage() {
 
       {loading ? (
         <div className="flex items-center justify-center min-h-[40vh]">
-          <Loader2 className="w-8 h-8 animate-spin text-[#E63946]" />
+          <Loader2 className="w-8 h-8 animate-spin text-accent" />
         </div>
       ) : branches.length === 0 ? (
         <p className="text-muted">لا توجد فروع بعد.</p>
@@ -102,7 +102,7 @@ export default function AdminBranchesPage() {
             >
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="font-bold text-white">{branch.nameAr}</p>
+                  <p className="font-bold text-fg">{branch.nameAr}</p>
                   {branch.nameEn && (
                     <p className="text-xs text-muted" dir="ltr">
                       {branch.nameEn}
@@ -147,7 +147,7 @@ export default function AdminBranchesPage() {
                   <p>
                     <a
                       href={`tel:${branch.phone}`}
-                      className="text-white hover:text-accent"
+                      className="text-fg hover:text-accent"
                       dir="ltr"
                     >
                       {branch.phone}
@@ -174,7 +174,7 @@ export default function AdminBranchesPage() {
                         <span className="text-muted">
                           {hoursLabels[day] ?? day}
                         </span>
-                        <span className="text-white" dir="ltr">
+                        <span className="text-fg" dir="ltr">
                           {hours as string}
                         </span>
                       </li>
@@ -185,19 +185,19 @@ export default function AdminBranchesPage() {
 
               <div className="mt-auto grid grid-cols-3 gap-2 border-t border-border pt-3 text-center text-xs">
                 <div>
-                  <p className="font-bold text-white">
+                  <p className="font-bold text-fg">
                     {nf.format(branch._count?.inventory ?? 0)}
                   </p>
                   <p className="text-muted">صنف بالمخزون</p>
                 </div>
                 <div>
-                  <p className="font-bold text-white">
+                  <p className="font-bold text-fg">
                     {nf.format(branch._count?.employees ?? 0)}
                   </p>
                   <p className="text-muted">موظف</p>
                 </div>
                 <div>
-                  <p className="font-bold text-white">
+                  <p className="font-bold text-fg">
                     {nf.format(branch._count?.orders ?? 0)}
                   </p>
                   <p className="text-muted">طلب</p>

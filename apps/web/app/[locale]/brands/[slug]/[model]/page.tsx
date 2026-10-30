@@ -53,7 +53,7 @@ export default async function ModelDetailPage({ params }: PageProps) {
         </nav>
 
         <header className="mb-10">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-white">
+          <h1 className="text-3xl md:text-4xl font-extrabold text-fg">
             {bikeModel.nameAr ?? bikeModel.name}
           </h1>
           <p className="mt-1 text-muted" dir="ltr">
@@ -89,7 +89,7 @@ export default async function ModelDetailPage({ params }: PageProps) {
         </header>
 
         <section aria-labelledby="compatible-parts">
-          <h2 id="compatible-parts" className="mb-4 border-b border-border pb-3 text-xl font-bold text-white">
+          <h2 id="compatible-parts" className="mb-4 border-b border-border pb-3 text-xl font-bold text-fg">
             قطع الغيار المتوافقة
           </h2>
           {products.length === 0 ? (
@@ -124,10 +124,10 @@ export default async function ModelDetailPage({ params }: PageProps) {
                           {stock > 0 ? "متوفر" : "غير متوفر"}
                         </span>
                       </div>
-                      <h3 className="font-bold text-white group-hover:text-accent">
+                      <h3 className="font-bold text-fg group-hover:text-accent">
                         {product.name}
                       </h3>
-                      <p className="mt-auto text-lg font-extrabold text-white">
+                      <p className="mt-auto text-lg font-extrabold text-fg">
                         {product.retailPrice != null
                           ? `${nf.format(product.retailPrice)} ج.م`
                           : "عند التواصل"}

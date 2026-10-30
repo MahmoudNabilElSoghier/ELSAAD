@@ -85,7 +85,7 @@ export default async function LocaleLayout({
       className={cairo.variable}
       suppressHydrationWarning
     >
-      <body className="font-sans antialiased bg-bg text-white min-h-screen flex flex-col" suppressHydrationWarning>
+      <body className="font-sans antialiased bg-bg text-fg min-h-screen flex flex-col" suppressHydrationWarning>
         <ThemeProvider>
           <NextIntlClientProvider messages={messages}>
             <a

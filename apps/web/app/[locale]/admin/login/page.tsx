@@ -37,11 +37,11 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-[#151515] border border-[#262626] rounded-xl p-8 shadow-2xl">
+    <div className="min-h-screen bg-bg flex items-center justify-center p-4">
+      <div className="w-full max-w-md bg-card border border-border rounded-xl p-8 shadow-2xl">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-white mb-2">لوحة تحكم السعد</h1>
-          <p className="text-sm text-[#9CA3AF]">تسجيل الدخول للإدارة ونظام التخطيط</p>
+          <h1 className="text-2xl font-bold text-fg mb-2">لوحة تحكم السعد</h1>
+          <p className="text-sm text-muted">تسجيل الدخول للإدارة ونظام التخطيط</p>
         </div>
 
         {error && (
@@ -53,15 +53,15 @@ export default function AdminLoginPage() {
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" dir="rtl">
           <div>
-            <label className="block text-xs font-medium text-[#9CA3AF] mb-1.5">البريد الإلكتروني</label>
+            <label className="block text-xs font-medium text-muted mb-1.5">البريد الإلكتروني</label>
             <div className="relative">
-              <span className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-[#9CA3AF]">
+              <span className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-muted">
                 <Mail className="w-4 h-4" />
               </span>
               <input
                 type="email"
                 {...register("email")}
-                className="w-full bg-[#0A0A0A] border border-[#262626] rounded-lg py-2.5 pr-10 pl-4 text-white text-sm focus:outline-none focus:border-[#E63946] transition-colors"
+                className="w-full bg-bg border border-border rounded-lg py-2.5 pr-10 pl-4 text-fg text-sm focus:outline-none focus:border-accent transition-colors"
                 placeholder="admin@elsaad.com"
               />
             </div>
@@ -69,15 +69,15 @@ export default function AdminLoginPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-[#9CA3AF] mb-1.5">كلمة المرور</label>
+            <label className="block text-xs font-medium text-muted mb-1.5">كلمة المرور</label>
             <div className="relative">
-              <span className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-[#9CA3AF]">
+              <span className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-muted">
                 <Lock className="w-4 h-4" />
               </span>
               <input
                 type="password"
                 {...register("password")}
-                className="w-full bg-[#0A0A0A] border border-[#262626] rounded-lg py-2.5 pr-10 pl-4 text-white text-sm focus:outline-none focus:border-[#E63946] transition-colors"
+                className="w-full bg-bg border border-border rounded-lg py-2.5 pr-10 pl-4 text-fg text-sm focus:outline-none focus:border-accent transition-colors"
                 placeholder="••••••••"
               />
             </div>
@@ -87,7 +87,7 @@ export default function AdminLoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#E63946] hover:bg-[#C1121F] text-white font-medium py-2.5 rounded-lg text-sm transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+            className="w-full bg-accent hover:bg-accent-strong text-white font-medium py-2.5 rounded-lg text-sm transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
           >
             {loading ? (
               <>

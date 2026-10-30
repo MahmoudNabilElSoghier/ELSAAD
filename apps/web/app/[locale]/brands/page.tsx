@@ -20,7 +20,7 @@ export default async function BrandsPage() {
     <main id="main-content" className="flex-1 py-12 md:py-16">
       <Container>
         <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-white">الماركات</h1>
+          <h1 className="text-3xl md:text-4xl font-extrabold text-fg">الماركات</h1>
           <p className="mt-2 text-muted">
             {nf.format(brands.length)} ماركة — اختار ماركتك لتشوف الموديلات وقطع غيارها.
           </p>
@@ -45,7 +45,7 @@ export default async function BrandsPage() {
                     {(brand.nameAr ?? brand.name).charAt(0)}
                   </span>
                   <div>
-                    <h2 className="text-lg font-bold text-white group-hover:text-accent">
+                    <h2 className="text-lg font-bold text-fg group-hover:text-accent">
                       {brand.nameAr ?? brand.name}
                     </h2>
                     <p className="text-sm text-muted" dir="ltr">

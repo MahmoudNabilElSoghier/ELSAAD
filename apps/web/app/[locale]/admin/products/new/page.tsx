@@ -22,7 +22,7 @@ export default async function NewProductPage() {
         >
           <span aria-hidden="true">←</span> العودة للمنتجات
         </Link>
-        <h1 className="text-2xl font-extrabold text-white">منتج جديد</h1>
+        <h1 className="text-2xl font-extrabold text-fg">منتج جديد</h1>
       </div>
       <ProductForm brands={brands} categories={categories} />
     </div>

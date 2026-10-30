@@ -53,7 +53,7 @@ export default async function BrandDetailPage({ params }: PageProps) {
             {(brand.nameAr ?? brand.name).charAt(0)}
           </span>
           <div>
-            <h1 className="text-3xl md:text-4xl font-extrabold text-white">
+            <h1 className="text-3xl md:text-4xl font-extrabold text-fg">
               {brand.nameAr ?? brand.name}
             </h1>
             <p className="mt-1 text-muted" dir="ltr">
@@ -87,7 +87,7 @@ export default async function BrandDetailPage({ params }: PageProps) {
               <section key={category} aria-labelledby={`cat-${category}`}>
                 <h2
                   id={`cat-${category}`}
-                  className="mb-4 border-b border-border pb-3 text-xl font-bold text-white"
+                  className="mb-4 border-b border-border pb-3 text-xl font-bold text-fg"
                 >
                   {category}
                 </h2>
@@ -99,7 +99,7 @@ export default async function BrandDetailPage({ params }: PageProps) {
                         className="group flex h-full flex-col gap-3 rounded-xl border border-border bg-card p-5 transition-colors hover:border-accent"
                       >
                         <div>
-                          <h3 className="font-bold text-white group-hover:text-accent">
+                          <h3 className="font-bold text-fg group-hover:text-accent">
                             {model.nameAr ?? model.name}
                           </h3>
                           <p className="text-sm text-muted" dir="ltr">

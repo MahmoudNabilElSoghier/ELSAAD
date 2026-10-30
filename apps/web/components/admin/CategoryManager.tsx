@@ -115,7 +115,7 @@ function CategoryFormPanel({
       className="space-y-3 rounded-lg border border-accent/40 bg-bg p-4"
       dir="rtl"
     >
-      <p className="text-sm font-semibold text-white">
+      <p className="text-sm font-semibold text-fg">
         {isEdit ? `تعديل: ${category?.nameAr ?? category?.name}` : "تصنيف جديد"}
       </p>
 
@@ -191,7 +191,7 @@ export function CategoryManager({ tree, onSuccess }: { tree: PartCategory[]; onS
         style={{ marginInlineStart: depth * 16 }}
         dir="rtl"
       >
-        <span className="font-semibold text-white">
+        <span className="font-semibold text-fg">
           {category.nameAr ?? category.name}
         </span>
         <span className="font-mono text-xs text-muted" dir="ltr">
@@ -211,7 +211,7 @@ export function CategoryManager({ tree, onSuccess }: { tree: PartCategory[]; onS
           <button
             type="button"
             onClick={() => setMode({ type: "add", parentId: category.id })}
-            className="text-muted hover:text-white"
+            className="text-muted hover:text-fg"
           >
             إضافة فرعي
           </button>
@@ -256,7 +256,7 @@ export function CategoryManager({ tree, onSuccess }: { tree: PartCategory[]; onS
         <button
           type="button"
           onClick={() => setMode({ type: "add", parentId: null })}
-          className="rounded-lg border border-border px-4 py-2 text-sm font-semibold text-white hover:border-accent"
+          className="rounded-lg border border-border px-4 py-2 text-sm font-semibold text-fg hover:border-accent"
         >
           + تصنيف رئيسي
         </button>

@@ -31,7 +31,7 @@ export function Brands() {
                     {brand.name.charAt(0).toUpperCase()}
                   </span>
                 </div>
-                <span className="font-bold text-base text-white tracking-wide">
+                <span className="font-bold text-base text-fg tracking-wide">
                   {brand.name}
                 </span>
               </Card>

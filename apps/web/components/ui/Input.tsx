@@ -17,7 +17,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="flex flex-col gap-1.5">
         {label ? (
-          <label htmlFor={inputId} className="text-sm font-medium text-white">
+          <label htmlFor={inputId} className="text-sm font-medium text-fg">
             {label}
           </label>
         ) : null}
@@ -28,7 +28,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? `${inputId}-error` : undefined}
           className={cn(
-            "bg-bg border rounded-lg px-4 py-3 text-white placeholder:text-muted focus:border-accent focus:outline-none disabled:opacity-50",
+            "bg-bg border rounded-lg px-4 py-3 text-fg placeholder:text-muted focus:border-accent focus:outline-none disabled:opacity-50",
             error ? "border-red-500 focus:border-red-500" : "border-border",
             className
           )}

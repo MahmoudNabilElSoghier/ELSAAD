@@ -50,7 +50,7 @@ export default function AdminHomePage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
-        <Loader2 className="w-8 h-8 animate-spin text-[#E63946]" />
+        <Loader2 className="w-8 h-8 animate-spin text-accent" />
       </div>
     );
   }
@@ -65,7 +65,7 @@ export default function AdminHomePage() {
   return (
     <div className="space-y-8" dir="rtl">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-2xl font-extrabold text-white">لوحة التحكم</h1>
+        <h1 className="text-2xl font-extrabold text-fg">لوحة التحكم</h1>
         <div className="flex gap-3">
           <Button asChild size="sm">
             <Link href="/admin/products/new">منتج جديد</Link>
@@ -87,7 +87,7 @@ export default function AdminHomePage() {
             <p className="text-sm text-muted">{card.label}</p>
             <p
               className={`mt-2 text-3xl font-extrabold ${
-                card.danger ? "text-red-400" : "text-white"
+                card.danger ? "text-red-400" : "text-fg"
               }`}
             >
               {nf.format(card.value)}
@@ -100,7 +100,7 @@ export default function AdminHomePage() {
         aria-labelledby="recent-orders"
         className="overflow-hidden rounded-xl border border-border bg-card"
       >
-        <h2 id="recent-orders" className="border-b border-border px-5 py-4 font-bold text-white">
+        <h2 id="recent-orders" className="border-b border-border px-5 py-4 font-bold text-fg">
           أحدث الطلبات
         </h2>
         {!orderPage || orderPage.items.length === 0 ? (
@@ -120,12 +120,12 @@ export default function AdminHomePage() {
               <tbody>
                 {orderPage.items.map((order: Order) => (
                   <tr key={order.id} className="border-b border-border/50 last:border-0">
-                    <td className="px-5 py-3 font-mono text-xs text-white" dir="ltr">
+                    <td className="px-5 py-3 font-mono text-xs text-fg" dir="ltr">
                       {order.orderNumber}
                     </td>
-                    <td className="px-5 py-3 text-white">{order.customer?.name ?? "—"}</td>
-                    <td className="px-5 py-3 text-white">{order.branch?.nameAr ?? "—"}</td>
-                    <td className="px-5 py-3 text-white">{formatEgp(order.total)}</td>
+                    <td className="px-5 py-3 text-fg">{order.customer?.name ?? "—"}</td>
+                    <td className="px-5 py-3 text-fg">{order.branch?.nameAr ?? "—"}</td>
+                    <td className="px-5 py-3 text-fg">{formatEgp(order.total)}</td>
                     <td className="px-5 py-3">
                       <span
                         className={`rounded-full px-3 py-1 text-xs font-semibold ${

@@ -121,8 +121,8 @@ export function EmployeeForm({ mode = "create", initialData, onSuccess, onCancel
   };
 
   return (
-    <div className="bg-[#151515] border border-[#262626] rounded-xl p-6 shadow-xl" dir="rtl">
-      <h2 className="text-lg font-bold text-white mb-4">
+    <div className="bg-card border border-border rounded-xl p-6 shadow-xl" dir="rtl">
+      <h2 className="text-lg font-bold text-fg mb-4">
         {mode === "edit" ? "تعديل الموظف" : "إضافة موظف جديد"}
       </h2>
 
@@ -138,10 +138,10 @@ export function EmployeeForm({ mode = "create", initialData, onSuccess, onCancel
           <Input label="البريد الإلكتروني" {...register("email")} error={errors.email?.message} placeholder="ahmed@elsaad.com" />
 
           <div>
-            <label className="block text-sm font-medium text-white mb-1">الوظيفة / الصلاحية</label>
+            <label className="block text-sm font-medium text-fg mb-1">الوظيفة / الصلاحية</label>
             <select
               {...register("role")}
-              className="w-full bg-[#0A0A0A] border border-[#262626] rounded-lg px-4 py-2.5 text-white text-sm focus:border-accent focus:outline-none"
+              className="w-full bg-bg border border-border rounded-lg px-4 py-2.5 text-fg text-sm focus:border-accent focus:outline-none"
             >
               <option value="cashier">كاشير (Cashier)</option>
               <option value="manager">مدير فرع (Manager)</option>
@@ -151,10 +151,10 @@ export function EmployeeForm({ mode = "create", initialData, onSuccess, onCancel
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-white mb-1">الفرع الأساسي</label>
+            <label className="block text-sm font-medium text-fg mb-1">الفرع الأساسي</label>
             <select
               {...register("branchId")}
-              className="w-full bg-[#0A0A0A] border border-[#262626] rounded-lg px-4 py-2.5 text-white text-sm focus:border-accent focus:outline-none"
+              className="w-full bg-bg border border-border rounded-lg px-4 py-2.5 text-fg text-sm focus:border-accent focus:outline-none"
             >
               <option value="">— بدون فرع —</option>
               {branches.map((branch) => (
@@ -166,12 +166,12 @@ export function EmployeeForm({ mode = "create", initialData, onSuccess, onCancel
           </div>
 
           <div className="flex items-center gap-2 pt-6">
-            <input type="checkbox" id="employee-active" {...register("active")} className="w-4 h-4 rounded accent-[#E63946]" />
-            <label htmlFor="employee-active" className="text-sm font-medium text-white">موظف نشط</label>
+            <input type="checkbox" id="employee-active" {...register("active")} className="w-4 h-4 rounded accent-accent" />
+            <label htmlFor="employee-active" className="text-sm font-medium text-fg">موظف نشط</label>
           </div>
         </div>
 
-        <div className="flex justify-end gap-3 pt-4 border-t border-[#262626]">
+        <div className="flex justify-end gap-3 pt-4 border-t border-border">
           {onCancel && (
             <Button type="button" variant="secondary" size="sm" onClick={onCancel}>
               إلغاء

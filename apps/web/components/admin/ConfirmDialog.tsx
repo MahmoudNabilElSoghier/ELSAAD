@@ -20,14 +20,14 @@ export function ConfirmDialog({
 }: ConfirmDialogProps) {
   return (
     <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4" dir="rtl">
-      <div className="w-full max-w-md bg-[#151515] border border-[#262626] rounded-xl p-6 shadow-2xl space-y-4">
+      <div className="w-full max-w-md bg-card border border-border rounded-xl p-6 shadow-2xl space-y-4">
         <div className="flex items-center gap-3">
           <div className={`p-2 rounded-full ${isDanger ? "bg-red-500/15 text-red-400" : "bg-amber-500/15 text-amber-400"}`}>
             <AlertTriangle className="w-6 h-6" />
           </div>
-          <h2 className="text-lg font-bold text-white">{title}</h2>
+          <h2 className="text-lg font-bold text-fg">{title}</h2>
         </div>
-        <p className="text-sm text-[#9CA3AF]">{message}</p>
+        <p className="text-sm text-muted">{message}</p>
         <div className="flex justify-end gap-3 pt-2">
           <Button variant="secondary" size="sm" onClick={onCancel}>
             إلغاء

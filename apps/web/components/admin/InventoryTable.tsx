@@ -76,7 +76,7 @@ export function InventoryTable({ rows }: { rows: BranchInventory[] }) {
                     low ? "bg-red-500/5" : ""
                   }`}
                 >
-                  <td className="px-4 py-3 font-semibold text-white">
+                  <td className="px-4 py-3 font-semibold text-fg">
                     {row.product?.name ?? "—"}
                   </td>
                   <td className="px-4 py-3 font-mono text-xs text-muted" dir="ltr">
@@ -93,7 +93,7 @@ export function InventoryTable({ rows }: { rows: BranchInventory[] }) {
                       value={edits[row.id] ?? String(row.quantity)}
                       onChange={(event) => setQty(row.id, event.target.value)}
                       aria-label={`كمية ${row.product?.name ?? ""} في ${row.branch?.nameAr ?? ""}`}
-                      className="w-24 rounded-lg border border-border bg-bg px-3 py-2 text-white focus:border-accent focus:outline-none"
+                      className="w-24 rounded-lg border border-border bg-bg px-3 py-2 text-fg focus:border-accent focus:outline-none"
                     />
                   </td>
                   <td className="px-4 py-3 text-muted">{nf.format(threshold)}</td>
@@ -115,7 +115,7 @@ export function InventoryTable({ rows }: { rows: BranchInventory[] }) {
                       disabled={!dirty}
                       className={`rounded-lg border px-3 py-1.5 text-xs font-semibold transition-colors ${
                         dirty
-                          ? "border-accent text-white hover:bg-accent-strong/20"
+                          ? "border-accent text-fg hover:bg-accent-strong/20"
                           : "border-border text-muted opacity-60"
                       }`}
                     >

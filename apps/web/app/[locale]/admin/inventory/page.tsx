@@ -37,7 +37,7 @@ export default function AdminInventoryPage() {
     <div className="space-y-6" dir="rtl">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-white">المخزون</h1>
+          <h1 className="text-2xl font-extrabold text-fg">المخزون</h1>
           <p className="mt-1 text-sm text-muted">
             {loading ? "جاري التحميل..." : `${nf.format(rows.length)} صنف في العرض — عدّل الكمية مباشرة ثم اضغط حفظ.`}
           </p>
@@ -53,7 +53,7 @@ export default function AdminInventoryPage() {
         <div className="flex flex-col gap-1.5">
           <label
             htmlFor="branch-select"
-            className="text-sm font-medium text-white"
+            className="text-sm font-medium text-fg"
           >
             تصفية حسب الفرع
           </label>
@@ -61,7 +61,7 @@ export default function AdminInventoryPage() {
             id="branch-select"
             name="branch"
             defaultValue={branch}
-            className="rounded-lg border border-border bg-bg px-4 py-3 text-white focus:border-accent focus:outline-none"
+            className="rounded-lg border border-border bg-bg px-4 py-3 text-fg focus:border-accent focus:outline-none"
           >
             <option value="">كل الفروع</option>
             {branches.map((branchItem) => (
@@ -78,7 +78,7 @@ export default function AdminInventoryPage() {
 
       {loading ? (
         <div className="flex items-center justify-center min-h-[40vh]">
-          <Loader2 className="w-8 h-8 animate-spin text-[#E63946]" />
+          <Loader2 className="w-8 h-8 animate-spin text-accent" />
         </div>
       ) : (
         <InventoryTable rows={rows} />

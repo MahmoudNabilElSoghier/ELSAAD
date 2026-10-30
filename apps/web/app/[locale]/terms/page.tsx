@@ -25,7 +25,7 @@ export default function TermsPage() {
 
         <div className="space-y-10">
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">قبول الشروط</h2>
+            <h2 className="text-xl font-bold text-fg mb-3">قبول الشروط</h2>
             <p className="text-muted leading-relaxed">
               باستخدامك لهذا الموقع فإنك توافق على هذه الشروط والأحكام. إذا
               كنت لا توافق على أي بند منها، يرجى عدم استخدام الموقع.
@@ -33,7 +33,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">
+            <h2 className="text-xl font-bold text-fg mb-3">
               استخدام الموقع
             </h2>
             <p className="text-muted leading-relaxed">
@@ -43,7 +43,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">
+            <h2 className="text-xl font-bold text-fg mb-3">
               الملكية الفكرية
             </h2>
             <p className="text-muted leading-relaxed">
@@ -54,7 +54,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">
+            <h2 className="text-xl font-bold text-fg mb-3">
               حدود المسؤولية
             </h2>
             <p className="text-muted leading-relaxed">
@@ -65,7 +65,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">
+            <h2 className="text-xl font-bold text-fg mb-3">
               الروابط الخارجية
             </h2>
             <p className="text-muted leading-relaxed">
@@ -75,7 +75,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">التعديلات</h2>
+            <h2 className="text-xl font-bold text-fg mb-3">التعديلات</h2>
             <p className="text-muted leading-relaxed">
               يحق لنا تعديل هذه الشروط في أي وقت دون إشعار مسبق، ويسري
               التعديل فور نشره على هذه الصفحة.
@@ -83,7 +83,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">
+            <h2 className="text-xl font-bold text-fg mb-3">
               القانون المعمول به
             </h2>
             <p className="text-muted leading-relaxed">

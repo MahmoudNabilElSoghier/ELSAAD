@@ -47,7 +47,7 @@ export default function AdminBrandsPage() {
   return (
     <div className="space-y-6" dir="rtl">
       <div>
-        <h1 className="text-2xl font-extrabold text-white">الماركات</h1>
+        <h1 className="text-2xl font-extrabold text-fg">الماركات</h1>
         <p className="mt-1 text-sm text-muted">
           {loading ? "جاري التحميل..." : `${nf.format(brands.length)} ماركة مع عدد الموديلات والمنتجات لكل منها.`}
         </p>
@@ -59,7 +59,7 @@ export default function AdminBrandsPage() {
 
       {editingBrand && (
         <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
-          <div className="w-full max-w-lg bg-[#151515] border border-[#262626] rounded-xl p-6">
+          <div className="w-full max-w-lg bg-card border border-border rounded-xl p-6">
             <BrandForm
               mode="edit"
               initialData={editingBrand}
@@ -75,7 +75,7 @@ export default function AdminBrandsPage() {
 
       {loading ? (
         <div className="flex items-center justify-center min-h-[40vh]">
-          <Loader2 className="w-8 h-8 animate-spin text-[#E63946]" />
+          <Loader2 className="w-8 h-8 animate-spin text-accent" />
         </div>
       ) : (
         <div className="overflow-hidden rounded-xl border border-border bg-card">
@@ -102,19 +102,19 @@ export default function AdminBrandsPage() {
                 ) : (
                   brands.map((brand) => (
                     <tr key={brand.id} className="border-b border-border/50 last:border-0">
-                      <td className="px-4 py-3 font-semibold text-white">
+                      <td className="px-4 py-3 font-semibold text-fg">
                         {brand.nameAr ?? "—"}
                       </td>
-                      <td className="px-4 py-3 text-white" dir="ltr">
+                      <td className="px-4 py-3 text-fg" dir="ltr">
                         {brand.name}
                       </td>
                       <td className="px-4 py-3 font-mono text-xs text-muted" dir="ltr">
                         {brand.slug}
                       </td>
-                      <td className="px-4 py-3 text-white">
+                      <td className="px-4 py-3 text-fg">
                         {nf.format(brand._count?.models ?? 0)}
                       </td>
-                      <td className="px-4 py-3 text-white">
+                      <td className="px-4 py-3 text-fg">
                         {nf.format(brand._count?.products ?? 0)}
                       </td>
                       <td className="px-4 py-3">

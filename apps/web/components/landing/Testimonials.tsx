@@ -35,7 +35,7 @@ export function Testimonials() {
                   </p>
                 </div>
                 <div className="border-t border-border pt-4">
-                  <div className="font-bold text-white">{item.name}</div>
+                  <div className="font-bold text-fg">{item.name}</div>
                   <div className="text-sm text-muted">{item.role}</div>
                 </div>
               </Card>

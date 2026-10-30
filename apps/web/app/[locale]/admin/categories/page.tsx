@@ -23,7 +23,7 @@ export default function AdminCategoriesPage() {
   return (
     <div className="space-y-6" dir="rtl">
       <div>
-        <h1 className="text-2xl font-extrabold text-white">التصنيفات</h1>
+        <h1 className="text-2xl font-extrabold text-fg">التصنيفات</h1>
         <p className="mt-1 text-sm text-muted">
           شجرة تصنيفات قطع الغيار (جذور وأبناء) — يظهر عدد المنتجات لكل تصنيف.
         </p>
@@ -31,7 +31,7 @@ export default function AdminCategoriesPage() {
 
       {loading ? (
         <div className="flex items-center justify-center min-h-[40vh]">
-          <Loader2 className="w-8 h-8 animate-spin text-[#E63946]" />
+          <Loader2 className="w-8 h-8 animate-spin text-accent" />
         </div>
       ) : (
         <CategoryManager tree={tree} onSuccess={refetch} />

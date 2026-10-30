@@ -30,7 +30,7 @@ export default async function EditProductPage({
         >
           <span aria-hidden="true">←</span> العودة للمنتجات
         </Link>
-        <h1 className="text-2xl font-extrabold text-white">تعديل المنتج</h1>
+        <h1 className="text-2xl font-extrabold text-fg">تعديل المنتج</h1>
         <span className="font-mono text-sm text-muted" dir="ltr">
           {product.code}
         </span>

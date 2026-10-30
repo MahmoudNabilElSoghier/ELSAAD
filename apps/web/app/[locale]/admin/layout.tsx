@@ -17,7 +17,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
     <div className="flex min-h-screen flex-1">
       <aside className="w-64 shrink-0 border-l border-border bg-card flex flex-col sticky top-0 h-screen">
         <div className="space-y-2 border-b border-border p-4 shrink-0">
-          <p className="text-lg font-bold text-white">إدارة Elsaad</p>
+          <p className="text-lg font-bold text-fg">إدارة Elsaad</p>
           {!dbConfigured && (
             <span className="inline-block rounded-full bg-amber-500/15 px-3 py-1 text-xs font-semibold text-amber-400">
               معاينة بيانات تجريبية

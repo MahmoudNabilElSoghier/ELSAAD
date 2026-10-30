@@ -26,14 +26,14 @@ export function Footer() {
 
           {/* Quick Links */}
           <div className="space-y-4">
-            <h3 className="text-white font-bold text-base">روابط سريعة</h3>
+            <h3 className="text-fg font-bold text-base">روابط سريعة</h3>
             <nav aria-label="روابط سريعة">
               <ul className="space-y-2.5">
               {navigation.map((item) => (
                 <li key={item.href + item.label}>
                   <Link
                     href={item.href}
-                    className="text-sm text-muted hover:text-white transition-colors"
+                    className="text-sm text-muted hover:text-fg transition-colors"
                   >
                     {item.label}
                   </Link>
@@ -42,7 +42,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/privacy"
-                  className="text-sm text-muted hover:text-white transition-colors"
+                  className="text-sm text-muted hover:text-fg transition-colors"
                 >
                   سياسة الخصوصية
                 </Link>
@@ -50,7 +50,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/terms"
-                  className="text-sm text-muted hover:text-white transition-colors"
+                  className="text-sm text-muted hover:text-fg transition-colors"
                 >
                   الشروط والأحكام
                 </Link>
@@ -61,7 +61,7 @@ export function Footer() {
 
           {/* Social & Contact */}
           <div className="space-y-4">
-            <h3 className="text-white font-bold text-base">تابعنا</h3>
+            <h3 className="text-fg font-bold text-base">تابعنا</h3>
             <div className="flex items-center gap-3">
               <a
                 href={footer.social.whatsapp}

@@ -140,8 +140,8 @@ export function BranchForm({ mode = "create", initialData, onSuccess, onCancel }
   };
 
   return (
-    <div className="bg-[#151515] border border-[#262626] rounded-xl p-6 shadow-xl" dir="rtl">
-      <h2 className="text-lg font-bold text-white mb-4">
+    <div className="bg-card border border-border rounded-xl p-6 shadow-xl" dir="rtl">
+      <h2 className="text-lg font-bold text-fg mb-4">
         {mode === "edit" ? "تعديل الفرع" : "إضافة فرع جديد"}
       </h2>
 
@@ -155,10 +155,10 @@ export function BranchForm({ mode = "create", initialData, onSuccess, onCancel }
           <Input label="الاسم بالإنجليزية" {...register("nameEn")} error={errors.nameEn?.message} placeholder="Maadi Branch" />
 
           <div>
-            <label className="block text-sm font-medium text-white mb-1">نوع الفرع</label>
+            <label className="block text-sm font-medium text-fg mb-1">نوع الفرع</label>
             <select
               {...register("type")}
-              className="w-full bg-[#0A0A0A] border border-[#262626] rounded-lg px-4 py-2.5 text-white text-sm focus:border-accent focus:outline-none"
+              className="w-full bg-bg border border-border rounded-lg px-4 py-2.5 text-fg text-sm focus:border-accent focus:outline-none"
             >
               <option value="retail">بيع بالتجزئة (Retail)</option>
               <option value="warehouse">مخزن (Warehouse)</option>
@@ -174,10 +174,10 @@ export function BranchForm({ mode = "create", initialData, onSuccess, onCancel }
           <Input label="العنوان" {...register("address")} error={errors.address?.message} placeholder="15 شارع النصر، المعادي" />
           
           <div>
-            <label className="block text-sm font-medium text-white mb-1">مدير الفرع (المشرف)</label>
+            <label className="block text-sm font-medium text-fg mb-1">مدير الفرع (المشرف)</label>
             <select
               {...register("managerId")}
-              className="w-full bg-[#0A0A0A] border border-[#262626] rounded-lg px-4 py-2.5 text-white text-sm focus:border-accent focus:outline-none"
+              className="w-full bg-bg border border-border rounded-lg px-4 py-2.5 text-fg text-sm focus:border-accent focus:outline-none"
             >
               <option value="">— بدون مدير —</option>
               {employees.map((emp) => (
@@ -191,12 +191,12 @@ export function BranchForm({ mode = "create", initialData, onSuccess, onCancel }
           <Input label="ترتيب العرض" type="number" {...register("displayOrder", { valueAsNumber: true })} error={errors.displayOrder?.message} />
 
           <div className="flex items-center gap-2 pt-6">
-            <input type="checkbox" id="branch-active" {...register("active")} className="w-4 h-4 rounded accent-[#E63946]" />
-            <label htmlFor="branch-active" className="text-sm font-medium text-white">فرع نشط</label>
+            <input type="checkbox" id="branch-active" {...register("active")} className="w-4 h-4 rounded accent-accent" />
+            <label htmlFor="branch-active" className="text-sm font-medium text-fg">فرع نشط</label>
           </div>
         </div>
 
-        <div className="flex justify-end gap-3 pt-4 border-t border-[#262626]">
+        <div className="flex justify-end gap-3 pt-4 border-t border-border">
           {onCancel && (
             <Button type="button" variant="secondary" size="sm" onClick={onCancel}>
               إلغاء

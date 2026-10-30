@@ -111,7 +111,7 @@ export function BrandForm({ mode = "create", initialData, onSuccess, onCancel }:
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="rounded-lg border border-border px-4 py-2 text-sm font-semibold text-white hover:border-accent"
+        className="rounded-lg border border-border px-4 py-2 text-sm font-semibold text-fg hover:border-accent"
       >
         + ماركة جديدة
       </button>
@@ -125,7 +125,7 @@ export function BrandForm({ mode = "create", initialData, onSuccess, onCancel }:
       className="space-y-3 rounded-xl border border-accent/40 bg-card p-5"
       dir="rtl"
     >
-      <p className="font-semibold text-white">{mode === "edit" ? "تعديل الماركة" : "ماركة جديدة"}</p>
+      <p className="font-semibold text-fg">{mode === "edit" ? "تعديل الماركة" : "ماركة جديدة"}</p>
       
       {banner && <FormBanner type={banner.type} message={banner.message} onClose={() => setBanner(null)} />}
 

@@ -50,8 +50,8 @@ export function AdminNav() {
               className={cn(
                 "rounded-lg px-3 py-2 text-sm transition-colors",
                 active
-                  ? "bg-accent-strong/20 font-semibold text-white"
-                  : "text-muted hover:bg-bg hover:text-white"
+                  ? "bg-accent-strong/20 font-semibold text-fg"
+                  : "text-muted hover:bg-bg hover:text-fg"
               )}
             >
               {item.label}
@@ -60,9 +60,9 @@ export function AdminNav() {
         })}
       </nav>
 
-      <div className="pt-4 border-t border-[#262626] mt-auto">
+      <div className="pt-4 border-t border-border mt-auto">
         {user && (
-          <div className="flex items-center gap-2 px-3 py-2 mb-2 text-xs text-[#9CA3AF] truncate">
+          <div className="flex items-center gap-2 px-3 py-2 mb-2 text-xs text-muted truncate">
             <User className="w-3.5 h-3.5 shrink-0" />
             <span className="truncate">{user.email}</span>
           </div>

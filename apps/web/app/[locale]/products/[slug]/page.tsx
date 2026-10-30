@@ -59,7 +59,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
                   {product.unitOfMeasure}
                 </span>
               </div>
-              <h1 className="text-3xl md:text-4xl font-extrabold text-white">
+              <h1 className="text-3xl md:text-4xl font-extrabold text-fg">
                 {product.name}
               </h1>
               {product.nameEn && (
@@ -78,7 +78,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
             {product.description && (
               <section aria-labelledby="product-desc">
-                <h2 id="product-desc" className="mb-2 text-xl font-bold text-white">
+                <h2 id="product-desc" className="mb-2 text-xl font-bold text-fg">
                   الوصف
                 </h2>
                 <p className="leading-relaxed text-muted">{product.description}</p>
@@ -87,7 +87,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
             {product.compatibilities && product.compatibilities.length > 0 && (
               <section aria-labelledby="product-fit">
-                <h2 id="product-fit" className="mb-3 text-xl font-bold text-white">
+                <h2 id="product-fit" className="mb-3 text-xl font-bold text-fg">
                   يركب على
                 </h2>
                 <ul className="flex flex-wrap gap-2">
@@ -96,7 +96,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
                       {compat.model && compat.model.brand ? (
                         <Link
                           href={`/brands/${compat.model.brand.slug}/${compat.model.slug}`}
-                          className="inline-block rounded-full border border-border bg-card px-4 py-2 text-sm text-white transition-colors hover:border-accent"
+                          className="inline-block rounded-full border border-border bg-card px-4 py-2 text-sm text-fg transition-colors hover:border-accent"
                         >
                           {compat.model.brand.nameAr} {compat.model.nameAr ?? compat.model.name}
                         </Link>
@@ -112,7 +112,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
             )}
 
             <section aria-labelledby="product-stock">
-              <h2 id="product-stock" className="mb-3 text-xl font-bold text-white">
+              <h2 id="product-stock" className="mb-3 text-xl font-bold text-fg">
                 التوفر حسب الفرع
               </h2>
               {!product.inventory || product.inventory.length === 0 ? (
@@ -132,10 +132,10 @@ export default async function ProductDetailPage({ params }: PageProps) {
                     <tbody>
                       {product.inventory.map((row) => (
                         <tr key={row.id} className="border-b border-border/50 last:border-0">
-                          <td className="px-4 py-3 text-white">
+                          <td className="px-4 py-3 text-fg">
                             {row.branch?.nameAr ?? "—"}
                           </td>
-                          <td className="px-4 py-3 text-white">
+                          <td className="px-4 py-3 text-fg">
                             {nf.format(row.quantity)}
                           </td>
                           <td className="px-4 py-3">
@@ -161,7 +161,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
           <aside className="space-y-4 lg:sticky lg:top-6 lg:self-start">
             <div className="rounded-xl border border-border bg-card p-6">
               <p className="text-sm text-muted">سعر التجزئة</p>
-              <p className="mt-1 text-3xl font-extrabold text-white">
+              <p className="mt-1 text-3xl font-extrabold text-fg">
                 {product.retailPrice != null
                   ? `${nf.format(product.retailPrice)} ج.م`
                   : "عند التواصل"}
@@ -177,7 +177,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
                   }`}
                   aria-hidden="true"
                 />
-                <span className={stock > 0 ? "text-white" : "text-red-400"}>
+                <span className={stock > 0 ? "text-fg" : "text-red-400"}>
                   {stock > 0
                     ? `متوفر — ${nf.format(stock)} ${product.unitOfMeasure} في الفروع`
                     : "غير متوفر حاليًا"}

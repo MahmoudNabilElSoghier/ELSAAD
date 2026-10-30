@@ -26,7 +26,7 @@ export default function PrivacyPage() {
 
         <div className="space-y-10">
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">مقدمة</h2>
+            <h2 className="text-xl font-bold text-fg mb-3">مقدمة</h2>
             <p className="text-muted leading-relaxed">
               نحن في السعد للدراجات النارية نحترم خصوصيتك. توضح هذه السياسة
               ما نجمعه من بيانات عند استخدامك لموقعنا وكيف نستخدمها ونحميها.
@@ -34,7 +34,7 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">
+            <h2 className="text-xl font-bold text-fg mb-3">
               البيانات التي نجمعها
             </h2>
             <p className="text-muted leading-relaxed">
@@ -45,7 +45,7 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">
+            <h2 className="text-xl font-bold text-fg mb-3">
               كيف نستخدم البيانات
             </h2>
             <p className="text-muted leading-relaxed">
@@ -55,7 +55,7 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">
+            <h2 className="text-xl font-bold text-fg mb-3">
               مشاركة البيانات
             </h2>
             <p className="text-muted leading-relaxed">
@@ -65,7 +65,7 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">
+            <h2 className="text-xl font-bold text-fg mb-3">
               ملفات تعريف الارتباط (Cookies)
             </h2>
             <p className="text-muted leading-relaxed">
@@ -76,7 +76,7 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">حقوقك</h2>
+            <h2 className="text-xl font-bold text-fg mb-3">حقوقك</h2>
             <p className="text-muted leading-relaxed">
               يحق لك في أي وقت طلب حذف بياناتك التي أرسلتها إلينا. يكفي
               مراسلتنا على البريد الإلكتروني أدناه وسننفذ الطلب دون تعقيد.
@@ -84,7 +84,7 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">التواصل</h2>
+            <h2 className="text-xl font-bold text-fg mb-3">التواصل</h2>
             <p className="text-muted leading-relaxed">
               لأي استفسار حول هذه السياسة أو بياناتك، تواصل معنا على:{" "}
               <a href={`mailto:${company.email}`} className="text-accent hover:underline" dir="ltr">

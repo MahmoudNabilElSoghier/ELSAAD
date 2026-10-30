@@ -100,7 +100,7 @@ export function Branches() {
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => e.stopPropagation()}
-                      className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-accent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm self-start"
+                      className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-fg hover:text-accent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm self-start"
                     >
                       <span>افتح في خرائط جوجل</span>
                       <ExternalLink className="w-4 h-4" />

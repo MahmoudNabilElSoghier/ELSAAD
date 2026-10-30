@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 const nf = new Intl.NumberFormat("ar-EG-u-nu-latn");
 
 const selectClass =
-  "rounded-lg border border-border bg-card px-4 py-3 text-white focus:border-accent focus:outline-none";
+  "rounded-lg border border-border bg-card px-4 py-3 text-fg focus:border-accent focus:outline-none";
 
 function stockBadge(stock: number, reorderLevel: number) {
   if (stock <= 0) return { label: "غير متوفر", classes: "bg-red-500/15 text-red-400" };
@@ -59,7 +59,7 @@ export default async function ProductsPage({
     <main id="main-content" className="flex-1 py-12 md:py-16">
       <Container>
         <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-white">قطع الغيار</h1>
+          <h1 className="text-3xl md:text-4xl font-extrabold text-fg">قطع الغيار</h1>
           <p className="mt-2 text-muted">
             {nf.format(result.total)} قطعة — ابحث بالاسم أو الكود أو حسب الماركة والتصنيف.
           </p>
@@ -77,7 +77,7 @@ export default async function ProductsPage({
             placeholder="اسم القطعة أو الكود"
           />
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="filter-brand" className="text-sm font-medium text-white">
+            <label htmlFor="filter-brand" className="text-sm font-medium text-fg">
               الماركة
             </label>
             <select
@@ -95,7 +95,7 @@ export default async function ProductsPage({
             </select>
           </div>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="filter-cat" className="text-sm font-medium text-white">
+            <label htmlFor="filter-cat" className="text-sm font-medium text-fg">
               التصنيف
             </label>
             <select
@@ -145,7 +145,7 @@ export default async function ProductsPage({
                         {badge.label}
                       </span>
                     </div>
-                    <h2 className="font-bold text-white group-hover:text-accent">
+                    <h2 className="font-bold text-fg group-hover:text-accent">
                       {product.name}
                     </h2>
                     <p className="text-sm text-muted">
@@ -154,7 +154,7 @@ export default async function ProductsPage({
                         .join(" · ")}
                     </p>
                     <div className="mt-auto flex items-end justify-between pt-2">
-                      <p className="text-lg font-extrabold text-white">
+                      <p className="text-lg font-extrabold text-fg">
                         {product.retailPrice != null
                           ? `${nf.format(product.retailPrice)} ج.م`
                           : "عند التواصل"}
@@ -181,7 +181,7 @@ export default async function ProductsPage({
               className={`rounded-lg border border-border px-4 py-2 font-semibold ${
                 result.page <= 1
                   ? "pointer-events-none opacity-40"
-                  : "text-white hover:border-accent"
+                  : "text-fg hover:border-accent"
               }`}
             >
               السابق
@@ -195,7 +195,7 @@ export default async function ProductsPage({
               className={`rounded-lg border border-border px-4 py-2 font-semibold ${
                 result.page >= result.totalPages
                   ? "pointer-events-none opacity-40"
-                  : "text-white hover:border-accent"
+                  : "text-fg hover:border-accent"
               }`}
             >
               التالي

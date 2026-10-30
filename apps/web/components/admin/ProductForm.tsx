@@ -46,7 +46,7 @@ function getErrorMessage(err: unknown): string {
 }
 
 const inputClass =
-  "bg-bg border rounded-lg px-4 py-3 text-white placeholder:text-muted focus:border-accent focus:outline-none disabled:opacity-50 border-border";
+  "bg-bg border rounded-lg px-4 py-3 text-fg placeholder:text-muted focus:border-accent focus:outline-none disabled:opacity-50 border-border";
 
 export function ProductForm({ product, brands, categories }: ProductFormProps) {
   const router = useRouter();
@@ -131,7 +131,7 @@ export function ProductForm({ product, brands, categories }: ProductFormProps) {
         <Input label="كود OEM" dir="ltr" {...register("oemCode")} />
 
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="product-brand" className="text-sm font-medium text-white">
+          <label htmlFor="product-brand" className="text-sm font-medium text-fg">
             الماركة
           </label>
           <select id="product-brand" className={inputClass} {...register("brandId")}>
@@ -150,7 +150,7 @@ export function ProductForm({ product, brands, categories }: ProductFormProps) {
         <div className="flex flex-col gap-1.5">
           <label
             htmlFor="product-category"
-            className="text-sm font-medium text-white"
+            className="text-sm font-medium text-fg"
           >
             التصنيف
           </label>
@@ -242,7 +242,7 @@ export function ProductForm({ product, brands, categories }: ProductFormProps) {
       <div className="flex flex-col gap-1.5">
         <label
           htmlFor="product-description"
-          className="text-sm font-medium text-white"
+          className="text-sm font-medium text-fg"
         >
           الوصف
         </label>
@@ -257,7 +257,7 @@ export function ProductForm({ product, brands, categories }: ProductFormProps) {
         )}
       </div>
 
-      <label className="flex items-center gap-2 text-sm text-white">
+      <label className="flex items-center gap-2 text-sm text-fg">
         <input
           type="checkbox"
           className="h-4 w-4 accent-accent-strong"
