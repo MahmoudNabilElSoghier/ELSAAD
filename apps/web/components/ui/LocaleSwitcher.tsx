@@ -18,6 +18,10 @@ export function LocaleSwitcher() {
   const rest = ["ar", "en"].includes(current) ? pathname.slice(current.length + 1) : pathname;
   const other = locale === "ar" ? "en" : "ar";
 
+  const handleSwitch = () => {
+    document.cookie = `NEXT_LOCALE=${other}; path=/; max-age=31536000; SameSite=Lax`;
+  };
+
   return (
     <nav
       aria-label={t("languageAria")}
@@ -25,6 +29,7 @@ export function LocaleSwitcher() {
     >
       <Link
         href={`/${other}${rest}`}
+        onClick={handleSwitch}
         hrefLang="ar"
         lang="ar"
         aria-current={locale === "ar" ? "true" : undefined}
@@ -39,6 +44,7 @@ export function LocaleSwitcher() {
       <span aria-hidden="true" className="w-px self-stretch bg-border" />
       <Link
         href={`/${other}${rest}`}
+        onClick={handleSwitch}
         hrefLang="en"
         lang="en"
         aria-current={locale === "en" ? "true" : undefined}
