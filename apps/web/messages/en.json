@@ -1,0 +1,222 @@
+{
+  "common": {
+    "siteName": "",
+    "tagline": "",
+    "loading": "",
+    "save": "",
+    "cancel": "",
+    "delete": "",
+    "edit": "",
+    "add": "",
+    "close": "",
+    "error": "",
+    "success": "",
+    "search": "",
+    "noResults": "",
+    "back": ""
+  },
+  "navigation": {
+    "home": "",
+    "products": "",
+    "brands": "",
+    "branches": "",
+    "contact": ""
+  },
+  "hero": {
+    "headline": "",
+    "subheadline": "",
+    "ctaProducts": "",
+    "ctaWhatsApp": ""
+  },
+  "trustBar": {
+    "years": { "label": "" },
+    "branches": { "label": "" },
+    "brands": { "label": "" },
+    "customers": { "label": "" }
+  },
+  "categories": {
+    "title": "",
+    "subtitle": "",
+    "newMotorcycles": { "title": "", "description": "" },
+    "usedMotorcycles": { "title": "", "description": "" },
+    "spareParts": { "title": "", "description": "" },
+    "accessories": { "title": "", "description": "" },
+    "cta": ""
+  },
+  "whyUs": { "title": "", "subtitle": "" },
+  "brands": { "title": "", "subtitle": "" },
+  "gallery": { "title": "", "subtitle": "" },
+  "testimonials": { "title": "", "subtitle": "" },
+  "branches": { "title": "", "subtitle": "", "openInMaps": "" },
+  "contact": {
+    "title": "",
+    "subtitle": "",
+    "fields": {
+      "name": { "label": "", "placeholder": "" },
+      "phone": { "label": "", "placeholder": "" },
+      "message": { "label": "", "placeholder": "" }
+    },
+    "submitButton": "",
+    "successMessage": "",
+    "errorMessage": "",
+    "hours": { "title": "", "weekdays": "", "friday": "" },
+    "address": { "title": "" }
+  },
+  "footer": { "tagline": "", "copyright": "" },
+  "admin": {
+    "login": {
+      "title": "",
+      "email": "",
+      "password": "",
+      "submit": "",
+      "errors": { "invalid": "", "required": "" }
+    },
+    "nav": {
+      "dashboard": "",
+      "products": "",
+      "brands": "",
+      "categories": "",
+      "branches": "",
+      "employees": "",
+      "inventory": "",
+      "logout": ""
+    },
+    "dashboard": {
+      "title": "",
+      "stats": {
+        "products": "",
+        "brands": "",
+        "categories": "",
+        "branches": "",
+        "employees": "",
+        "inventory": ""
+      }
+    },
+    "products": {
+      "title": "",
+      "add": "",
+      "edit": "",
+      "delete": "",
+      "table": {
+        "code": "",
+        "name": "",
+        "category": "",
+        "brand": "",
+        "price": "",
+        "stock": "",
+        "actions": ""
+      },
+      "form": {
+        "code": "",
+        "nameAr": "",
+        "nameEn": "",
+        "brand": "",
+        "category": "",
+        "wholesalePrice": "",
+        "costPrice": "",
+        "retailPrice": "",
+        "taxRate": "",
+        "unit": "",
+        "save": "",
+        "cancel": ""
+      }
+    },
+    "brands": {
+      "title": "",
+      "add": "",
+      "edit": "",
+      "delete": "",
+      "form": {
+        "slug": "",
+        "nameAr": "",
+        "nameEn": "",
+        "country": "",
+        "save": "",
+        "cancel": ""
+      }
+    },
+    "categories": {
+      "title": "",
+      "add": "",
+      "edit": "",
+      "delete": "",
+      "form": { "slug": "", "nameAr": "", "nameEn": "", "save": "", "cancel": "" }
+    },
+    "branches": {
+      "title": "",
+      "add": "",
+      "edit": "",
+      "delete": "",
+      "form": {
+        "nameAr": "",
+        "nameEn": "",
+        "phone": "",
+        "city": "",
+        "governorate": "",
+        "address": "",
+        "manager": "",
+        "save": "",
+        "cancel": ""
+      }
+    },
+    "employees": {
+      "title": "",
+      "add": "",
+      "edit": "",
+      "delete": "",
+      "form": {
+        "fullNameAr": "",
+        "fullNameEn": "",
+        "phone": "",
+        "email": "",
+        "nationalId": "",
+        "jobTitle": "",
+        "role": "",
+        "branch": "",
+        "save": "",
+        "cancel": ""
+      }
+    },
+    "inventory": {
+      "title": "",
+      "table": { "product": "", "quantity": "", "minLevel": "", "location": "" }
+    },
+    "common": {
+      "loading": "",
+      "saving": "",
+      "deleting": "",
+      "confirm": "",
+      "cancel": "",
+      "yes": "",
+      "no": "",
+      "error": "",
+      "success": ""
+    }
+  },
+  "privacy": {
+    "title": "",
+    "sections": {
+      "intro": { "title": "", "body": "" },
+      "dataCollected": { "title": "", "body": "" },
+      "howUsed": { "title": "", "body": "" },
+      "sharing": { "title": "", "body": "" },
+      "cookies": { "title": "", "body": "" },
+      "rights": { "title": "", "body": "" },
+      "contact": { "title": "", "body": "" }
+    },
+    "lastUpdated": ""
+  },
+  "terms": {
+    "title": "",
+    "sections": {
+      "acceptance": { "title": "", "body": "" },
+      "usage": { "title": "", "body": "" },
+      "ip": { "title": "", "body": "" },
+      "liability": { "title": "", "body": "" },
+      "external": { "title": "", "body": "" },
+      "changes": { "title": "", "body": "" },
+      "law": { "title": "", "body": "" }
+    },
+    "lastUpdated": ""
+  }
+}

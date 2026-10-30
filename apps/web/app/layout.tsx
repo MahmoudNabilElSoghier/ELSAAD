@@ -1,84 +1,10 @@
-import type { Metadata } from "next";
-import { Cairo } from "next/font/google";
-import { GoogleAnalytics } from "@next/third-parties/google";
-import Script from "next/script";
-import { meta } from "@/lib/content";
-import "./globals.css";
-
-const cairo = Cairo({
-  subsets: ["arabic", "latin"],
-  variable: "--font-cairo",
-  display: "swap",
-});
-
-// Absolute URL for OG/twitter images and sitemap/robots.
-// Priority: explicit NEXT_PUBLIC_SITE_URL > Vercel-injected URL > localhost.
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  (process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : "http://localhost:3000");
-
-// Analytics are env-gated: preview deploys and localhost load neither.
-const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
-const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID;
-
-export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: meta.title,
-  description: meta.description,
-  keywords: meta.keywords,
-  openGraph: {
-    title: "السعد للدراجات النارية",
-    description: "قطع غيار أصلية، دراجات جديدة ومستعملة، وخدمة صيانة معتمدة من أكبر ماركات العالم. 35+ سنة خبرة.",
-    locale: "ar_EG",
-    type: "website",
-    siteName: "ELSAAD",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "السعد للدراجات النارية",
-    description: "قطع غيار أصلية، دراجات جديدة ومستعملة، وخدمة صيانة معتمدة.",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
-
+// Root layout fallback (next-intl pattern): the real <html>/<body> shell lives
+// in app/[locale]/layout.tsx. Routes rendered outside [locale] (none currently
+// render UI) pass through unchanged.
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <html dir="rtl" lang="ar" className={cairo.variable} suppressHydrationWarning>
-      <body className="font-sans antialiased bg-bg text-white min-h-screen flex flex-col" suppressHydrationWarning>
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:right-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-accent-strong focus:text-white focus:rounded-lg"
-        >
-          تخطَّ إلى المحتوى الرئيسي
-        </a>
-        {children}
-        {GA_ID && <GoogleAnalytics gaId={GA_ID} />}
-        {META_PIXEL_ID && (
-          <Script id="meta-pixel" strategy="afterInteractive">
-            {`
-              !function(f,b,e,v,n,t,s)
-              {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-              n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-              if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-              n.queue=[];t=b.createElement(e);t.async=!0;
-              t.src=v;s=b.getElementsByTagName(e)[0];
-              s.parentNode.insertBefore(t,s)}(window, document,'script',
-              'https://connect.facebook.net/en_US/fbevents.js');
-              fbq('init', '${META_PIXEL_ID}');
-              fbq('track', 'PageView');
-            `}
-          </Script>
-        )}
-      </body>
-    </html>
-  );
+  return children;
 }
