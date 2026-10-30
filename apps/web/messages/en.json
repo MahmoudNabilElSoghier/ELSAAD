@@ -1,222 +1,655 @@
 {
   "common": {
-    "siteName": "",
-    "tagline": "",
-    "loading": "",
-    "save": "",
-    "cancel": "",
-    "delete": "",
-    "edit": "",
-    "add": "",
-    "close": "",
-    "error": "",
-    "success": "",
-    "search": "",
-    "noResults": "",
-    "back": ""
+    "skipToContent": "Skip to main content",
+    "brandName": "ELSAAD Motorcycle",
+    "brandShort": "Motorcycles",
+    "tagline": "Your trusted partner in the world of motorcycles",
+    "price": "{price} EGP",
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "close": "Close",
+    "active": "Active",
+    "inactive": "Inactive",
+    "whatsapp": "WhatsApp",
+    "search": "Search",
+    "apply": "Apply",
+    "prev": "Previous",
+    "next": "Next",
+    "pageOf": "Page {page} of {total}",
+    "details": "Details",
+    "contactPrice": "Contact us for price",
+    "backToHome": "Back to home",
+    "counts": {
+      "models": "{count} models",
+      "parts": "{count} spare parts",
+      "products": "{count} products",
+      "compatibleParts": "{count} compatible parts",
+      "cc": "{count} cc",
+      "fromYear": "From {year}",
+      "yearRange": "{from} - {to}"
+    },
+    "stock": {
+      "inStock": "In stock",
+      "outOfStock": "Out of stock",
+      "low": "Low stock"
+    }
+  },
+  "switcher": {
+    "languageAria": "Choose language",
+    "arabic": "العربية",
+    "english": "English"
+  },
+  "themeToggle": {
+    "aria": "Toggle theme",
+    "light": "Light",
+    "dark": "Dark"
   },
   "navigation": {
-    "home": "",
-    "products": "",
-    "brands": "",
-    "branches": "",
-    "contact": ""
+    "home": "Home",
+    "models": "Models",
+    "parts": "Spare Parts",
+    "brands": "Brands",
+    "branches": "Branches",
+    "contact": "Contact"
+  },
+  "header": {
+    "navAria": "Main navigation",
+    "menuToggle": "Menu",
+    "logoSubtitle": "Motorcycles"
   },
   "hero": {
-    "headline": "",
-    "subheadline": "",
-    "ctaProducts": "",
-    "ctaWhatsApp": ""
+    "headline": "Performance, genuine parts, ELSAAD trust",
+    "subheadline": "Over 35 years in the motorcycle world — we offer new and used bikes, genuine spare parts, and reliable maintenance service across all our branches.",
+    "ctaPrimary": "View models",
+    "ctaSecondary": "Chat with us on WhatsApp"
   },
   "trustBar": {
-    "years": { "label": "" },
-    "branches": { "label": "" },
-    "brands": { "label": "" },
-    "customers": { "label": "" }
+    "years": { "label": "Years of experience" },
+    "branches": { "label": "Branches" },
+    "brands": { "label": "Global brands" },
+    "customers": { "label": "Customers" }
   },
   "categories": {
-    "title": "",
-    "subtitle": "",
-    "newMotorcycles": { "title": "", "description": "" },
-    "usedMotorcycles": { "title": "", "description": "" },
-    "spareParts": { "title": "", "description": "" },
-    "accessories": { "title": "", "description": "" },
-    "cta": ""
+    "title": "Our categories and products",
+    "subtitle": "Browse our wide range of new and used motorcycles and genuine spare parts",
+    "cta": "Available at our branches",
+    "items": {
+      "new-motorcycles": {
+        "title": "New motorcycles",
+        "description": "The latest models from the world's best brands with an official warranty"
+      },
+      "used-motorcycles": {
+        "title": "Used motorcycles",
+        "description": "Fully inspected motorcycles in excellent condition, with warranty"
+      },
+      "spare-parts": {
+        "title": "Spare parts",
+        "description": "Genuine certified parts for every brand and model"
+      },
+      "accessories": {
+        "title": "Accessories",
+        "description": "Everything your bike needs — helmets, riding gear, and protective equipment"
+      }
+    }
   },
-  "whyUs": { "title": "", "subtitle": "" },
-  "brands": { "title": "", "subtitle": "" },
-  "gallery": { "title": "", "subtitle": "" },
-  "testimonials": { "title": "", "subtitle": "" },
-  "branches": { "title": "", "subtitle": "", "openInMaps": "" },
+  "whyUs": {
+    "title": "Why choose ELSAAD?",
+    "subtitle": "Because we offer more than a motorcycle — we offer a complete experience that starts at selection and continues after the sale",
+    "items": {
+      "warranty": {
+        "title": "Official warranty",
+        "description": "Official warranty on every motorcycle and genuine part"
+      },
+      "maintenance": {
+        "title": "Regular maintenance",
+        "description": "Specialized maintenance teams at every branch"
+      },
+      "installments": {
+        "title": "Flexible installments",
+        "description": "Flexible installment plans that fit your budget"
+      },
+      "delivery": {
+        "title": "Fast delivery",
+        "description": "Delivery to all governorates within 48 hours"
+      },
+      "genuine-parts": {
+        "title": "Genuine parts",
+        "description": "100% genuine spare parts from authorized suppliers"
+      },
+      "support": {
+        "title": "Customer service",
+        "description": "Technical support around the clock, seven days a week"
+      }
+    }
+  },
+  "brands": {
+    "title": "All the world's biggest brands in one place",
+    "subtitle": "From Honda and Yamaha to KTM and Ducati — we carry every brand you are looking for"
+  },
+  "gallery": {
+    "title": "From our showrooms",
+    "subtitle": "See the newest motorcycles and the latest model releases across our showrooms",
+    "placeholder": "Photo from our showroom",
+    "viewImage": "View image {n}"
+  },
+  "lightbox": {
+    "dialog": "Gallery image viewer",
+    "close": "Close",
+    "prev": "Previous image",
+    "next": "Next image"
+  },
+  "testimonials": {
+    "title": "What our customers say",
+    "subtitle": "Over 35 years of trust, described by our valued customers everywhere",
+    "items": {
+      "1": {
+        "name": "Ahmed Mahmoud",
+        "role": "Customer",
+        "text": "I bought my motorcycle from an ELSAAD branch — excellent service, spare parts always in stock, and precise maintenance. I recommend them."
+      },
+      "2": {
+        "name": "Mohamed Saeed",
+        "role": "Spare parts dealer",
+        "text": "The best place for motorcycle spare parts in Egypt — genuine products, fair prices, and respectful service from day one."
+      },
+      "3": {
+        "name": "Karim Abdullah",
+        "role": "Returning customer",
+        "text": "I have been dealing with them for 5 years — trust and credibility in every transaction. I have never had a single complaint."
+      }
+    }
+  },
+  "branches": {
+    "title": "Our branches and service centers",
+    "subtitle": "Visit your nearest branch to see the latest models and enjoy our best maintenance services",
+    "mapTitle": "Map of {name}",
+    "openInMaps": "Open in Google Maps",
+    "items": {
+      "cairo": {
+        "name": "Cairo Branch - Mohandessin",
+        "address": "Arab League Street, Mohandessin, Giza",
+        "hours": "Saturday - Thursday: 10 am - 10 pm"
+      },
+      "giza": {
+        "name": "Giza Branch",
+        "address": "Haram Street, Giza",
+        "hours": "Saturday - Thursday: 10 am - 10 pm"
+      },
+      "alex": {
+        "name": "Alexandria Branch",
+        "address": "Smouha Street, Alexandria",
+        "hours": "Saturday - Thursday: 10 am - 10 pm"
+      }
+    }
+  },
   "contact": {
-    "title": "",
-    "subtitle": "",
+    "title": "Contact us",
+    "subtitle": "Send us a message and we will get back to you as soon as possible",
     "fields": {
-      "name": { "label": "", "placeholder": "" },
-      "phone": { "label": "", "placeholder": "" },
-      "message": { "label": "", "placeholder": "" }
+      "name": { "label": "Full name", "placeholder": "Enter your name" },
+      "phone": { "label": "Phone number", "placeholder": "01XXXXXXXXX" },
+      "message": { "label": "Your message", "placeholder": "Write your message here..." }
     },
-    "submitButton": "",
-    "successMessage": "",
-    "errorMessage": "",
-    "hours": { "title": "", "weekdays": "", "friday": "" },
-    "address": { "title": "" }
+    "submitButton": "Send",
+    "sending": "Sending...",
+    "successMessage": "Your message has been received — we will get back to you soon",
+    "errorMessage": "Something went wrong — please try again",
+    "directTitle": "Direct contact",
+    "directText": "Our customer service team is ready to answer your inquiries and handle purchase and maintenance requests all week long.",
+    "whatsappQuick": "Quick WhatsApp",
+    "messageUs": "Message us",
+    "hotline": "Hotline",
+    "callUs": "Call us",
+    "hours": {
+      "title": "Working hours",
+      "weekdays": "Saturday - Thursday: 10 am - 10 pm",
+      "friday": "Friday: 2 pm - 10 pm"
+    },
+    "address": {
+      "title": "Head office",
+      "map": "Map"
+    }
   },
-  "footer": { "tagline": "", "copyright": "" },
+  "footer": {
+    "tagline": "ELSAAD Motorcycle — your trusted partner since 1990",
+    "copyright": "© 2025 ELSAAD Motorcycle. All rights reserved.",
+    "quickLinks": "Quick links",
+    "followUs": "Follow us",
+    "privacy": "Privacy Policy",
+    "terms": "Terms and Conditions",
+    "social": {
+      "whatsapp": "WhatsApp",
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "youtube": "YouTube"
+    }
+  },
+  "meta": {
+    "title": "ELSAAD Motorcycle | Genuine Parts & Motorcycles",
+    "description": "Over 35 years of experience in motorcycles and genuine spare parts. 12 branches across Egypt. Warranty, installments, maintenance, and delivery to every governorate.",
+    "ogTitle": "ELSAAD Motorcycle",
+    "ogDescription": "Genuine spare parts, new and used motorcycles, and certified maintenance service from the world's top brands. 35+ years of experience."
+  },
+  "products": {
+    "metaTitle": "Spare Parts | ELSAAD Motorcycle",
+    "metaDescription": "Catalog of genuine spare parts — filters, cables, spark plugs, chains and more for every motorcycle brand.",
+    "heading": "Spare Parts",
+    "countLine": "Parts in catalog: {count} — search by name or code, or filter by brand and category.",
+    "searchLabel": "Search",
+    "searchPlaceholder": "Part name or code",
+    "brandLabel": "Brand",
+    "allBrands": "All brands",
+    "categoryLabel": "Category",
+    "allCategories": "All categories",
+    "empty": "No parts match your search — try another word or change the filters.",
+    "vatNote": "Prices exclude VAT (added at checkout).",
+    "paginationAria": "Product pages"
+  },
+  "productDetail": {
+    "metaNotFound": "Part not found | ELSAAD Motorcycle",
+    "metaTitle": "{name} | Spare Parts | ELSAAD Motorcycle",
+    "metaDescription": "{name} — code {code}{oemPart}Available at ELSAAD Motorcycle branches.",
+    "metaOem": ", OEM code {oem}",
+    "whatsappText": "Hello, I would like to inquire about the part \"{name}\" (code {code}) on the ELSAAD Motorcycle website.",
+    "backToParts": "All spare parts",
+    "descriptionTitle": "Description",
+    "fitsTitle": "Fits",
+    "modelFallback": "Model",
+    "stockTitle": "Availability by branch",
+    "noInventory": "No quantities recorded at the moment — contact us for availability or to pre-order.",
+    "retailTitle": "Retail price",
+    "vatExcluded": "Excludes VAT ({rate}%)",
+    "stockAvailable": "In stock — {qty} {unit} across branches",
+    "stockUnavailable": "Currently out of stock",
+    "whatsappCta": "Inquire on WhatsApp",
+    "branchPrompt": "Or visit your nearest branch at",
+    "branchesLink": "our branches"
+  },
+  "brandsPage": {
+    "metaTitle": "Brands | ELSAAD Motorcycle",
+    "metaDescription": "Motorcycle brands and their spare parts available at ELSAAD — SYM, Kymco, Haojue and more.",
+    "heading": "Brands",
+    "countLine": "Brands: {count} — choose your brand to see models and spare parts.",
+    "empty": "Brands will appear here soon."
+  },
+  "brandDetail": {
+    "metaNotFound": "Brand not found | ELSAAD Motorcycle",
+    "metaTitle": "{name} | Brands | ELSAAD Motorcycle",
+    "metaDescription": "Models and spare parts for {name} available at ELSAAD Motorcycle.",
+    "backToBrands": "All brands",
+    "viewParts": "View spare parts ←",
+    "empty": "Models for this brand will appear here soon."
+  },
+  "modelDetail": {
+    "metaNotFound": "Model not found | ELSAAD Motorcycle",
+    "metaTitle": "{name} | Spare Parts | ELSAAD Motorcycle",
+    "metaDescription": "Spare parts compatible with {name} — available at ELSAAD Motorcycle branches.",
+    "breadcrumbAria": "Breadcrumb",
+    "crumbBrands": "Brands",
+    "compatibleTitle": "Compatible spare parts",
+    "emptyBefore": "No parts registered for this model yet —",
+    "emptyContact": "contact us",
+    "emptyAfter": "and we will get them for you."
+  },
+  "privacy": {
+    "metaTitle": "Privacy Policy | ELSAAD Motorcycle",
+    "metaDescription": "How we collect and use your data when you contact the ELSAAD Motorcycle website.",
+    "heading": "Privacy Policy",
+    "lastUpdated": "Last updated: {date}",
+    "sections": {
+      "intro": {
+        "title": "Introduction",
+        "body": "At ELSAAD Motorcycle we respect your privacy. This policy explains what data we collect when you use our website, how we use it, and how we protect it."
+      },
+      "dataCollected": {
+        "title": "Data we collect",
+        "body": "We only collect the data you submit yourself through the contact form: your name, phone number, and message text (optional). We do not collect any other data through this website."
+      },
+      "howUsed": {
+        "title": "How we use data",
+        "body": "We use your data solely to contact you and respond to your inquiry. We do not use it for any marketing purpose without your consent."
+      },
+      "sharing": {
+        "title": "Data sharing",
+        "body": "We do not share your data with any third party, sell it, or use it outside the scope of responding to your message."
+      },
+      "cookies": {
+        "title": "Cookies",
+        "body": "We may use Google Analytics to understand website visits in aggregate (aggregated figures only, without identifying you personally). You can disable cookies from your browser settings at any time."
+      },
+      "rights": {
+        "title": "Your rights",
+        "body": "You may request deletion of the data you have sent us at any time. Simply email us at the address below and we will carry out the request without complications."
+      },
+      "contact": {
+        "title": "Contact",
+        "body": "For any question about this policy or your data, contact us at:"
+      }
+    }
+  },
+  "terms": {
+    "metaTitle": "Terms and Conditions | ELSAAD Motorcycle",
+    "metaDescription": "Terms and conditions for using the ELSAAD Motorcycle website and our protection of intellectual property rights.",
+    "heading": "Terms and Conditions",
+    "lastUpdated": "Last updated: {date}",
+    "sections": {
+      "acceptance": {
+        "title": "Acceptance of terms",
+        "body": "By using this website you agree to these terms and conditions. If you do not agree with any of them, please refrain from using the website."
+      },
+      "usage": {
+        "title": "Use of the website",
+        "body": "The website is provided to present our products and services and to introduce our branches. Use of the website for any unlawful purpose or in violation of these terms is not permitted."
+      },
+      "ip": {
+        "title": "Intellectual property",
+        "body": "All content on this website, including texts, images, logos, and trademarks, is owned by or licensed to ELSAAD Motorcycle. Reproducing or republishing any content without prior written permission is prohibited."
+      },
+      "liability": {
+        "title": "Limitation of liability",
+        "body": "We strive to keep information accurate, but the website is provided \"as is\" without warranties of any kind. We are not responsible for any data errors, service interruptions, or indirect damages arising from use of the website."
+      },
+      "external": {
+        "title": "External links",
+        "body": "The website may contain links to other sites (such as WhatsApp and social media). We do not control these sites and are not responsible for their content."
+      },
+      "changes": {
+        "title": "Amendments",
+        "body": "We reserve the right to amend these terms at any time without prior notice; the amendment takes effect immediately upon publication on this page."
+      },
+      "law": {
+        "title": "Governing law",
+        "body": "These terms are governed by the laws of the Arab Republic of Egypt, and any dispute shall be referred to the competent authorities in Egypt."
+      }
+    }
+  },
+  "notFound": {
+    "heading": "Page not found",
+    "text": "The link you are looking for does not exist.",
+    "button": "Back to home"
+  },
   "admin": {
+    "layout": {
+      "metaTitle": "Admin Panel | ELSAAD Motorcycle",
+      "panelName": "ELSAAD Admin",
+      "demoBadge": "Preview with demo data"
+    },
     "login": {
-      "title": "",
-      "email": "",
-      "password": "",
-      "submit": "",
-      "errors": { "invalid": "", "required": "" }
+      "heading": "ELSAAD Control Panel",
+      "subtitle": "Sign in for administration and planning system",
+      "emailLabel": "Email address",
+      "passwordLabel": "Password",
+      "submit": "Sign in",
+      "loggingIn": "Signing in...",
+      "loginError": "An error occurred while signing in"
     },
     "nav": {
-      "dashboard": "",
-      "products": "",
-      "brands": "",
-      "categories": "",
-      "branches": "",
-      "employees": "",
-      "inventory": "",
-      "logout": ""
+      "aria": "Admin menu",
+      "logout": "Sign out",
+      "dashboard": "Dashboard",
+      "products": "Products",
+      "categories": "Categories",
+      "brands": "Brands",
+      "employees": "Employees",
+      "branches": "Branches",
+      "inventory": "Inventory"
     },
     "dashboard": {
-      "title": "",
-      "stats": {
-        "products": "",
-        "brands": "",
-        "categories": "",
-        "branches": "",
-        "employees": "",
-        "inventory": ""
-      }
+      "title": "Dashboard",
+      "newProduct": "New product",
+      "viewSite": "View site",
+      "statsAria": "Store statistics",
+      "cardBrands": "Brands",
+      "cardProducts": "Products",
+      "cardOrders": "Orders",
+      "cardLowStock": "Low stock",
+      "recentOrders": "Recent orders",
+      "noOrders": "No orders yet.",
+      "orderNo": "Order no.",
+      "customer": "Customer",
+      "branchCol": "Branch",
+      "total": "Total",
+      "status": "Status",
+      "statusPending": "Pending",
+      "statusConfirmed": "Confirmed",
+      "statusDelivered": "Delivered",
+      "statusCancelled": "Cancelled"
     },
     "products": {
-      "title": "",
-      "add": "",
-      "edit": "",
-      "delete": "",
-      "table": {
-        "code": "",
-        "name": "",
-        "category": "",
-        "brand": "",
-        "price": "",
-        "stock": "",
-        "actions": ""
-      },
+      "metaNew": "New product | ELSAAD Motorcycle",
+      "metaEdit": "Edit product | ELSAAD Motorcycle",
+      "newTitle": "New product",
+      "editTitle": "Edit product",
+      "backToList": "Back to products",
+      "title": "Products",
+      "countLine": "Products in list: {count}",
+      "add": "New product",
+      "searchLabel": "Search",
+      "searchPlaceholder": "Product name, code, or OEM code",
+      "searchBtn": "Search",
+      "code": "Code",
+      "name": "Name",
+      "brand": "Brand",
+      "category": "Category",
+      "wholesale": "Wholesale price",
+      "retail": "Retail price",
+      "stock": "Stock",
+      "status": "Status",
+      "actions": "Actions",
+      "empty": "No matching products.",
+      "lowTag": "(low)",
+      "paginationAria": "Product pages",
+      "deleteTitle": "Delete product",
+      "deleteMsg": "Are you sure you want to delete the product \"{name}\"?",
+      "deletedOk": "Product deleted successfully",
+      "deleteFailed": "Failed to delete product",
       "form": {
-        "code": "",
-        "nameAr": "",
-        "nameEn": "",
-        "brand": "",
-        "category": "",
-        "wholesalePrice": "",
-        "costPrice": "",
-        "retailPrice": "",
-        "taxRate": "",
-        "unit": "",
-        "save": "",
-        "cancel": ""
+        "code": "Product code *",
+        "name": "Product name *",
+        "nameEn": "English name",
+        "oemCode": "OEM code",
+        "brand": "Brand",
+        "noBrand": "No brand",
+        "category": "Category",
+        "noCategory": "No category",
+        "cost": "Cost price (EGP)",
+        "wholesale": "Wholesale price (EGP)",
+        "retail": "Retail price (EGP) *",
+        "vip": "VIP price (EGP)",
+        "vat": "Value-added tax",
+        "vatHint": "Default 0.14 — prices are before tax",
+        "unit": "Unit of measure *",
+        "reorder": "Reorder level (quantity)",
+        "tags": "Tags",
+        "tagsHint": "Separate with commas",
+        "description": "Description",
+        "activeLabel": "Active product (shown in store)",
+        "saving": "Saving...",
+        "createdOk": "Product added successfully",
+        "updatedOk": "Product updated successfully",
+        "saveError": "An error occurred while saving the product",
+        "validationFailed": "Validation failed — {details}"
       }
     },
     "brands": {
-      "title": "",
-      "add": "",
-      "edit": "",
-      "delete": "",
+      "title": "Brands",
+      "countLine": "Brands: {count} — with model and product counts for each.",
+      "empty": "No brands yet.",
+      "nameAr": "Arabic name",
+      "nameEn": "English name",
+      "slugCol": "Slug",
+      "modelsCol": "Models",
+      "productsCol": "Products",
+      "websiteCol": "Website",
+      "actions": "Actions",
+      "newBtn": "+ New brand",
+      "deleteTitle": "Delete brand",
+      "deleteMsg": "Are you sure you want to delete the brand \"{name}\"?",
+      "createdOk": "Brand added successfully",
+      "updatedOk": "Brand updated successfully",
+      "deleteFailed": "Failed to delete brand",
       "form": {
-        "slug": "",
-        "nameAr": "",
-        "nameEn": "",
-        "country": "",
-        "save": "",
-        "cancel": ""
+        "titleNew": "New brand",
+        "titleEdit": "Edit brand",
+        "nameEn": "English name *",
+        "nameAr": "Arabic name",
+        "slug": "Slug *",
+        "slugHint": "a-z, 0-9 and - only",
+        "website": "Website",
+        "description": "Description",
+        "saving": "Saving...",
+        "createdOk": "Brand added successfully",
+        "updatedOk": "Brand updated successfully",
+        "saveError": "An error occurred while saving the brand",
+        "validationFailed": "Validation failed — {details}"
       }
     },
     "categories": {
-      "title": "",
-      "add": "",
-      "edit": "",
-      "delete": "",
-      "form": { "slug": "", "nameAr": "", "nameEn": "", "save": "", "cancel": "" }
+      "title": "Categories",
+      "subtitle": "Spare-parts category tree (roots and children) — showing the product count for each category.",
+      "empty": "No categories yet.",
+      "addRoot": "+ Root category",
+      "addChild": "Add child",
+      "deleteTitle": "Delete category",
+      "deleteMsg": "Are you sure you want to delete the category \"{name}\"?",
+      "deleteOk": "Category deleted successfully",
+      "form": {
+        "editTitle": "Edit: {name}",
+        "newTitle": "New category",
+        "nameAr": "Arabic name *",
+        "nameEn": "English name",
+        "slug": "Slug *",
+        "order": "Order",
+        "saving": "Saving...",
+        "saveError": "An error occurred while saving the category",
+        "validationFailed": "Validation failed — {details}"
+      }
     },
     "branches": {
-      "title": "",
-      "add": "",
-      "edit": "",
-      "delete": "",
+      "title": "Branches",
+      "countLine": "Branches: {count} — warranty, staff and stock for each branch.",
+      "add": "+ Add branch",
+      "empty": "No branches yet.",
+      "createdOk": "Branch added successfully",
+      "updatedOk": "Branch updated successfully",
+      "stats": {
+        "inventory": "stock items",
+        "employees": "employees",
+        "orders": "orders"
+      },
+      "hours": {
+        "sat-thu": "Saturday - Thursday",
+        "fri": "Friday"
+      },
+      "types": {
+        "retail": "Retail",
+        "warehouse": "Warehouse",
+        "showroom": "Showroom",
+        "main": "Main",
+        "service_center": "Service Center"
+      },
       "form": {
-        "nameAr": "",
-        "nameEn": "",
-        "phone": "",
-        "city": "",
-        "governorate": "",
-        "address": "",
-        "manager": "",
-        "save": "",
-        "cancel": ""
+        "titleNew": "Add new branch",
+        "titleEdit": "Edit branch",
+        "code": "Branch code",
+        "slug": "Slug",
+        "nameAr": "Arabic name",
+        "nameEn": "English name",
+        "type": "Branch type",
+        "governorate": "Governorate",
+        "defaultGovernorate": "Cairo",
+        "phNameAr": "Maadi Branch",
+        "phAddress": "15 El-Nasr Street, Maadi",
+        "phone": "Mobile number",
+        "whatsapp": "WhatsApp number",
+        "address": "Address",
+        "manager": "Branch manager (supervisor)",
+        "noManager": "— No manager —",
+        "displayOrder": "Display order",
+        "activeLabel": "Active branch",
+        "saving": "Saving...",
+        "save": "Save branch",
+        "createdOk": "Branch added successfully",
+        "updatedOk": "Branch updated successfully",
+        "saveError": "An error occurred while saving the branch",
+        "validationFailed": "Validation failed — {details}"
       }
     },
     "employees": {
-      "title": "",
-      "add": "",
-      "edit": "",
-      "delete": "",
+      "title": "Employees",
+      "countLine": "Employees: {count} — each with a branch and permissions.",
+      "add": "+ Add employee",
+      "empty": "No employees yet.",
+      "empNo": "Employee no.",
+      "name": "Name",
+      "mobile": "Mobile",
+      "role": "Role",
+      "branchCol": "Branch",
+      "ordersCol": "Orders",
+      "statusCol": "Status",
+      "actions": "Actions",
+      "createdOk": "Employee added successfully",
+      "updatedOk": "Employee updated successfully",
+      "roles": {
+        "admin": "System admin",
+        "manager": "Branch manager",
+        "cashier": "Cashier",
+        "warehouse": "Warehouse keeper"
+      },
       "form": {
-        "fullNameAr": "",
-        "fullNameEn": "",
-        "phone": "",
-        "email": "",
-        "nationalId": "",
-        "jobTitle": "",
-        "role": "",
-        "branch": "",
-        "save": "",
-        "cancel": ""
+        "titleNew": "Add new employee",
+        "titleEdit": "Edit employee",
+        "empNo": "Employee no.",
+        "nameAr": "Arabic name",
+        "nameEn": "English name",
+        "nationalId": "National ID",
+        "phone": "Mobile number",
+        "email": "Email address",
+        "role": "Job / role",
+        "branchLabel": "Primary branch",
+        "noBranch": "— No branch —",
+        "activeLabel": "Active employee",
+        "phNameAr": "Ahmed Mohamed",
+        "saving": "Saving...",
+        "save": "Save employee",
+        "createdOk": "Employee added successfully",
+        "updatedOk": "Employee updated successfully",
+        "saveError": "An error occurred while saving the employee",
+        "validationFailed": "Validation failed — {details}"
+      },
+      "formRoles": {
+        "cashier": "Cashier",
+        "manager": "Branch manager",
+        "warehouse": "Warehouse keeper",
+        "admin": "System admin"
       }
     },
     "inventory": {
-      "title": "",
-      "table": { "product": "", "quantity": "", "minLevel": "", "location": "" }
+      "title": "Inventory",
+      "countLine": "Items shown: {count} — edit a quantity, then press save.",
+      "lowCount": "Items below reorder level: {count}",
+      "filterLabel": "Filter by branch",
+      "allBranches": "All branches",
+      "viewBtn": "View",
+      "empty": "No inventory items for the selected branches.",
+      "product": "Product",
+      "code": "Code",
+      "branchCol": "Branch",
+      "qty": "Quantity",
+      "reorder": "Reorder level",
+      "statusCol": "Status",
+      "actionSr": "Action",
+      "low": "Low",
+      "save": "Save",
+      "done": "Saved",
+      "qtyAria": "Quantity of {product} at {branch}"
     },
     "common": {
-      "loading": "",
-      "saving": "",
-      "deleting": "",
-      "confirm": "",
-      "cancel": "",
-      "yes": "",
-      "no": "",
-      "error": "",
-      "success": ""
+      "validationFailed": "Validation failed — {details}"
     }
-  },
-  "privacy": {
-    "title": "",
-    "sections": {
-      "intro": { "title": "", "body": "" },
-      "dataCollected": { "title": "", "body": "" },
-      "howUsed": { "title": "", "body": "" },
-      "sharing": { "title": "", "body": "" },
-      "cookies": { "title": "", "body": "" },
-      "rights": { "title": "", "body": "" },
-      "contact": { "title": "", "body": "" }
-    },
-    "lastUpdated": ""
-  },
-  "terms": {
-    "title": "",
-    "sections": {
-      "acceptance": { "title": "", "body": "" },
-      "usage": { "title": "", "body": "" },
-      "ip": { "title": "", "body": "" },
-      "liability": { "title": "", "body": "" },
-      "external": { "title": "", "body": "" },
-      "changes": { "title": "", "body": "" },
-      "law": { "title": "", "body": "" }
-    },
-    "lastUpdated": ""
   }
 }

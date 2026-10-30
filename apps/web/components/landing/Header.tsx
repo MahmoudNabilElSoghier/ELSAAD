@@ -7,6 +7,8 @@ import { navigation } from "@/lib/content";
 import { company } from "@/lib/config";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
+import { LocaleSwitcher } from "@/components/ui/LocaleSwitcher";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -39,8 +41,10 @@ export function Header() {
             ))}
           </nav>
 
-          {/* Desktop WhatsApp Button */}
-          <div className="hidden md:inline-flex">
+          {/* Desktop Actions (Switchers + WhatsApp) */}
+          <div className="hidden md:flex items-center gap-3">
+            <LocaleSwitcher />
+            <ThemeToggle />
             <Button variant="primary" size="sm" asChild>
               <a
                 href={company.whatsappUrl}
@@ -89,14 +93,18 @@ export function Header() {
               </Link>
             ))}
           </nav>
-          <div className="pt-2">
-            <Button variant="primary" size="sm" fullWidth asChild>
+          <div className="flex items-center justify-between pt-2 border-t border-border">
+            <div className="flex items-center gap-2">
+              <LocaleSwitcher />
+              <ThemeToggle />
+            </div>
+            <Button variant="primary" size="sm" asChild>
               <a
                 href={company.whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setIsOpen(false)}
-                className="inline-flex items-center justify-center gap-2"
+                className="inline-flex items-center gap-2"
               >
                 <MessageCircle className="w-4 h-4" />
                 <span>واتساب</span>

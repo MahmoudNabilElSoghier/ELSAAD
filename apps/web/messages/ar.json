@@ -1,222 +1,655 @@
 {
   "common": {
-    "siteName": "",
-    "tagline": "",
-    "loading": "",
-    "save": "",
-    "cancel": "",
-    "delete": "",
-    "edit": "",
-    "add": "",
-    "close": "",
-    "error": "",
-    "success": "",
-    "search": "",
-    "noResults": "",
-    "back": ""
+    "skipToContent": "تخطَّ إلى المحتوى الرئيسي",
+    "brandName": "السعد للدراجات النارية",
+    "brandShort": "السعد للدراجات",
+    "tagline": "شريكك الموثوق في عالم الدراجات النارية",
+    "price": "{price} ج.م",
+    "loading": "جاري التحميل...",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "confirm": "تأكيد",
+    "close": "إغلاق",
+    "active": "نشط",
+    "inactive": "موقوف",
+    "whatsapp": "واتساب",
+    "search": "بحث",
+    "apply": "تطبيق",
+    "prev": "السابق",
+    "next": "التالي",
+    "pageOf": "صفحة {page} من {total}",
+    "details": "التفاصيل",
+    "contactPrice": "عند التواصل",
+    "backToHome": "العودة للرئيسية",
+    "counts": {
+      "models": "{count} موديل",
+      "parts": "{count} قطعة غيار",
+      "products": "{count} منتج",
+      "compatibleParts": "{count} قطعة متوافقة",
+      "cc": "{count} سي سي",
+      "fromYear": "من {year}",
+      "yearRange": "{from} - {to}"
+    },
+    "stock": {
+      "inStock": "متوفر",
+      "outOfStock": "غير متوفر",
+      "low": "كمية محدودة"
+    }
+  },
+  "switcher": {
+    "languageAria": "اختيار اللغة",
+    "arabic": "العربية",
+    "english": "English"
+  },
+  "themeToggle": {
+    "aria": "تبديل المظهر",
+    "light": "الفاتح",
+    "dark": "الداكن"
   },
   "navigation": {
-    "home": "",
-    "products": "",
-    "brands": "",
-    "branches": "",
-    "contact": ""
+    "home": "الرئيسية",
+    "models": "الموديلات",
+    "parts": "قطع الغيار",
+    "brands": "الماركات",
+    "branches": "الفروع",
+    "contact": "تواصل"
+  },
+  "header": {
+    "navAria": "القائمة الرئيسية",
+    "menuToggle": "القائمة",
+    "logoSubtitle": "السعد للدراجات"
   },
   "hero": {
-    "headline": "",
-    "subheadline": "",
-    "ctaProducts": "",
-    "ctaWhatsApp": ""
+    "headline": "قوة الأداء، أصل القطع، ثقة السعد",
+    "subheadline": "أكثر من 35 سنة في عالم الدراجات النارية — بنوفر لك دراجات جديدة ومستعملة، قطع غيار أصلية، وخدمة صيانة موثوقة في كل فروعنا.",
+    "ctaPrimary": "شوف الموديلات",
+    "ctaSecondary": "كلمنا على واتساب"
   },
   "trustBar": {
-    "years": { "label": "" },
-    "branches": { "label": "" },
-    "brands": { "label": "" },
-    "customers": { "label": "" }
+    "years": { "label": "سنة خبرة" },
+    "branches": { "label": "فرع" },
+    "brands": { "label": "ماركة عالمية" },
+    "customers": { "label": "عميل" }
   },
   "categories": {
-    "title": "",
-    "subtitle": "",
-    "newMotorcycles": { "title": "", "description": "" },
-    "usedMotorcycles": { "title": "", "description": "" },
-    "spareParts": { "title": "", "description": "" },
-    "accessories": { "title": "", "description": "" },
-    "cta": ""
+    "title": "أقسامنا ومنتجاتنا",
+    "subtitle": "تخوّل في تشكيلتنا الواسعة من الدراجات الجديدة والمستعملة وقطع الغيار الأصلية",
+    "cta": "متاح في الفروع",
+    "items": {
+      "new-motorcycles": {
+        "title": "دراجات جديدة",
+        "description": "أحدث الموديلات من أفضل الماركات العالمية بضمان رسمي"
+      },
+      "used-motorcycles": {
+        "title": "دراجات مستعملة",
+        "description": "دراجات مفحوصة بالكامل وبضمان وحالة ممتازة"
+      },
+      "spare-parts": {
+        "title": "قطع غيار",
+        "description": "قطع أصلية معتمدة لكل الماركات والموديلات"
+      },
+      "accessories": {
+        "title": "إكسسوارات",
+        "description": "كل ما تحتاجه لدراجتك — خوذات، ملابس، ومعدات حماية"
+      }
+    }
   },
-  "whyUs": { "title": "", "subtitle": "" },
-  "brands": { "title": "", "subtitle": "" },
-  "gallery": { "title": "", "subtitle": "" },
-  "testimonials": { "title": "", "subtitle": "" },
-  "branches": { "title": "", "subtitle": "", "openInMaps": "" },
+  "whyUs": {
+    "title": "لماذا السعد؟",
+    "subtitle": "لأننا بنقدملك أكتر من دراجة — بنقدملك تجربة متكاملة تبدأ من الاختيار وتستمر بعد البيع",
+    "items": {
+      "warranty": {
+        "title": "ضمان معتمد",
+        "description": "ضمان رسمي على كل دراجة وقطعة أصلية"
+      },
+      "maintenance": {
+        "title": "صيانة دورية",
+        "description": "فريق صيانة متخصص في كل فرع"
+      },
+      "installments": {
+        "title": "تقسيط مريح",
+        "description": "خطط تقسيط مرنة تناسب ميزانيتك"
+      },
+      "delivery": {
+        "title": "توصيل سريع",
+        "description": "توصيل لكل المحافظات خلال 48 ساعة"
+      },
+      "genuine-parts": {
+        "title": "قطع أصلية",
+        "description": "قطع غيار أصلية 100% من موردين معتمدين"
+      },
+      "support": {
+        "title": "خدمة عملاء",
+        "description": "دعم فني على مدار الساعة طول أيام الأسبوع"
+      }
+    }
+  },
+  "brands": {
+    "title": "أكبر الماركات العالمية كلها في مكان واحد",
+    "subtitle": "من Honda و Yamaha لـ KTM و Ducati — بنوفر كل الماركات اللي تدور عليها"
+  },
+  "gallery": {
+    "title": "من قلب المعارض",
+    "subtitle": "شوف أجدد الدراجات وآخر إصدارات الماركات في معارضنا",
+    "placeholder": "صورة من معرضنا",
+    "viewImage": "عرض صورة {n}"
+  },
+  "lightbox": {
+    "dialog": "عرض صورة المعرض",
+    "close": "إغلاق",
+    "prev": "الصورة السابقة",
+    "next": "الصورة التالية"
+  },
+  "testimonials": {
+    "title": "آراء عملائنا",
+    "subtitle": "ثقة أكثر من 35 عاماً تتحدث عنها آراء عملائنا الكرام في كل مكان",
+    "items": {
+      "1": {
+        "name": "أحمد محمود",
+        "role": "عميل",
+        "text": "اشتريت دراجتي من فرع السعد — خدمة ممتازة، قطع الغيار متوفرة، والصيانة دقيقة. أنصح بيهم."
+      },
+      "2": {
+        "name": "محمد سعيد",
+        "role": "تاجر قطع غيار",
+        "text": "أفضل مكان لقطع غيار الدراجات في مصر — أصلي، أسعار مناسبة، وتعامل محترم من أول يوم."
+      },
+      "3": {
+        "name": "كريم عبد الله",
+        "role": "عميل دائم",
+        "text": "بتعامل معاهم من 5 سنين — ثقة ومصداقية في كل صفقة. مفيش مرة اشتكيت من حاجة."
+      }
+    }
+  },
+  "branches": {
+    "title": "فروعنا ومراكز الخدمة",
+    "subtitle": "زوروا أقرب فرع إليكم لتتعرفوا على أحدث الموديلات وتحصلوا على أفضل خدمات الصيانة",
+    "mapTitle": "خريطة {name}",
+    "openInMaps": "افتح في خرائط جوجل",
+    "items": {
+      "cairo": {
+        "name": "فرع القاهرة - المهندسين",
+        "address": "شارع جامعة الدول العربية، المهندسين، الجيزة",
+        "hours": "السبت - الخميس: 10 ص - 10 م"
+      },
+      "giza": {
+        "name": "فرع الجيزة",
+        "address": "شارع الهرم، الجيزة",
+        "hours": "السبت - الخميس: 10 ص - 10 م"
+      },
+      "alex": {
+        "name": "فرع الإسكندرية",
+        "address": "شارع سموحة، الإسكندرية",
+        "hours": "السبت - الخميس: 10 ص - 10 م"
+      }
+    }
+  },
   "contact": {
-    "title": "",
-    "subtitle": "",
+    "title": "تواصل معنا",
+    "subtitle": "ابعتلنا رسالة وهنرد عليك في أقرب وقت",
     "fields": {
-      "name": { "label": "", "placeholder": "" },
-      "phone": { "label": "", "placeholder": "" },
-      "message": { "label": "", "placeholder": "" }
+      "name": { "label": "الاسم الكامل", "placeholder": "اكتب اسمك" },
+      "phone": { "label": "رقم الموبايل", "placeholder": "01XXXXXXXXX" },
+      "message": { "label": "رسالتك", "placeholder": "اكتب رسالتك هنا..." }
     },
-    "submitButton": "",
-    "successMessage": "",
-    "errorMessage": "",
-    "hours": { "title": "", "weekdays": "", "friday": "" },
-    "address": { "title": "" }
+    "submitButton": "إرسال",
+    "sending": "جاري الإرسال...",
+    "successMessage": "تم استلام رسالتك — هنرد عليك قريباً",
+    "errorMessage": "حدث خطأ — حاول مرة أخرى",
+    "directTitle": "تواصل مباشر",
+    "directText": "فريق خدمة العملاء جاهز للرد على استفساراتكم وتلقي طلبات الشراء والصيانة طوال أيام الأسبوع.",
+    "whatsappQuick": "واتساب السريع",
+    "messageUs": "راسلنا",
+    "hotline": "الخط الساخن",
+    "callUs": "اتصل بنا",
+    "hours": {
+      "title": "مواعيد العمل",
+      "weekdays": "السبت - الخميس: 10 ص - 10 م",
+      "friday": "الجمعة: 2 م - 10 م"
+    },
+    "address": {
+      "title": "العنوان الرئيسي",
+      "map": "الخريطة"
+    }
   },
-  "footer": { "tagline": "", "copyright": "" },
+  "footer": {
+    "tagline": "السعد للدراجات النارية — شريكك الموثوق منذ 1990",
+    "copyright": "© 2025 السعد للدراجات النارية. جميع الحقوق محفوظة.",
+    "quickLinks": "روابط سريعة",
+    "followUs": "تابعنا",
+    "privacy": "سياسة الخصوصية",
+    "terms": "الشروط والأحكام",
+    "social": {
+      "whatsapp": "واتساب",
+      "facebook": "فيسبوك",
+      "instagram": "انستجرام",
+      "youtube": "يوتيوب"
+    }
+  },
+  "meta": {
+    "title": "السعد للدراجات النارية | ELSAAD Motorcycle",
+    "description": "أكثر من 35 سنة خبرة في الدراجات النارية وقطع الغيار الأصلية. 12 فرع في مصر. ضمان، تقسيط، صيانة، وتوصيل لكل المحافظات.",
+    "ogTitle": "السعد للدراجات النارية",
+    "ogDescription": "قطع غيار أصلية، دراجات جديدة ومستعملة، وخدمة صيانة معتمدة من أكبر ماركات العالم. 35+ سنة خبرة."
+  },
+  "products": {
+    "metaTitle": "قطع الغيار | السعد للدراجات النارية",
+    "metaDescription": "كتالوج قطع الغيار الأصلية — فلاتر، كابلات، بوجيهات، سلاسل وأكثر لكل ماركات الدراجات النارية.",
+    "heading": "قطع الغيار",
+    "countLine": "{count} قطعة — ابحث بالاسم أو الكود أو حسب الماركة والتصنيف.",
+    "searchLabel": "بحث",
+    "searchPlaceholder": "اسم القطعة أو الكود",
+    "brandLabel": "الماركة",
+    "allBrands": "كل الماركات",
+    "categoryLabel": "التصنيف",
+    "allCategories": "كل التصنيفات",
+    "empty": "لا توجد قطع مطابقة لبحثك — جرّب كلمة تانية أو غيّر الفلاتر.",
+    "vatNote": "الأسعار لا تشمل ضريبة القيمة المضافة (تُضاف عند الفاتورة).",
+    "paginationAria": "صفحات المنتجات"
+  },
+  "productDetail": {
+    "metaNotFound": "قطعة غير موجودة | السعد للدراجات النارية",
+    "metaTitle": "{name} | قطع الغيار | السعد للدراجات النارية",
+    "metaDescription": "{name} — كود {code}{oemPart}متاح في فروع السعد للدراجات النارية.",
+    "metaOem": "، كود OEM {oem}",
+    "whatsappText": "مرحبًا، عايز أستفسر عن قطعة \"{name}\" (كود {code}) على موقع السعد للدراجات النارية.",
+    "backToParts": "كل قطع الغيار",
+    "descriptionTitle": "الوصف",
+    "fitsTitle": "يركب على",
+    "modelFallback": "موديل",
+    "stockTitle": "التوفر حسب الفرع",
+    "noInventory": "لا توجد كميات مسجلة حاليًا — تواصل معنا للتوفر أو الطلب مسبقًا.",
+    "retailTitle": "سعر التجزئة",
+    "vatExcluded": "لا يشمل ض.ق.م ({rate}%)",
+    "stockAvailable": "متوفر — {qty} {unit} في الفروع",
+    "stockUnavailable": "غير متوفر حاليًا",
+    "whatsappCta": "استعلم على واتساب",
+    "branchPrompt": "أو زر أقرب فرع من",
+    "branchesLink": "الفروع"
+  },
+  "brandsPage": {
+    "metaTitle": "الماركات | السعد للدراجات النارية",
+    "metaDescription": "ماركات الدراجات النارية وقطع غيارها المتوفرة في السعد — SYM، Kymco، Haojue وغيرها.",
+    "heading": "الماركات",
+    "countLine": "{count} ماركة — اختار ماركتك لتشوف الموديلات وقطع غيارها.",
+    "empty": "الماركات هتظهر هنا قريبًا."
+  },
+  "brandDetail": {
+    "metaNotFound": "ماركة غير موجودة | السعد للدراجات النارية",
+    "metaTitle": "{name} | الماركات | السعد للدراجات النارية",
+    "metaDescription": "موديلات وقطع غيار {name} المتوفرة في السعد للدراجات النارية.",
+    "backToBrands": "كل الماركات",
+    "viewParts": "عرض قطع الغيار ←",
+    "empty": "موديلات هذه الماركة هتظهر هنا قريبًا."
+  },
+  "modelDetail": {
+    "metaNotFound": "موديل غير موجود | السعد للدراجات النارية",
+    "metaTitle": "{name} | قطع غيار | السعد للدراجات النارية",
+    "metaDescription": "قطع غيار متوافقة مع {name} — متاحة في فروع السعد للدراجات النارية.",
+    "breadcrumbAria": "مسار التنقل",
+    "crumbBrands": "الماركات",
+    "compatibleTitle": "قطع الغيار المتوافقة",
+    "emptyBefore": "لا توجد قطع مسجلة لهذا الموديل بعد —",
+    "emptyContact": "كلمنا",
+    "emptyAfter": "وهنوفّرها لك."
+  },
+  "privacy": {
+    "metaTitle": "سياسة الخصوصية | السعد للدراجات النارية",
+    "metaDescription": "كيف نجمع بياناتك وكيف نستخدمها عند تواصلك مع موقع السعد للدراجات النارية.",
+    "heading": "سياسة الخصوصية",
+    "lastUpdated": "آخر تحديث: {date}",
+    "sections": {
+      "intro": {
+        "title": "مقدمة",
+        "body": "نحن في السعد للدراجات النارية نحترم خصوصيتك. توضح هذه السياسة ما نجمعه من بيانات عند استخدامك لموقعنا وكيف نستخدمها ونحميها."
+      },
+      "dataCollected": {
+        "title": "البيانات التي نجمعها",
+        "body": "نجمع البيانات التي ترسلها بنفسك عبر نموذج التواصل فقط: اسمك، رقم موبايلك، ونص رسالتك (اختياري). لا نجمع أي بيانات أخرى عبر هذا الموقع."
+      },
+      "howUsed": {
+        "title": "كيف نستخدم البيانات",
+        "body": "نستخدم بياناتك للتواصل معك وردّ على استفسارك فقط. لا نستخدمها لأي غرض تسويقي دون موافقتك."
+      },
+      "sharing": {
+        "title": "مشاركة البيانات",
+        "body": "لا نشارك بياناتك مع أي طرف ثالث، ولا نبيعها، ولا نستخدمها خارج نطاق الرد على تواصلك معنا."
+      },
+      "cookies": {
+        "title": "ملفات تعريف الارتباط (Cookies)",
+        "body": "قد نستخدم Google Analytics لفهم زيارات الموقع بشكل عام (أرقام مجمّعة فقط دون تعريفك الشخصي). يمكنك تعطيل الكوكيز من إعدادات متصفحك في أي وقت."
+      },
+      "rights": {
+        "title": "حقوقك",
+        "body": "يحق لك في أي وقت طلب حذف بياناتك التي أرسلتها إلينا. يكفي مراسلتنا على البريد الإلكتروني أدناه وسننفذ الطلب دون تعقيد."
+      },
+      "contact": {
+        "title": "التواصل",
+        "body": "لأي استفسار حول هذه السياسة أو بياناتك، تواصل معنا على:"
+      }
+    }
+  },
+  "terms": {
+    "metaTitle": "الشروط والأحكام | السعد للدراجات النارية",
+    "metaDescription": "شروط وأحكام استخدام موقع السعد للدراجات النارية ومحافظتنا على حقوق الملكية الفكرية.",
+    "heading": "الشروط والأحكام",
+    "lastUpdated": "آخر تحديث: {date}",
+    "sections": {
+      "acceptance": {
+        "title": "قبول الشروط",
+        "body": "باستخدامك لهذا الموقع فإنك توافق على هذه الشروط والأحكام. إذا كنت لا توافق على أي بند منها، يرجى عدم استخدام الموقع."
+      },
+      "usage": {
+        "title": "استخدام الموقع",
+        "body": "يُعرض الموقع لعرض منتجاتنا وخدماتنا والتعريف بفروعنا. لا يُسمح باستخدام الموقع لأي غرض غير مشرع أو يخالف هذه الشروط."
+      },
+      "ip": {
+        "title": "الملكية الفكرية",
+        "body": "جميع محتويات الموقع من نصوص وصور وشعارات وعلامات تجارية مملوكة للسعد للدراجات النارية أو مرخصة لها. لا يجوز نسخ أو إعادة نشر أي محتوى دون إذن كتابي مسبق."
+      },
+      "liability": {
+        "title": "حدود المسؤولية",
+        "body": "نبذل جهدنا لتحديث المعلومات بدقة، لكن الموقع يُقدَّم \"كما هو\" دون ضمانات. لا نتحمل مسؤولية أي أخطاء في البيانات أو انقطاع الخدمة أو أي أضرار غير مباشرة ناتجة عن استخدام الموقع."
+      },
+      "external": {
+        "title": "الروابط الخارجية",
+        "body": "قد يحتوي الموقع على روابط لمواقع أخرى (مثل واتساب ووسائل التواصل). لا نتحكم في هذه المواقع ولا نتحمل مسؤولية محتواها."
+      },
+      "changes": {
+        "title": "التعديلات",
+        "body": "يحق لنا تعديل هذه الشروط في أي وقت دون إشعار مسبق، ويسري التعديل فور نشره على هذه الصفحة."
+      },
+      "law": {
+        "title": "القانون المعمول به",
+        "body": "تخضع هذه الشروط لقوانين جمهورية مصر العربية، وأي نزوج يُرجع إلى الجهات المختصة في مصر."
+      }
+    }
+  },
+  "notFound": {
+    "heading": "الصفحة غير موجودة",
+    "text": "الرابط اللي بتدور عليه مش موجود.",
+    "button": "ارجع للرئيسية"
+  },
   "admin": {
+    "layout": {
+      "metaTitle": "لوحة الإدارة | السعد للدراجات النارية",
+      "panelName": "إدارة Elsaad",
+      "demoBadge": "معاينة بيانات تجريبية"
+    },
     "login": {
-      "title": "",
-      "email": "",
-      "password": "",
-      "submit": "",
-      "errors": { "invalid": "", "required": "" }
+      "heading": "لوحة تحكم السعد",
+      "subtitle": "تسجيل الدخول للإدارة ونظام التخطيط",
+      "emailLabel": "البريد الإلكتروني",
+      "passwordLabel": "كلمة المرور",
+      "submit": "تسجيل الدخول",
+      "loggingIn": "جاري تسجيل الدخول...",
+      "loginError": "حدث خطأ أثناء تسجيل الدخول"
     },
     "nav": {
-      "dashboard": "",
-      "products": "",
-      "brands": "",
-      "categories": "",
-      "branches": "",
-      "employees": "",
-      "inventory": "",
-      "logout": ""
+      "aria": "قائمة الإدارة",
+      "logout": "تسجيل الخروج",
+      "dashboard": "لوحة التحكم",
+      "products": "المنتجات",
+      "categories": "التصنيفات",
+      "brands": "الماركات",
+      "employees": "الموظفون",
+      "branches": "الفروع",
+      "inventory": "المخزون"
     },
     "dashboard": {
-      "title": "",
-      "stats": {
-        "products": "",
-        "brands": "",
-        "categories": "",
-        "branches": "",
-        "employees": "",
-        "inventory": ""
-      }
+      "title": "لوحة التحكم",
+      "newProduct": "منتج جديد",
+      "viewSite": "عرض الموقع",
+      "statsAria": "إحصائيات المتجر",
+      "cardBrands": "الماركات",
+      "cardProducts": "المنتجات",
+      "cardOrders": "الطلبات",
+      "cardLowStock": "مخزون منخفض",
+      "recentOrders": "أحدث الطلبات",
+      "noOrders": "لا توجد طلبات بعد.",
+      "orderNo": "رقم الطلب",
+      "customer": "العميل",
+      "branchCol": "الفرع",
+      "total": "الإجمالي",
+      "status": "الحالة",
+      "statusPending": "قيد الانتظار",
+      "statusConfirmed": "مؤكد",
+      "statusDelivered": "تم التسليم",
+      "statusCancelled": "ملغي"
     },
     "products": {
-      "title": "",
-      "add": "",
-      "edit": "",
-      "delete": "",
-      "table": {
-        "code": "",
-        "name": "",
-        "category": "",
-        "brand": "",
-        "price": "",
-        "stock": "",
-        "actions": ""
-      },
+      "metaNew": "منتج جديد | السعد للدراجات النارية",
+      "metaEdit": "تعديل منتج | السعد للدراجات النارية",
+      "newTitle": "منتج جديد",
+      "editTitle": "تعديل المنتج",
+      "backToList": "العودة للمنتجات",
+      "title": "المنتجات",
+      "countLine": "{count} منتج في القائمة",
+      "add": "منتج جديد",
+      "searchLabel": "بحث",
+      "searchPlaceholder": "اسم المنتج، الكود، أو كود OEM",
+      "searchBtn": "بحث",
+      "code": "الكود",
+      "name": "الاسم",
+      "brand": "الماركة",
+      "category": "التصنيف",
+      "wholesale": "سعر الجملة",
+      "retail": "سعر التجزئة",
+      "stock": "المخزون",
+      "status": "الحالة",
+      "actions": "الإجراءات",
+      "empty": "لا توجد منتجات مطابقة.",
+      "lowTag": "(منخفض)",
+      "paginationAria": "صفحات المنتجات",
+      "deleteTitle": "حذف المنتج",
+      "deleteMsg": "هل أنت متأكد من حذف المنتج \"{name}\"؟",
+      "deletedOk": "تم حذف المنتج بنجاح",
+      "deleteFailed": "تعسّر حذف المنتج",
       "form": {
-        "code": "",
-        "nameAr": "",
-        "nameEn": "",
-        "brand": "",
-        "category": "",
-        "wholesalePrice": "",
-        "costPrice": "",
-        "retailPrice": "",
-        "taxRate": "",
-        "unit": "",
-        "save": "",
-        "cancel": ""
+        "code": "كود المنتج *",
+        "name": "اسم المنتج *",
+        "nameEn": "الاسم بالإنجليزية",
+        "oemCode": "كود OEM",
+        "brand": "الماركة",
+        "noBrand": "بدون ماركة",
+        "category": "التصنيف",
+        "noCategory": "بدون تصنيف",
+        "cost": "سعر التكلفة (ج.م)",
+        "wholesale": "سعر الجملة (ج.م)",
+        "retail": "سعر التجزئة (ج.م) *",
+        "vip": "سعر VIP (ج.م)",
+        "vat": "ضريبة القيمة المضافة",
+        "vatHint": "الافتراضي 0.14 — الأسعار قبل الضريبة",
+        "unit": "وحدة القياس *",
+        "reorder": "حد إعادة الطلب (كمية)",
+        "tags": "وسوم",
+        "tagsHint": "افصل بينها بفاصلة",
+        "description": "الوصف",
+        "activeLabel": "منتج نشط (يظهر في المتجر)",
+        "saving": "جاري الحفظ...",
+        "createdOk": "تم إضافة المنتج بنجاح",
+        "updatedOk": "تم تحديث المنتج بنجاح",
+        "saveError": "حدث خطأ أثناء حفظ المنتج",
+        "validationFailed": "فشل التحقق — {details}"
       }
     },
     "brands": {
-      "title": "",
-      "add": "",
-      "edit": "",
-      "delete": "",
+      "title": "الماركات",
+      "countLine": "{count} ماركة مع عدد الموديلات والمنتجات لكل منها.",
+      "empty": "لا توجد ماركات بعد.",
+      "nameAr": "الاسم بالعربي",
+      "nameEn": "الاسم بالإنجليزي",
+      "slugCol": "المعرّف",
+      "modelsCol": "الموديلات",
+      "productsCol": "المنتجات",
+      "websiteCol": "الموقع",
+      "actions": "الإجراءات",
+      "newBtn": "+ ماركة جديدة",
+      "deleteTitle": "حذف الماركة",
+      "deleteMsg": "هل أنت متأكد من حذف الماركة \"{name}\"؟",
+      "createdOk": "تم إضافة الماركة بنجاح",
+      "updatedOk": "تم تحديث الماركة بنجاح",
+      "deleteFailed": "تعسّر حذف الماركة",
       "form": {
-        "slug": "",
-        "nameAr": "",
-        "nameEn": "",
-        "country": "",
-        "save": "",
-        "cancel": ""
+        "titleNew": "ماركة جديدة",
+        "titleEdit": "تعديل الماركة",
+        "nameEn": "الاسم بالإنجليزي *",
+        "nameAr": "الاسم بالعربي",
+        "slug": "المعرّف *",
+        "slugHint": "a-z و 0-9 و - فقط",
+        "website": "الموقع الإلكتروني",
+        "description": "الوصف",
+        "saving": "جاري الحفظ...",
+        "createdOk": "تم إضافة الماركة بنجاح",
+        "updatedOk": "تم تحديث الماركة بنجاح",
+        "saveError": "حدث خطأ أثناء حفظ الماركة",
+        "validationFailed": "فشل التحقق — {details}"
       }
     },
     "categories": {
-      "title": "",
-      "add": "",
-      "edit": "",
-      "delete": "",
-      "form": { "slug": "", "nameAr": "", "nameEn": "", "save": "", "cancel": "" }
+      "title": "التصنيفات",
+      "subtitle": "شجرة تصنيفات قطع الغيار (جذور وأبناء) — يظهر عدد المنتجات لكل تصنيف.",
+      "empty": "لا توجد تصنيفات بعد.",
+      "addRoot": "+ تصنيف رئيسي",
+      "addChild": "إضافة فرعي",
+      "deleteTitle": "حذف التصنيف",
+      "deleteMsg": "هل أنت متأكد من حذف التصنيف \"{name}\"؟",
+      "deleteOk": "تم حذف التصنيف بنجاح",
+      "form": {
+        "editTitle": "تعديل: {name}",
+        "newTitle": "تصنيف جديد",
+        "nameAr": "الاسم بالعربي *",
+        "nameEn": "الاسم بالإنجليزية",
+        "slug": "المعرّف *",
+        "order": "الترتيب",
+        "saving": "جاري الحفظ...",
+        "saveError": "حدث خطأ أثناء حفظ التصنيف",
+        "validationFailed": "فشل التحقق — {details}"
+      }
     },
     "branches": {
-      "title": "",
-      "add": "",
-      "edit": "",
-      "delete": "",
+      "title": "الفروع",
+      "countLine": "{count} فرع — الضمان والموظفين والمخزون لكل فرع.",
+      "add": "+ إضافة فرع",
+      "empty": "لا توجد فروع بعد.",
+      "createdOk": "تم إضافة الفرع بنجاح",
+      "updatedOk": "تم تحديث الفرع بنجاح",
+      "stats": {
+        "inventory": "صنف بالمخزون",
+        "employees": "موظف",
+        "orders": "طلب"
+      },
+      "hours": {
+        "sat-thu": "السبت - الخميس",
+        "fri": "الجمعة"
+      },
+      "types": {
+        "retail": "بيع بالتجزئة (Retail)",
+        "warehouse": "مخزن (Warehouse)",
+        "showroom": "صالة عرض (Showroom)",
+        "main": "رئيسي (Main)",
+        "service_center": "مركز صيانة (Service Center)"
+      },
       "form": {
-        "nameAr": "",
-        "nameEn": "",
-        "phone": "",
-        "city": "",
-        "governorate": "",
-        "address": "",
-        "manager": "",
-        "save": "",
-        "cancel": ""
+        "titleNew": "إضافة فرع جديد",
+        "titleEdit": "تعديل الفرع",
+        "code": "كود الفرع",
+        "slug": "المعرّف (Slug)",
+        "nameAr": "الاسم بالعربية",
+        "nameEn": "الاسم بالإنجليزية",
+        "type": "نوع الفرع",
+        "governorate": "المحافظة",
+        "defaultGovernorate": "القاهرة",
+        "phNameAr": "فرع المعادي",
+        "phAddress": "15 شارع النصر، المعادي",
+        "phone": "رقم الموبايل",
+        "whatsapp": "رقم الواتساب",
+        "address": "العنوان",
+        "manager": "مدير الفرع (المشرف)",
+        "noManager": "— بدون مدير —",
+        "displayOrder": "ترتيب العرض",
+        "activeLabel": "فرع نشط",
+        "saving": "جاري الحفظ...",
+        "save": "حفظ الفرع",
+        "createdOk": "تم إضافة الفرع بنجاح",
+        "updatedOk": "تم تحديث الفرع بنجاح",
+        "saveError": "حدث خطأ أثناء حفظ الفرع",
+        "validationFailed": "فشل التحقق — {details}"
       }
     },
     "employees": {
-      "title": "",
-      "add": "",
-      "edit": "",
-      "delete": "",
+      "title": "الموظفون",
+      "countLine": "{count} موظف مسجل، مع فرع وكل صلاحية.",
+      "add": "+ إضافة موظف",
+      "empty": "لا يوجد موظفون بعد.",
+      "empNo": "رقم الموظف",
+      "name": "الاسم",
+      "mobile": "الموبايل",
+      "role": "الصلاحية",
+      "branchCol": "الفرع",
+      "ordersCol": "الطلبات",
+      "statusCol": "الحالة",
+      "actions": "الإجراءات",
+      "createdOk": "تم إضافة الموظف بنجاح",
+      "updatedOk": "تم تحديث الموظف بنجاح",
+      "roles": {
+        "admin": "مدير نظام",
+        "manager": "مدير فرع",
+        "cashier": "كاشير",
+        "warehouse": "أمين مخزن"
+      },
       "form": {
-        "fullNameAr": "",
-        "fullNameEn": "",
-        "phone": "",
-        "email": "",
-        "nationalId": "",
-        "jobTitle": "",
-        "role": "",
-        "branch": "",
-        "save": "",
-        "cancel": ""
+        "titleNew": "إضافة موظف جديد",
+        "titleEdit": "تعديل الموظف",
+        "empNo": "رقم الموظف",
+        "nameAr": "الاسم بالعربية",
+        "nameEn": "الاسم بالإنجليزية",
+        "nationalId": "الرقم القومي",
+        "phone": "رقم الموبايل",
+        "email": "البريد الإلكتروني",
+        "role": "الوظيفة / الصلاحية",
+        "branchLabel": "الفرع الأساسي",
+        "noBranch": "— بدون فرع —",
+        "activeLabel": "موظف نشط",
+        "phNameAr": "أحمد محمد",
+        "saving": "جاري الحفظ...",
+        "save": "حفظ الموظف",
+        "createdOk": "تم إضافة الموظف بنجاح",
+        "updatedOk": "تم تحديث الموظف بنجاح",
+        "saveError": "حدث خطأ أثناء حفظ الموظف",
+        "validationFailed": "فشل التحقق — {details}"
+      },
+      "formRoles": {
+        "cashier": "كاشير (Cashier)",
+        "manager": "مدير فرع (Manager)",
+        "warehouse": "أمين مخزن (Warehouse)",
+        "admin": "مدير نظام (Admin)"
       }
     },
     "inventory": {
-      "title": "",
-      "table": { "product": "", "quantity": "", "minLevel": "", "location": "" }
+      "title": "المخزون",
+      "countLine": "{count} صنف في العرض — عدّل الكمية مباشرة ثم اضغط حفظ.",
+      "lowCount": "{count} صنف تحت حد الطلب",
+      "filterLabel": "تصفية حسب الفرع",
+      "allBranches": "كل الفروع",
+      "viewBtn": "عرض",
+      "empty": "لا توجد أصناف بالمخزون للفروع المختارة.",
+      "product": "المنتج",
+      "code": "الكود",
+      "branchCol": "الفرع",
+      "qty": "الكمية",
+      "reorder": "حد الطلب",
+      "statusCol": "الحالة",
+      "actionSr": "إجراء",
+      "low": "منخفض",
+      "save": "حفظ",
+      "done": "تم",
+      "qtyAria": "كمية {product} في {branch}"
     },
     "common": {
-      "loading": "",
-      "saving": "",
-      "deleting": "",
-      "confirm": "",
-      "cancel": "",
-      "yes": "",
-      "no": "",
-      "error": "",
-      "success": ""
+      "validationFailed": "فشل التحقق — {details}"
     }
-  },
-  "privacy": {
-    "title": "",
-    "sections": {
-      "intro": { "title": "", "body": "" },
-      "dataCollected": { "title": "", "body": "" },
-      "howUsed": { "title": "", "body": "" },
-      "sharing": { "title": "", "body": "" },
-      "cookies": { "title": "", "body": "" },
-      "rights": { "title": "", "body": "" },
-      "contact": { "title": "", "body": "" }
-    },
-    "lastUpdated": ""
-  },
-  "terms": {
-    "title": "",
-    "sections": {
-      "acceptance": { "title": "", "body": "" },
-      "usage": { "title": "", "body": "" },
-      "ip": { "title": "", "body": "" },
-      "liability": { "title": "", "body": "" },
-      "external": { "title": "", "body": "" },
-      "changes": { "title": "", "body": "" },
-      "law": { "title": "", "body": "" }
-    },
-    "lastUpdated": ""
   }
 }
