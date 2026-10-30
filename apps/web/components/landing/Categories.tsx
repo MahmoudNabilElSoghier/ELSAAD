@@ -25,25 +25,26 @@ export function Categories() {
           {categories.map((category, index) => {
             const Icon = icons[index % icons.length];
             return (
-              <Card
-                key={category.id}
-                hover
-                padding="lg"
-                className="flex flex-col justify-between group"
-              >
-                <div>
-                  <div className="w-12 h-12 rounded-lg bg-accent/10 text-accent flex items-center justify-center mb-6 group-hover:bg-accent group-hover:text-white transition-colors">
-                    <Icon className="w-6 h-6" />
+              <FadeIn key={category.id} delay={Math.min(index * 0.05, 0.3)} className="h-full">
+                <Card
+                  hover
+                  padding="lg"
+                  className="flex flex-col justify-between group h-full"
+                >
+                  <div>
+                    <div className="w-12 h-12 rounded-lg bg-accent/10 text-accent flex items-center justify-center mb-6 group-hover:bg-accent group-hover:text-white transition-colors">
+                      <Icon className="w-6 h-6" />
+                    </div>
+                    <h3 className="text-xl font-bold mb-3">{category.title}</h3>
+                    <p className="text-muted text-sm leading-relaxed mb-6">
+                      {category.description}
+                    </p>
                   </div>
-                  <h3 className="text-xl font-bold mb-3">{category.title}</h3>
-                  <p className="text-muted text-sm leading-relaxed mb-6">
-                    {category.description}
-                  </p>
-                </div>
-                <div className="text-accent text-sm font-semibold">
-                  <span>متاح في الفروع</span>
-                </div>
-              </Card>
+                  <div className="text-accent text-sm font-semibold">
+                    <span>متاح في الفروع</span>
+                  </div>
+                </Card>
+              </FadeIn>
             );
           })}
         </div>

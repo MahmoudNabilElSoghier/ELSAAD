@@ -20,28 +20,30 @@ export function Branches() {
         </FadeIn>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {branches.map((branch) => (
-            <Card key={branch.id} padding="lg" className="bg-bg/50 border-border flex flex-col justify-between">
-              <div>
-                <h3 className="text-xl font-bold text-accent mb-4">
-                  {branch.name}
-                </h3>
-                <div className="space-y-3 text-sm text-muted">
-                  <div className="flex items-start gap-3">
-                    <MapPin className="w-5 h-5 text-accent shrink-0 mt-0.5" />
-                    <span>{branch.address}</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Phone className="w-5 h-5 text-accent shrink-0" />
-                    <span dir="ltr">{branch.phone}</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Clock className="w-5 h-5 text-accent shrink-0" />
-                    <span>{branch.hours}</span>
+          {branches.map((branch, index) => (
+            <FadeIn key={branch.id} delay={Math.min(index * 0.05, 0.3)} className="h-full">
+              <Card padding="lg" className="bg-bg/50 border-border flex flex-col justify-between h-full">
+                <div>
+                  <h3 className="text-xl font-bold text-accent mb-4">
+                    {branch.name}
+                  </h3>
+                  <div className="space-y-3 text-sm text-muted">
+                    <div className="flex items-start gap-3">
+                      <MapPin className="w-5 h-5 text-accent shrink-0 mt-0.5" />
+                      <span>{branch.address}</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Phone className="w-5 h-5 text-accent shrink-0" />
+                      <span dir="ltr">{branch.phone}</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Clock className="w-5 h-5 text-accent shrink-0" />
+                      <span>{branch.hours}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Card>
+              </Card>
+            </FadeIn>
           ))}
         </div>
       </Container>

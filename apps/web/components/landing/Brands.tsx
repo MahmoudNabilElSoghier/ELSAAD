@@ -20,15 +20,16 @@ export function Brands() {
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
           {brands.map((brand, index) => (
-            <Card
-              key={index}
-              padding="md"
-              className="bg-card/55 border-border flex items-center justify-center h-24 text-center hover:border-accent/40 transition-colors"
-            >
-              <span className="font-bold text-lg md:text-xl text-white tracking-wide">
-                {brand.name}
-              </span>
-            </Card>
+            <FadeIn key={brand.name} delay={Math.min(index * 0.05, 0.3)} className="h-full">
+              <Card
+                padding="md"
+                className="bg-card/55 border-border flex items-center justify-center h-24 text-center hover:border-accent/40 transition-colors"
+              >
+                <span className="font-bold text-lg md:text-xl text-white tracking-wide">
+                  {brand.name}
+                </span>
+              </Card>
+            </FadeIn>
           ))}
         </div>
       </Container>

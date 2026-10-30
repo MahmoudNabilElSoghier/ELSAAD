@@ -20,20 +20,21 @@ export function Gallery() {
         </FadeIn>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {gallery.map((item) => (
-            <Card
-              key={item.id}
-              padding="none"
-              className="overflow-hidden bg-bg border-border group relative aspect-[4/3] flex items-center justify-center"
-            >
-              {/* Placeholder graphic until real photos are provided */}
-              <div className="absolute inset-0 bg-gradient-to-br from-bg to-card flex flex-col items-center justify-center p-6 text-center group-hover:scale-105 transition-transform duration-300">
-                <ImageIcon className="w-12 h-12 text-muted mb-3 group-hover:text-accent transition-colors" />
-                <span className="text-sm font-medium text-muted">
-                  السعد للدراجات النارية
-                </span>
-              </div>
-            </Card>
+          {gallery.map((item, index) => (
+            <FadeIn key={item.id} delay={Math.min(index * 0.05, 0.3)} className="h-full">
+              <Card
+                padding="none"
+                className="overflow-hidden bg-bg border-border group relative aspect-[4/3] flex items-center justify-center"
+              >
+                {/* Placeholder graphic until real photos are provided */}
+                <div className="absolute inset-0 bg-gradient-to-br from-bg to-card flex flex-col items-center justify-center p-6 text-center group-hover:scale-105 transition-transform duration-300">
+                  <ImageIcon className="w-12 h-12 text-muted mb-3 group-hover:text-accent transition-colors" />
+                  <span className="text-sm font-medium text-muted">
+                    السعد للدراجات النارية
+                  </span>
+                </div>
+              </Card>
+            </FadeIn>
           ))}
         </div>
       </Container>

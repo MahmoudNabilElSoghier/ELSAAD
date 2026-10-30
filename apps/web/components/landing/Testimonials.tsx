@@ -20,24 +20,26 @@ export function Testimonials() {
         </FadeIn>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {testimonials.map((item) => (
-            <Card key={item.id} padding="lg" className="bg-card border-border flex flex-col justify-between">
-              <div>
-                <div className="flex items-center gap-1 text-amber-400 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-current" />
-                  ))}
+          {testimonials.map((item, index) => (
+            <FadeIn key={item.id} delay={Math.min(index * 0.05, 0.3)} className="h-full">
+              <Card padding="lg" className="bg-card border-border flex flex-col justify-between h-full">
+                <div>
+                  <div className="flex items-center gap-1 text-amber-400 mb-4">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-current" />
+                    ))}
+                  </div>
+                  <Quote className="w-8 h-8 text-accent/30 mb-2" />
+                  <p className="text-muted text-base leading-relaxed mb-6">
+                    &ldquo;{item.text}&rdquo;
+                  </p>
                 </div>
-                <Quote className="w-8 h-8 text-accent/30 mb-2" />
-                <p className="text-muted text-base leading-relaxed mb-6">
-                  &ldquo;{item.text}&rdquo;
-                </p>
-              </div>
-              <div className="border-t border-border pt-4">
-                <div className="font-bold text-white">{item.name}</div>
-                <div className="text-sm text-muted">{item.role}</div>
-              </div>
-            </Card>
+                <div className="border-t border-border pt-4">
+                  <div className="font-bold text-white">{item.name}</div>
+                  <div className="text-sm text-muted">{item.role}</div>
+                </div>
+              </Card>
+            </FadeIn>
           ))}
         </div>
       </Container>

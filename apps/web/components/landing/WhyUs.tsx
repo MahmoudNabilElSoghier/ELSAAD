@@ -25,15 +25,17 @@ export function WhyUs() {
           {whyUs.map((feature, index) => {
             const Icon = icons[index % icons.length];
             return (
-              <Card key={feature.id} padding="lg" className="bg-bg/50 border-border">
-                <div className="w-12 h-12 rounded-lg bg-accent/10 text-accent flex items-center justify-center mb-6">
-                  <Icon className="w-6 h-6" />
-                </div>
-                <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
-                <p className="text-muted text-sm leading-relaxed">
-                  {feature.description}
-                </p>
-              </Card>
+              <FadeIn key={feature.id} delay={Math.min(index * 0.05, 0.3)} className="h-full">
+                <Card padding="lg" className="bg-bg/50 border-border h-full">
+                  <div className="w-12 h-12 rounded-lg bg-accent/10 text-accent flex items-center justify-center mb-6">
+                    <Icon className="w-6 h-6" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
+                  <p className="text-muted text-sm leading-relaxed">
+                    {feature.description}
+                  </p>
+                </Card>
+              </FadeIn>
             );
           })}
         </div>

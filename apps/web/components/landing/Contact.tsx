@@ -67,7 +67,8 @@ export function Contact() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start max-w-5xl mx-auto">
           {/* Contact Form */}
-          <Card padding="lg" className="bg-card border-border">
+          <FadeIn delay={0.05}>
+            <Card padding="lg" className="bg-card border-border">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <Input
                 label={contactForm.fields.name.label}
@@ -127,10 +128,12 @@ export function Contact() {
                 <span>{status === "loading" ? "جاري الإرسال..." : contactForm.submitButton}</span>
               </Button>
             </form>
-          </Card>
+            </Card>
+          </FadeIn>
 
           {/* Quick Contact & WhatsApp info */}
-          <div className="space-y-6 lg:py-8">
+          <FadeIn delay={0.1}>
+            <div className="space-y-6 lg:py-8">
             <h3 className="text-2xl font-bold mb-4">تواصل مباشر</h3>
             <p className="text-muted leading-relaxed mb-6">
               فريق خدمة العملاء جاهز للرد على استفساراتكم وتلقي طلبات الشراء والصيانة طوال أيام الأسبوع.
@@ -173,7 +176,8 @@ export function Contact() {
                 </Button>
               </Card>
             </div>
-          </div>
+            </div>
+          </FadeIn>
         </div>
       </Container>
     </section>
