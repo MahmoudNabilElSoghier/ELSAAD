@@ -5,8 +5,10 @@ import { CategoryManager } from "@/components/admin/CategoryManager";
 import { getCategoryTree } from "@elsaad/api-client";
 import type { PartCategory } from "@elsaad/shared";
 import { Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function AdminCategoriesPage() {
+  const t = useTranslations("admin.categories");
   const [tree, setTree] = useState<PartCategory[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -21,11 +23,11 @@ export default function AdminCategoriesPage() {
   }, [refreshKey]);
 
   return (
-    <div className="space-y-6" dir="rtl">
+    <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-extrabold text-fg">التصنيفات</h1>
+        <h1 className="text-2xl font-extrabold text-fg">{t("title")}</h1>
         <p className="mt-1 text-sm text-muted">
-          شجرة تصنيفات قطع الغيار (جذور وأبناء) — يظهر عدد المنتجات لكل تصنيف.
+          {t("subtitle")}
         </p>
       </div>
 

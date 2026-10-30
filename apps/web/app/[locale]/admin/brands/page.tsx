@@ -6,11 +6,15 @@ import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
 import { FormBanner } from "@/components/admin/FormBanner";
 import { getBrands, deleteBrand } from "@elsaad/api-client";
 import type { Brand } from "@elsaad/shared";
+import { useLocale, useTranslations } from "next-intl";
 import { Loader2 } from "lucide-react";
 
-const nf = new Intl.NumberFormat("ar-EG-u-nu-latn");
-
 export default function AdminBrandsPage() {
+  const t = useTranslations("admin.brands");
+  const tCommon = useTranslations("admin.forms.common");
+  const locale = useLocale();
+  const nf = new Intl.NumberFormat(locale === "ar" ? "ar-EG-u-nu-latn" : "en-US");
+
   const [brands, setBrands] = useState<Brand[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -32,24 +36,24 @@ export default function AdminBrandsPage() {
     setBanner(null);
     try {
       await deleteBrand(deleteTarget.id);
-      setBanner({ type: "success", message: "تم حذف الماركة بنجاح" });
+      setBanner({ type: "success", message: t("deleteOk") });
       setDeleteTarget(null);
       refetch();
     } catch (err) {
       setBanner({
         type: "error",
-        message: err instanceof Error ? err.message : "تعسّر حذف الماركة",
+        message: err instanceof Error ? err.message : t("deleteFailed"),
       });
       setDeleteTarget(null);
     }
   };
 
   return (
-    <div className="space-y-6" dir="rtl">
+    <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-extrabold text-fg">الماركات</h1>
+        <h1 className="text-2xl font-extrabold text-fg">{t("title")}</h1>
         <p className="mt-1 text-sm text-muted">
-          {loading ? "جاري التحميل..." : `${nf.format(brands.length)} ماركة مع عدد الموديلات والمنتجات لكل منها.`}
+          {loading ? (locale === "ar" ? "جاري التحميل..." : "Loading...") : t("countLine", { count: nf.format(brands.length) })}
         </p>
       </div>
 
@@ -83,20 +87,20 @@ export default function AdminBrandsPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-border text-muted">
-                  <th className="px-4 py-3 font-medium text-right">الاسم بالعربي</th>
-                  <th className="px-4 py-3 font-medium text-right">الاسم بالإنجليزي</th>
-                  <th className="px-4 py-3 font-medium text-right">المعرّف</th>
-                  <th className="px-4 py-3 font-medium text-right">الموديلات</th>
-                  <th className="px-4 py-3 font-medium text-right">المنتجات</th>
-                  <th className="px-4 py-3 font-medium text-right">الموقع</th>
-                  <th className="px-4 py-3 font-medium text-right">الإجراءات</th>
+                  <th className="px-4 py-3 font-medium text-start">{t("nameAr")}</th>
+                  <th className="px-4 py-3 font-medium text-start">{t("nameEn")}</th>
+                  <th className="px-4 py-3 font-medium text-start">{t("slugCol")}</th>
+                  <th className="px-4 py-3 font-medium text-start">{t("modelsCol")}</th>
+                  <th className="px-4 py-3 font-medium text-start">{t("productsCol")}</th>
+                  <th className="px-4 py-3 font-medium text-start">{t("websiteCol")}</th>
+                  <th className="px-4 py-3 font-medium text-start">{t("actions")}</th>
                 </tr>
               </thead>
               <tbody>
                 {brands.length === 0 ? (
                   <tr>
                     <td colSpan={7} className="px-4 py-8 text-center text-muted">
-                      لا توجد ماركات بعد.
+                      {t("empty")}
                     </td>
                   </tr>
                 ) : (
@@ -138,14 +142,14 @@ export default function AdminBrandsPage() {
                           onClick={() => setEditingBrand(brand)}
                           className="font-semibold text-accent hover:underline"
                         >
-                          تعديل
+                          {tCommon("edit")}
                         </button>
                         <button
                           type="button"
                           onClick={() => setDeleteTarget(brand)}
                           className="text-red-400 hover:text-red-300"
                         >
-                          حذف
+                          {tCommon("delete")}
                         </button>
                       </td>
                     </tr>
@@ -159,8 +163,8 @@ export default function AdminBrandsPage() {
 
       {deleteTarget && (
         <ConfirmDialog
-          title="حذف الماركة"
-          message={`هل أنت متأكد من حذف الماركة "${deleteTarget.nameAr ?? deleteTarget.name}"؟`}
+          title={t("deleteTitle")}
+          message={t("deleteMsg", { name: deleteTarget.nameAr ?? deleteTarget.name })}
           onConfirm={handleDelete}
           onCancel={() => setDeleteTarget(null)}
         />

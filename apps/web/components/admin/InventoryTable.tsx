@@ -2,17 +2,18 @@
 
 import { useState } from "react";
 import type { BranchInventory } from "@elsaad/shared";
+import { useLocale, useTranslations } from "next-intl";
 
-const nf = new Intl.NumberFormat("ar-EG-u-nu-latn");
-
-// Mirrors the service's isLowStock — kept local to avoid pulling the service
-// layer and mock data into the client bundle.
 function isLow(row: BranchInventory): boolean {
   const threshold = row.reorderLevel ?? row.product?.reorderLevel ?? 0;
   return row.quantity <= threshold;
 }
 
 export function InventoryTable({ rows }: { rows: BranchInventory[] }) {
+  const t = useTranslations("admin.inventory");
+  const locale = useLocale();
+  const nf = new Intl.NumberFormat(locale === "ar" ? "ar-EG-u-nu-latn" : "en-US");
+
   const [edits, setEdits] = useState<Record<string, string>>({});
   const [savedId, setSavedId] = useState<string | null>(null);
 
@@ -29,8 +30,6 @@ export function InventoryTable({ rows }: { rows: BranchInventory[] }) {
       productId: row.productId,
       quantity,
     });
-    // TODO(Phase 2D): PATCH /api/admin/inventory once ADMIN_API_KEY auth exists
-    // (decision 1B) — reason: writes must never ship unauthenticated.
     setEdits((prev) => {
       const next = { ...prev };
       delete next[row.id];
@@ -42,7 +41,7 @@ export function InventoryTable({ rows }: { rows: BranchInventory[] }) {
   if (rows.length === 0) {
     return (
       <p className="rounded-xl border border-border bg-card px-4 py-8 text-center text-muted">
-        لا توجد أصناف بالمخزون للفروع المختارة.
+        {t("empty")}
       </p>
     );
   }
@@ -53,14 +52,14 @@ export function InventoryTable({ rows }: { rows: BranchInventory[] }) {
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-border text-muted">
-              <th className="px-4 py-3 font-medium">المنتج</th>
-              <th className="px-4 py-3 font-medium">الكود</th>
-              <th className="px-4 py-3 font-medium">الفرع</th>
-              <th className="px-4 py-3 font-medium">الكمية</th>
-              <th className="px-4 py-3 font-medium">حد الطلب</th>
-              <th className="px-4 py-3 font-medium">الحالة</th>
-              <th className="px-4 py-3 font-medium">
-                <span className="sr-only">إجراء</span>
+              <th className="px-4 py-3 font-medium text-start">{t("product")}</th>
+              <th className="px-4 py-3 font-medium text-start">{t("code")}</th>
+              <th className="px-4 py-3 font-medium text-start">{t("branchCol")}</th>
+              <th className="px-4 py-3 font-medium text-start">{t("qty")}</th>
+              <th className="px-4 py-3 font-medium text-start">{t("reorder")}</th>
+              <th className="px-4 py-3 font-medium text-start">{t("statusCol")}</th>
+              <th className="px-4 py-3 font-medium text-start">
+                <span className="sr-only">{t("actionSr")}</span>
               </th>
             </tr>
           </thead>
@@ -92,7 +91,7 @@ export function InventoryTable({ rows }: { rows: BranchInventory[] }) {
                       step={1}
                       value={edits[row.id] ?? String(row.quantity)}
                       onChange={(event) => setQty(row.id, event.target.value)}
-                      aria-label={`كمية ${row.product?.name ?? ""} في ${row.branch?.nameAr ?? ""}`}
+                      aria-label={t("qtyAria", { product: row.product?.name ?? "", branch: row.branch?.nameAr ?? "" })}
                       className="w-24 rounded-lg border border-border bg-bg px-3 py-2 text-fg focus:border-accent focus:outline-none"
                     />
                   </td>
@@ -100,11 +99,11 @@ export function InventoryTable({ rows }: { rows: BranchInventory[] }) {
                   <td className="px-4 py-3">
                     {low ? (
                       <span className="rounded-full bg-red-500/15 px-3 py-1 text-xs font-semibold text-red-400">
-                        منخفض
+                        {t("low")}
                       </span>
                     ) : (
                       <span className="rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-400">
-                        متوفر
+                        {locale === "ar" ? "متوفر" : "In stock"}
                       </span>
                     )}
                   </td>
@@ -119,7 +118,7 @@ export function InventoryTable({ rows }: { rows: BranchInventory[] }) {
                           : "border-border text-muted opacity-60"
                       }`}
                     >
-                      {savedId === row.id && !dirty ? "تم" : "حفظ"}
+                      {savedId === row.id && !dirty ? t("done") : t("save")}
                     </button>
                   </td>
                 </tr>

@@ -14,34 +14,8 @@ import {
   type PartCategory,
 } from "@elsaad/shared";
 import { createCategory, updateCategory, deleteCategory, ApiError } from "@elsaad/api-client";
+import { useLocale, useTranslations } from "next-intl";
 import { Loader2 } from "lucide-react";
-
-const nf = new Intl.NumberFormat("ar-EG-u-nu-latn");
-
-const EDIT_FORBIDDEN = ["id", "slug", "createdAt", "updatedAt"] as const;
-
-function pickEditable<T extends Record<string, unknown>>(input: T, forbidden: readonly string[]): Partial<T> {
-  const out: Record<string, unknown> = {};
-  for (const [k, v] of Object.entries(input)) {
-    if (!forbidden.includes(k)) out[k] = v;
-  }
-  return out as Partial<T>;
-}
-
-function getErrorMessage(err: unknown): string {
-  if (err instanceof ApiError) {
-    const errBody = err.body as { message?: string; issues?: Array<{ path?: string | string[]; message?: string }> };
-    if (errBody?.issues && Array.isArray(errBody.issues)) {
-      const details = errBody.issues
-        .map((i) => `${Array.isArray(i.path) ? i.path.join(".") : i.path || ""}: ${i.message}`)
-        .join("; ");
-      return `فشل التحقق — ${details}`;
-    }
-    if (err.message) return err.message;
-  }
-  if (err instanceof Error) return err.message;
-  return "حدث خطأ أثناء حفظ التصنيف";
-}
 
 type Mode =
   | { type: "edit"; category: PartCategory }
@@ -56,9 +30,26 @@ function CategoryFormPanel({
   onCancel: () => void;
   onSuccess: () => void;
 }) {
+  const t = useTranslations("admin.categories");
+  const tCommon = useTranslations("admin.forms.common");
   const isEdit = mode.type === "edit";
   const category = isEdit ? mode.category : null;
   const [banner, setBanner] = useState<{ type: "success" | "error"; message: string } | null>(null);
+
+  const getErrorMessage = (err: unknown): string => {
+    if (err instanceof ApiError) {
+      const errBody = err.body as { message?: string; issues?: Array<{ path?: string | string[]; message?: string }> };
+      if (errBody?.issues && Array.isArray(errBody.issues)) {
+        const details = errBody.issues
+          .map((i) => `${Array.isArray(i.path) ? i.path.join(".") : i.path || ""}: ${i.message}`)
+          .join("; ");
+        return t("form.validationFailed", { details });
+      }
+      if (err.message) return err.message;
+    }
+    if (err instanceof Error) return err.message;
+    return t("form.saveError");
+  };
 
   const {
     register,
@@ -113,23 +104,22 @@ function CategoryFormPanel({
       onSubmit={handleSubmit(onSubmit)}
       noValidate
       className="space-y-3 rounded-lg border border-accent/40 bg-bg p-4"
-      dir="rtl"
     >
       <p className="text-sm font-semibold text-fg">
-        {isEdit ? `تعديل: ${category?.nameAr ?? category?.name}` : "تصنيف جديد"}
+        {isEdit ? t("form.editTitle", { name: category?.nameAr ?? category?.name ?? "" }) : t("form.newTitle")}
       </p>
 
       {banner && <FormBanner type={banner.type} message={banner.message} onClose={() => setBanner(null)} />}
 
       <div className="grid gap-3 sm:grid-cols-2">
         <Input
-          label="الاسم بالعربي *"
+          label={t("form.nameAr")}
           error={errors.nameAr?.message}
           {...register("nameAr")}
         />
-        <Input label="الاسم بالإنجليزية" dir="ltr" {...register("name")} />
+        <Input label={t("form.nameEn")} dir="ltr" {...register("name")} />
         <Input
-          label="المعرّف *"
+          label={t("form.slug")}
           dir="ltr"
           placeholder="oil-filter"
           error={errors.slug?.message}
@@ -137,7 +127,7 @@ function CategoryFormPanel({
           disabled={isEdit}
         />
         <Input
-          label="الترتيب"
+          label={t("form.order")}
           type="number"
           dir="ltr"
           error={errors.order?.message}
@@ -148,22 +138,37 @@ function CategoryFormPanel({
         <Button type="submit" size="sm" disabled={isSubmitting}>
           {isSubmitting ? (
             <>
-              <Loader2 className="w-4 h-4 animate-spin ml-1 inline" />
-              <span>جاري الحفظ...</span>
+              <Loader2 className="w-4 h-4 animate-spin ms-1 inline" />
+              <span>{t("form.saving")}</span>
             </>
           ) : (
-            <span>حفظ</span>
+            <span>{tCommon("save")}</span>
           )}
         </Button>
         <Button type="button" size="sm" variant="secondary" onClick={onCancel}>
-          إلغاء
+          {tCommon("cancel")}
         </Button>
       </div>
     </form>
   );
 }
 
+const EDIT_FORBIDDEN = ["id", "slug", "createdAt", "updatedAt"] as const;
+
+function pickEditable<T extends Record<string, unknown>>(input: T, forbidden: readonly string[]): Partial<T> {
+  const out: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(input)) {
+    if (!forbidden.includes(k)) out[k] = v;
+  }
+  return out as Partial<T>;
+}
+
 export function CategoryManager({ tree, onSuccess }: { tree: PartCategory[]; onSuccess: () => void }) {
+  const t = useTranslations("admin.categories");
+  const tCommon = useTranslations("admin.forms.common");
+  const locale = useLocale();
+  const nf = new Intl.NumberFormat(locale === "ar" ? "ar-EG-u-nu-latn" : "en-US");
+
   const [mode, setMode] = useState<Mode | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<PartCategory | null>(null);
   const [banner, setBanner] = useState<{ type: "success" | "error"; message: string } | null>(null);
@@ -172,13 +177,13 @@ export function CategoryManager({ tree, onSuccess }: { tree: PartCategory[]; onS
     if (!deleteTarget) return;
     try {
       await deleteCategory(deleteTarget.id);
-      setBanner({ type: "success", message: "تم حذف التصنيف بنجاح" });
+      setBanner({ type: "success", message: t("deleteOk") });
       setDeleteTarget(null);
       onSuccess();
     } catch (err) {
       setBanner({
         type: "error",
-        message: getErrorMessage(err),
+        message: err instanceof Error ? err.message : t("form.saveError"),
       });
       setDeleteTarget(null);
     }
@@ -189,7 +194,6 @@ export function CategoryManager({ tree, onSuccess }: { tree: PartCategory[]; onS
       <div
         className="flex flex-wrap items-center gap-3 rounded-lg border border-border bg-card px-4 py-3"
         style={{ marginInlineStart: depth * 16 }}
-        dir="rtl"
       >
         <span className="font-semibold text-fg">
           {category.nameAr ?? category.name}
@@ -198,7 +202,7 @@ export function CategoryManager({ tree, onSuccess }: { tree: PartCategory[]; onS
           {category.slug}
         </span>
         <span className="rounded-full bg-bg px-2 py-0.5 text-xs text-muted">
-          {nf.format(category._count?.products ?? 0)} منتج
+          {nf.format(category._count?.products ?? 0)} {locale === "ar" ? "منتج" : "products"}
         </span>
         <span className="ms-auto flex gap-3 text-sm">
           <button
@@ -206,21 +210,21 @@ export function CategoryManager({ tree, onSuccess }: { tree: PartCategory[]; onS
             onClick={() => setMode({ type: "edit", category })}
             className="font-semibold text-accent hover:underline"
           >
-            تعديل
+            {tCommon("edit")}
           </button>
           <button
             type="button"
             onClick={() => setMode({ type: "add", parentId: category.id })}
             className="text-muted hover:text-fg"
           >
-            إضافة فرعي
+            {t("addChild")}
           </button>
           <button
             type="button"
             onClick={() => setDeleteTarget(category)}
             className="text-red-400 hover:text-red-300"
           >
-            حذف
+            {tCommon("delete")}
           </button>
         </span>
       </div>
@@ -249,7 +253,7 @@ export function CategoryManager({ tree, onSuccess }: { tree: PartCategory[]; onS
   );
 
   return (
-    <div className="space-y-4" dir="rtl">
+    <div className="space-y-4">
       {banner && <FormBanner type={banner.type} message={banner.message} onClose={() => setBanner(null)} />}
 
       <div>
@@ -258,22 +262,22 @@ export function CategoryManager({ tree, onSuccess }: { tree: PartCategory[]; onS
           onClick={() => setMode({ type: "add", parentId: null })}
           className="rounded-lg border border-border px-4 py-2 text-sm font-semibold text-fg hover:border-accent"
         >
-          + تصنيف رئيسي
+          {t("addRoot")}
         </button>
       </div>
       {mode?.type === "add" && mode.parentId === null && (
         <CategoryFormPanel key="add-root" mode={mode} onCancel={() => setMode(null)} onSuccess={onSuccess} />
       )}
       {tree.length === 0 ? (
-        <p className="text-muted">لا توجد تصنيفات بعد.</p>
+        <p className="text-muted">{t("empty")}</p>
       ) : (
         <ul className="space-y-2">{tree.map((category) => renderNode(category, 0))}</ul>
       )}
 
       {deleteTarget && (
         <ConfirmDialog
-          title="حذف التصنيف"
-          message={`هل أنت متأكد من حذف التصنيف "${deleteTarget.nameAr ?? deleteTarget.name}"؟`}
+          title={t("deleteTitle")}
+          message={t("deleteMsg", { name: deleteTarget.nameAr ?? deleteTarget.name })}
           onConfirm={handleDelete}
           onCancel={() => setDeleteTarget(null)}
         />

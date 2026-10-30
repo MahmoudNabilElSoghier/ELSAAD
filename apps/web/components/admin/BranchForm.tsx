@@ -9,6 +9,7 @@ import type { Branch, Employee } from "@elsaad/shared";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { FormBanner } from "./FormBanner";
+import { useTranslations } from "next-intl";
 import { Loader2 } from "lucide-react";
 
 interface BranchFormProps {
@@ -28,22 +29,9 @@ function pickEditable<T extends Record<string, unknown>>(input: T, forbidden: re
   return out as Partial<T>;
 }
 
-function getErrorMessage(err: unknown): string {
-  if (err instanceof ApiError) {
-    const errBody = err.body as { message?: string; issues?: Array<{ path?: string | string[]; message?: string }> };
-    if (errBody?.issues && Array.isArray(errBody.issues)) {
-      const details = errBody.issues
-        .map((i) => `${Array.isArray(i.path) ? i.path.join(".") : i.path || ""}: ${i.message}`)
-        .join("; ");
-      return `فشل التحقق — ${details}`;
-    }
-    if (err.message) return err.message;
-  }
-  if (err instanceof Error) return err.message;
-  return "حدث خطأ أثناء حفظ الفرع";
-}
-
 export function BranchForm({ mode = "create", initialData, onSuccess, onCancel }: BranchFormProps) {
+  const t = useTranslations("admin.branches");
+  const tCommon = useTranslations("admin.forms.common");
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [banner, setBanner] = useState<{ type: "success" | "error"; message: string } | null>(null);
   const [loading, setLoading] = useState(false);
@@ -51,6 +39,21 @@ export function BranchForm({ mode = "create", initialData, onSuccess, onCancel }
   useEffect(() => {
     getEmployees().then(setEmployees).catch(() => {});
   }, []);
+
+  const getErrorMessage = (err: unknown): string => {
+    if (err instanceof ApiError) {
+      const errBody = err.body as { message?: string; issues?: Array<{ path?: string | string[]; message?: string }> };
+      if (errBody?.issues && Array.isArray(errBody.issues)) {
+        const details = errBody.issues
+          .map((i) => `${Array.isArray(i.path) ? i.path.join(".") : i.path || ""}: ${i.message}`)
+          .join("; ");
+        return t("form.validationFailed", { details });
+      }
+      if (err.message) return err.message;
+    }
+    if (err instanceof Error) return err.message;
+    return t("form.saveError");
+  };
 
   const {
     register,
@@ -76,7 +79,7 @@ export function BranchForm({ mode = "create", initialData, onSuccess, onCancel }
         }
       : {
           type: "retail",
-          governorate: "القاهرة",
+          governorate: t("form.defaultGovernorate"),
           displayOrder: 0,
           active: true,
         },
@@ -122,10 +125,10 @@ export function BranchForm({ mode = "create", initialData, onSuccess, onCancel }
           active: editable.active as boolean | undefined,
         };
         await updateBranch(initialData.id, updatePayload);
-        setBanner({ type: "success", message: "تم تحديث الفرع بنجاح" });
+        setBanner({ type: "success", message: t("form.updatedOk") });
       } else {
         await createBranch(payload);
-        setBanner({ type: "success", message: "تم إضافة الفرع بنجاح" });
+        setBanner({ type: "success", message: t("form.createdOk") });
       }
 
       if (onSuccess) onSuccess();
@@ -140,46 +143,46 @@ export function BranchForm({ mode = "create", initialData, onSuccess, onCancel }
   };
 
   return (
-    <div className="bg-card border border-border rounded-xl p-6 shadow-xl" dir="rtl">
+    <div className="bg-card border border-border rounded-xl p-6 shadow-xl">
       <h2 className="text-lg font-bold text-fg mb-4">
-        {mode === "edit" ? "تعديل الفرع" : "إضافة فرع جديد"}
+        {mode === "edit" ? t("form.titleEdit") : t("form.titleNew")}
       </h2>
 
       {banner && <FormBanner type={banner.type} message={banner.message} onClose={() => setBanner(null)} />}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Input label="كود الفرع" {...register("code")} error={errors.code?.message} placeholder="BR-CAI-02" disabled={mode === "edit"} />
-          <Input label="المعرّف (Slug)" {...register("slug")} error={errors.slug?.message} placeholder="cairo-maadi" disabled={mode === "edit"} />
-          <Input label="الاسم بالعربية" {...register("nameAr")} error={errors.nameAr?.message} placeholder="فرع المعادي" />
-          <Input label="الاسم بالإنجليزية" {...register("nameEn")} error={errors.nameEn?.message} placeholder="Maadi Branch" />
+          <Input label={t("form.code")} {...register("code")} error={errors.code?.message} placeholder="BR-CAI-02" disabled={mode === "edit"} />
+          <Input label={t("form.slug")} {...register("slug")} error={errors.slug?.message} placeholder="cairo-maadi" disabled={mode === "edit"} />
+          <Input label={t("form.nameAr")} {...register("nameAr")} error={errors.nameAr?.message} placeholder={t("form.phNameAr")} />
+          <Input label={t("form.nameEn")} {...register("nameEn")} error={errors.nameEn?.message} placeholder="Maadi Branch" />
 
           <div>
-            <label className="block text-sm font-medium text-fg mb-1">نوع الفرع</label>
+            <label className="block text-sm font-medium text-fg mb-1">{t("form.type")}</label>
             <select
               {...register("type")}
               className="w-full bg-bg border border-border rounded-lg px-4 py-2.5 text-fg text-sm focus:border-accent focus:outline-none"
             >
-              <option value="retail">بيع بالتجزئة (Retail)</option>
-              <option value="warehouse">مخزن (Warehouse)</option>
-              <option value="showroom">صالة عرض (Showroom)</option>
-              <option value="main">رئيسي (Main)</option>
-              <option value="service_center">مركز صيانة (Service Center)</option>
+              <option value="retail">{t("types.retail")}</option>
+              <option value="warehouse">{t("types.warehouse")}</option>
+              <option value="showroom">{t("types.showroom")}</option>
+              <option value="main">{t("types.main")}</option>
+              <option value="service_center">{t("types.service_center")}</option>
             </select>
           </div>
 
-          <Input label="المحافظة" {...register("governorate")} error={errors.governorate?.message} placeholder="القاهرة" />
-          <Input label="رقم الموبايل" {...register("phone")} error={errors.phone?.message} placeholder="01001234567" />
-          <Input label="رقم الواتساب" {...register("whatsapp")} error={errors.whatsapp?.message} placeholder="01001234567" />
-          <Input label="العنوان" {...register("address")} error={errors.address?.message} placeholder="15 شارع النصر، المعادي" />
+          <Input label={t("form.governorate")} {...register("governorate")} error={errors.governorate?.message} placeholder={t("form.defaultGovernorate")} />
+          <Input label={t("form.phone")} {...register("phone")} error={errors.phone?.message} placeholder="01001234567" />
+          <Input label={t("form.whatsapp")} {...register("whatsapp")} error={errors.whatsapp?.message} placeholder="01001234567" />
+          <Input label={t("form.address")} {...register("address")} error={errors.address?.message} placeholder={t("form.phAddress")} />
           
           <div>
-            <label className="block text-sm font-medium text-fg mb-1">مدير الفرع (المشرف)</label>
+            <label className="block text-sm font-medium text-fg mb-1">{t("form.manager")}</label>
             <select
               {...register("managerId")}
               className="w-full bg-bg border border-border rounded-lg px-4 py-2.5 text-fg text-sm focus:border-accent focus:outline-none"
             >
-              <option value="">— بدون مدير —</option>
+              <option value="">{t("form.noManager")}</option>
               {employees.map((emp) => (
                 <option key={emp.id} value={emp.id}>
                   {emp.nameAr} ({emp.employeeNumber})
@@ -188,28 +191,28 @@ export function BranchForm({ mode = "create", initialData, onSuccess, onCancel }
             </select>
           </div>
 
-          <Input label="ترتيب العرض" type="number" {...register("displayOrder", { valueAsNumber: true })} error={errors.displayOrder?.message} />
+          <Input label={t("form.displayOrder")} type="number" {...register("displayOrder", { valueAsNumber: true })} error={errors.displayOrder?.message} />
 
           <div className="flex items-center gap-2 pt-6">
             <input type="checkbox" id="branch-active" {...register("active")} className="w-4 h-4 rounded accent-accent" />
-            <label htmlFor="branch-active" className="text-sm font-medium text-fg">فرع نشط</label>
+            <label htmlFor="branch-active" className="text-sm font-medium text-fg">{t("form.activeLabel")}</label>
           </div>
         </div>
 
         <div className="flex justify-end gap-3 pt-4 border-t border-border">
           {onCancel && (
             <Button type="button" variant="secondary" size="sm" onClick={onCancel}>
-              إلغاء
+              {tCommon("cancel")}
             </Button>
           )}
           <Button type="submit" size="sm" disabled={loading}>
             {loading ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin ml-2" />
-                <span>جاري الحفظ...</span>
+                <Loader2 className="w-4 h-4 animate-spin ms-2" />
+                <span>{t("form.saving")}</span>
               </>
             ) : (
-              <span>حفظ الفرع</span>
+              <span>{t("form.save")}</span>
             )}
           </Button>
         </div>

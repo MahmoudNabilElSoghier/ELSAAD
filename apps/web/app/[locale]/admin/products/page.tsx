@@ -10,12 +10,16 @@ import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
 import { getProducts, deleteProduct, totalStock, type ProductPage } from "@elsaad/api-client";
 import type { Product } from "@elsaad/shared";
 import { Loader2 } from "lucide-react";
-
-const nf = new Intl.NumberFormat("ar-EG-u-nu-latn");
-const formatEgp = (value: number | null) =>
-  value == null ? "—" : `${nf.format(value)} ج.م`;
+import { useLocale, useTranslations } from "next-intl";
 
 export default function AdminProductsPage() {
+  const t = useTranslations("admin.products");
+  const tCommon = useTranslations("common");
+  const locale = useLocale();
+  const nf = new Intl.NumberFormat(locale === "ar" ? "ar-EG-u-nu-latn" : "en-US");
+  const formatEgp = (value: number | null) =>
+    value == null ? "—" : `${nf.format(value)} ${locale === "ar" ? "ج.م" : "EGP"}`;
+
   const searchParams = useSearchParams();
   const q = searchParams.get("q") ?? "";
   const page = searchParams.get("page") ?? "1";
@@ -46,13 +50,13 @@ export default function AdminProductsPage() {
     setBanner(null);
     try {
       await deleteProduct(deleteTarget.id);
-      setBanner({ type: "success", message: "تم حذف المنتج بنجاح" });
+      setBanner({ type: "success", message: t("deletedOk") });
       setDeleteTarget(null);
       refetch();
     } catch (err) {
       setBanner({
         type: "error",
-        message: err instanceof Error ? err.message : "تعسّر حذف المنتج",
+        message: err instanceof Error ? err.message : t("deleteFailed"),
       });
       setDeleteTarget(null);
     }
@@ -67,16 +71,16 @@ export default function AdminProductsPage() {
   };
 
   return (
-    <div className="space-y-6" dir="rtl">
+    <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-fg">المنتجات</h1>
+          <h1 className="text-2xl font-extrabold text-fg">{t("title")}</h1>
           <p className="mt-1 text-sm text-muted">
-            {result ? `${nf.format(result.total)} منتج في القائمة` : "جاري التحميل..."}
+            {result ? t("countLine", { count: nf.format(result.total) }) : tCommon("loading")}
           </p>
         </div>
         <Button asChild size="sm">
-          <Link href="/admin/products/new">منتج جديد</Link>
+          <Link href="/admin/products/new">{t("add")}</Link>
         </Button>
       </div>
 
@@ -85,14 +89,14 @@ export default function AdminProductsPage() {
       <form action="/admin/products" method="get" className="flex items-end gap-2">
         <div className="w-full max-w-md">
           <Input
-            label="بحث"
+            label={t("searchLabel")}
             name="q"
             defaultValue={q}
-            placeholder="اسم المنتج، الكود، أو كود OEM"
+            placeholder={t("searchPlaceholder")}
           />
         </div>
         <Button type="submit" variant="secondary" size="md">
-          بحث
+          {t("searchBtn")}
         </Button>
       </form>
 
@@ -107,22 +111,22 @@ export default function AdminProductsPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-border text-muted">
-                    <th className="px-4 py-3 font-medium text-right">الكود</th>
-                    <th className="px-4 py-3 font-medium text-right">الاسم</th>
-                    <th className="px-4 py-3 font-medium text-right">الماركة</th>
-                    <th className="px-4 py-3 font-medium text-right">التصنيف</th>
-                    <th className="px-4 py-3 font-medium text-right">سعر الجملة</th>
-                    <th className="px-4 py-3 font-medium text-right">سعر التجزئة</th>
-                    <th className="px-4 py-3 font-medium text-right">المخزون</th>
-                    <th className="px-4 py-3 font-medium text-right">الحالة</th>
-                    <th className="px-4 py-3 font-medium text-right">الإجراءات</th>
+                    <th className="px-4 py-3 font-medium text-start">{t("code")}</th>
+                    <th className="px-4 py-3 font-medium text-start">{t("name")}</th>
+                    <th className="px-4 py-3 font-medium text-start">{t("brand")}</th>
+                    <th className="px-4 py-3 font-medium text-start">{t("category")}</th>
+                    <th className="px-4 py-3 font-medium text-start">{t("wholesale")}</th>
+                    <th className="px-4 py-3 font-medium text-start">{t("retail")}</th>
+                    <th className="px-4 py-3 font-medium text-start">{t("stock")}</th>
+                    <th className="px-4 py-3 font-medium text-start">{t("status")}</th>
+                    <th className="px-4 py-3 font-medium text-start">{t("actions")}</th>
                   </tr>
                 </thead>
                 <tbody>
                   {!result || result.items.length === 0 ? (
                     <tr>
                       <td colSpan={9} className="px-4 py-8 text-center text-muted">
-                        لا توجد منتجات مطابقة.
+                        {t("empty")}
                       </td>
                     </tr>
                   ) : (
@@ -151,7 +155,7 @@ export default function AdminProductsPage() {
                             }`}
                           >
                             {nf.format(stock)}
-                            {low && <span className="mr-1 text-xs">(منخفض)</span>}
+                            {low && <span className="ms-1 text-xs">{t("lowTag")}</span>}
                           </td>
                           <td className="px-4 py-3">
                             <span
@@ -161,7 +165,7 @@ export default function AdminProductsPage() {
                                   : "bg-bg text-muted"
                               }`}
                             >
-                              {product.active ? "نشط" : "موقوف"}
+                              {product.active ? tCommon("active") : tCommon("inactive")}
                             </span>
                           </td>
                           <td className="px-4 py-3 flex gap-3 text-sm">
@@ -169,14 +173,14 @@ export default function AdminProductsPage() {
                               href={`/admin/products/${product.id}/edit`}
                               className="font-semibold text-accent hover:underline"
                             >
-                              تعديل
+                              {tCommon("edit")}
                             </Link>
                             <button
                               type="button"
                               onClick={() => setDeleteTarget(product)}
                               className="text-red-400 hover:text-red-300"
                             >
-                              حذف
+                              {tCommon("delete")}
                             </button>
                           </td>
                         </tr>
@@ -190,7 +194,7 @@ export default function AdminProductsPage() {
 
           {result && result.totalPages > 1 && (
             <nav
-              aria-label="صفحات المنتجات"
+              aria-label={t("paginationAria")}
               className="flex items-center justify-between text-sm"
             >
               <Link
@@ -202,10 +206,10 @@ export default function AdminProductsPage() {
                     : "text-fg hover:border-accent"
                 }`}
               >
-                السابق
+                {tCommon("prev")}
               </Link>
               <span className="text-muted">
-                صفحة {nf.format(result.page)} من {nf.format(result.totalPages)}
+                {tCommon("pageOf", { page: nf.format(result.page), total: nf.format(result.totalPages) })}
               </span>
               <Link
                 href={pageHref(result.page + 1)}
@@ -216,7 +220,7 @@ export default function AdminProductsPage() {
                     : "text-fg hover:border-accent"
                 }`}
               >
-                التالي
+                {tCommon("next")}
               </Link>
             </nav>
           )}
@@ -225,8 +229,8 @@ export default function AdminProductsPage() {
 
       {deleteTarget && (
         <ConfirmDialog
-          title="حذف المنتج"
-          message={`هل أنت متأكد من حذف المنتج "${deleteTarget.name}"؟`}
+          title={t("deleteTitle")}
+          message={t("deleteMsg", { name: deleteTarget.name })}
           onConfirm={handleDelete}
           onCancel={() => setDeleteTarget(null)}
         />

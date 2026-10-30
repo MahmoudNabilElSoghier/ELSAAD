@@ -7,10 +7,14 @@ import { InventoryTable } from "@/components/admin/InventoryTable";
 import { getBranches, getInventory, isLowStock } from "@elsaad/api-client";
 import type { Branch, BranchInventory } from "@elsaad/shared";
 import { Loader2 } from "lucide-react";
-
-const nf = new Intl.NumberFormat("ar-EG-u-nu-latn");
+import { useLocale, useTranslations } from "next-intl";
 
 export default function AdminInventoryPage() {
+  const t = useTranslations("admin.inventory");
+  const tCommon = useTranslations("common");
+  const locale = useLocale();
+  const nf = new Intl.NumberFormat(locale === "ar" ? "ar-EG-u-nu-latn" : "en-US");
+
   const searchParams = useSearchParams();
   const branch = searchParams.get("branch") ?? "";
 
@@ -34,17 +38,17 @@ export default function AdminInventoryPage() {
   const lowCount = rows.filter(isLowStock).length;
 
   return (
-    <div className="space-y-6" dir="rtl">
+    <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-fg">المخزون</h1>
+          <h1 className="text-2xl font-extrabold text-fg">{t("title")}</h1>
           <p className="mt-1 text-sm text-muted">
-            {loading ? "جاري التحميل..." : `${nf.format(rows.length)} صنف في العرض — عدّل الكمية مباشرة ثم اضغط حفظ.`}
+            {loading ? tCommon("loading") : t("countLine", { count: nf.format(rows.length) })}
           </p>
         </div>
         {!loading && lowCount > 0 && (
           <p className="rounded-full bg-red-500/15 px-4 py-2 text-sm font-semibold text-red-400">
-            {nf.format(lowCount)} صنف تحت حد الطلب
+            {t("lowCount", { count: nf.format(lowCount) })}
           </p>
         )}
       </div>
@@ -55,7 +59,7 @@ export default function AdminInventoryPage() {
             htmlFor="branch-select"
             className="text-sm font-medium text-fg"
           >
-            تصفية حسب الفرع
+            {t("filterLabel")}
           </label>
           <select
             id="branch-select"
@@ -63,16 +67,16 @@ export default function AdminInventoryPage() {
             defaultValue={branch}
             className="rounded-lg border border-border bg-bg px-4 py-3 text-fg focus:border-accent focus:outline-none"
           >
-            <option value="">كل الفروع</option>
+            <option value="">{t("allBranches")}</option>
             {branches.map((branchItem) => (
               <option key={branchItem.id} value={branchItem.id}>
-                {branchItem.nameAr}
+                {locale === "ar" ? branchItem.nameAr : (branchItem.nameEn ?? branchItem.nameAr)}
               </option>
             ))}
           </select>
         </div>
         <Button type="submit" variant="secondary" size="md">
-          عرض
+          {t("viewBtn")}
         </Button>
       </form>
 

@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/Input";
 import { FormBanner } from "./FormBanner";
 import { brandFormSchema, type BrandFormValues, type UpdateBrandInput, type Brand } from "@elsaad/shared";
 import { createBrand, updateBrand, ApiError } from "@elsaad/api-client";
+import { useTranslations } from "next-intl";
 import { Loader2 } from "lucide-react";
 
 interface BrandFormProps {
@@ -27,24 +28,26 @@ function pickEditable<T extends Record<string, unknown>>(input: T, forbidden: re
   return out as Partial<T>;
 }
 
-function getErrorMessage(err: unknown): string {
-  if (err instanceof ApiError) {
-    const errBody = err.body as { message?: string; issues?: Array<{ path?: string | string[]; message?: string }> };
-    if (errBody?.issues && Array.isArray(errBody.issues)) {
-      const details = errBody.issues
-        .map((i) => `${Array.isArray(i.path) ? i.path.join(".") : i.path || ""}: ${i.message}`)
-        .join("; ");
-      return `فشل التحقق — ${details}`;
-    }
-    if (err.message) return err.message;
-  }
-  if (err instanceof Error) return err.message;
-  return "حدث خطأ أثناء حفظ الماركة";
-}
-
 export function BrandForm({ mode = "create", initialData, onSuccess, onCancel }: BrandFormProps) {
+  const t = useTranslations("admin.brands");
+  const tCommon = useTranslations("admin.forms.common");
   const [open, setOpen] = useState(mode === "edit");
   const [banner, setBanner] = useState<{ type: "success" | "error"; message: string } | null>(null);
+
+  const getErrorMessage = (err: unknown): string => {
+    if (err instanceof ApiError) {
+      const errBody = err.body as { message?: string; issues?: Array<{ path?: string | string[]; message?: string }> };
+      if (errBody?.issues && Array.isArray(errBody.issues)) {
+        const details = errBody.issues
+          .map((i) => `${Array.isArray(i.path) ? i.path.join(".") : i.path || ""}: ${i.message}`)
+          .join("; ");
+        return t("form.validationFailed", { details });
+      }
+      if (err.message) return err.message;
+    }
+    if (err instanceof Error) return err.message;
+    return t("form.saveError");
+  };
 
   const {
     register,
@@ -89,10 +92,10 @@ export function BrandForm({ mode = "create", initialData, onSuccess, onCancel }:
           description: editable.description as string | undefined,
         };
         await updateBrand(initialData.id, updatePayload);
-        setBanner({ type: "success", message: "تم تحديث الماركة بنجاح" });
+        setBanner({ type: "success", message: t("updatedOk") });
       } else {
         await createBrand(payload);
-        setBanner({ type: "success", message: "تم إضافة الماركة بنجاح" });
+        setBanner({ type: "success", message: t("createdOk") });
         reset();
         setOpen(false);
       }
@@ -113,7 +116,7 @@ export function BrandForm({ mode = "create", initialData, onSuccess, onCancel }:
         onClick={() => setOpen(true)}
         className="rounded-lg border border-border px-4 py-2 text-sm font-semibold text-fg hover:border-accent"
       >
-        + ماركة جديدة
+        {t("newBtn")}
       </button>
     );
   }
@@ -123,48 +126,47 @@ export function BrandForm({ mode = "create", initialData, onSuccess, onCancel }:
       onSubmit={handleSubmit(onSubmit)}
       noValidate
       className="space-y-3 rounded-xl border border-accent/40 bg-card p-5"
-      dir="rtl"
     >
-      <p className="font-semibold text-fg">{mode === "edit" ? "تعديل الماركة" : "ماركة جديدة"}</p>
+      <p className="font-semibold text-fg">{mode === "edit" ? t("form.titleEdit") : t("form.titleNew")}</p>
       
       {banner && <FormBanner type={banner.type} message={banner.message} onClose={() => setBanner(null)} />}
 
       <div className="grid gap-3 sm:grid-cols-2">
         <Input
-          label="الاسم بالإنجليزي *"
+          label={t("form.nameEn")}
           dir="ltr"
           placeholder="SYM"
           error={errors.name?.message}
           {...register("name")}
         />
-        <Input label="الاسم بالعربي" placeholder="سيم" {...register("nameAr")} />
+        <Input label={t("form.nameAr")} placeholder="سيم" {...register("nameAr")} />
         <Input
-          label="المعرّف *"
+          label={t("form.slug")}
           dir="ltr"
           placeholder="sym"
-          hint="a-z و 0-9 و - فقط"
+          hint={t("form.slugHint")}
           error={errors.slug?.message}
           {...register("slug")}
           disabled={mode === "edit"}
         />
         <Input
-          label="الموقع الإلكتروني"
+          label={t("form.website")}
           dir="ltr"
           placeholder="https://…"
           error={errors.website?.message}
           {...register("website")}
         />
       </div>
-      <Input label="الوصف" {...register("description")} />
+      <Input label={t("form.description")} {...register("description")} />
       <div className="flex gap-2">
         <Button type="submit" size="sm" disabled={isSubmitting}>
           {isSubmitting ? (
             <>
-              <Loader2 className="w-4 h-4 animate-spin ml-1 inline" />
-              <span>جاري الحفظ...</span>
+              <Loader2 className="w-4 h-4 animate-spin ms-1 inline" />
+              <span>{t("form.saving")}</span>
             </>
           ) : (
-            <span>حفظ</span>
+            <span>{tCommon("save")}</span>
           )}
         </Button>
         <Button
@@ -177,7 +179,7 @@ export function BrandForm({ mode = "create", initialData, onSuccess, onCancel }:
             if (onCancel) onCancel();
           }}
         >
-          إلغاء
+          {tCommon("cancel")}
         </Button>
       </div>
     </form>

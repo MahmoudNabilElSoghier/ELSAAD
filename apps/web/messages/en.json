@@ -491,6 +491,7 @@
       "deleteMsg": "Are you sure you want to delete the brand \"{name}\"?",
       "createdOk": "Brand added successfully",
       "updatedOk": "Brand updated successfully",
+      "deleteOk": "Brand deleted successfully",
       "deleteFailed": "Failed to delete brand",
       "form": {
         "titleNew": "New brand",

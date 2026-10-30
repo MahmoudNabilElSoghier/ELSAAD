@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/Input";
 import { FormBanner } from "./FormBanner";
 import { productFormSchema, type ProductFormValues, type UpdateProductInput, type Brand, type PartCategory, type Product } from "@elsaad/shared";
 import { createProduct, updateProduct, ApiError } from "@elsaad/api-client";
+import { useTranslations } from "next-intl";
 import { Loader2 } from "lucide-react";
 
 const toPriceInput = (value: number | null | undefined) =>
@@ -30,27 +31,29 @@ function pickEditable<T extends Record<string, unknown>>(input: T, forbidden: re
   return out as Partial<T>;
 }
 
-function getErrorMessage(err: unknown): string {
-  if (err instanceof ApiError) {
-    const errBody = err.body as { message?: string; issues?: Array<{ path?: string | string[]; message?: string }> };
-    if (errBody?.issues && Array.isArray(errBody.issues)) {
-      const details = errBody.issues
-        .map((i) => `${Array.isArray(i.path) ? i.path.join(".") : i.path || ""}: ${i.message}`)
-        .join("; ");
-      return `فشل التحقق — ${details}`;
-    }
-    if (err.message) return err.message;
-  }
-  if (err instanceof Error) return err.message;
-  return "حدث خطأ أثناء حفظ المنتج";
-}
-
 const inputClass =
   "bg-bg border rounded-lg px-4 py-3 text-fg placeholder:text-muted focus:border-accent focus:outline-none disabled:opacity-50 border-border";
 
 export function ProductForm({ product, brands, categories }: ProductFormProps) {
+  const t = useTranslations("admin.products.form");
+  const tCommon = useTranslations("admin.forms.common");
   const router = useRouter();
   const [banner, setBanner] = useState<{ type: "success" | "error"; message: string } | null>(null);
+
+  const getErrorMessage = (err: unknown): string => {
+    if (err instanceof ApiError) {
+      const errBody = err.body as { message?: string; issues?: Array<{ path?: string | string[]; message?: string }> };
+      if (errBody?.issues && Array.isArray(errBody.issues)) {
+        const details = errBody.issues
+          .map((i) => `${Array.isArray(i.path) ? i.path.join(".") : i.path || ""}: ${i.message}`)
+          .join("; ");
+        return t("validationFailed", { details });
+      }
+      if (err.message) return err.message;
+    }
+    if (err instanceof Error) return err.message;
+    return t("saveError");
+  };
 
   const {
     register,
@@ -86,10 +89,10 @@ export function ProductForm({ product, brands, categories }: ProductFormProps) {
         const editable = pickEditable(fullValues, EDIT_FORBIDDEN);
         const updatePayload: UpdateProductInput = editable as UpdateProductInput;
         await updateProduct(product.id, updatePayload);
-        setBanner({ type: "success", message: "تم تحديث المنتج بنجاح" });
+        setBanner({ type: "success", message: t("updatedOk") });
       } else {
         await createProduct(values);
-        setBanner({ type: "success", message: "تم إضافة المنتج بنجاح" });
+        setBanner({ type: "success", message: t("createdOk") });
       }
 
       setTimeout(() => {
@@ -109,13 +112,12 @@ export function ProductForm({ product, brands, categories }: ProductFormProps) {
       onSubmit={handleSubmit(onSubmit)}
       noValidate
       className="space-y-6 rounded-xl border border-border bg-card p-6"
-      dir="rtl"
     >
       {banner && <FormBanner type={banner.type} message={banner.message} onClose={() => setBanner(null)} />}
 
       <div className="grid gap-4 md:grid-cols-2">
         <Input
-          label="كود المنتج *"
+          label={t("code")}
           dir="ltr"
           placeholder="SYM-FLT-001"
           error={errors.code?.message}
@@ -123,19 +125,19 @@ export function ProductForm({ product, brands, categories }: ProductFormProps) {
           disabled={!!product}
         />
         <Input
-          label="اسم المنتج *"
+          label={t("name")}
           error={errors.name?.message}
           {...register("name")}
         />
-        <Input label="الاسم بالإنجليزية" dir="ltr" {...register("nameEn")} />
-        <Input label="كود OEM" dir="ltr" {...register("oemCode")} />
+        <Input label={t("nameEn")} dir="ltr" {...register("nameEn")} />
+        <Input label={t("oemCode")} dir="ltr" {...register("oemCode")} />
 
         <div className="flex flex-col gap-1.5">
           <label htmlFor="product-brand" className="text-sm font-medium text-fg">
-            الماركة
+            {t("brand")}
           </label>
           <select id="product-brand" className={inputClass} {...register("brandId")}>
-            <option value="">بدون ماركة</option>
+            <option value="">{t("noBrand")}</option>
             {brands.map((brand) => (
               <option key={brand.id} value={brand.id}>
                 {brand.nameAr ?? brand.name}
@@ -152,14 +154,14 @@ export function ProductForm({ product, brands, categories }: ProductFormProps) {
             htmlFor="product-category"
             className="text-sm font-medium text-fg"
           >
-            التصنيف
+            {t("category")}
           </label>
           <select
             id="product-category"
             className={inputClass}
             {...register("partCategoryId")}
           >
-            <option value="">بدون تصنيف</option>
+            <option value="">{t("noCategory")}</option>
             {categories.map((category) => (
               <option key={category.id} value={category.id}>
                 {category.parentId ? "└ " : ""}
@@ -173,7 +175,7 @@ export function ProductForm({ product, brands, categories }: ProductFormProps) {
         </div>
 
         <Input
-          label="سعر التكلفة (ج.م)"
+          label={t("cost")}
           type="number"
           step="0.01"
           min="0"
@@ -182,7 +184,7 @@ export function ProductForm({ product, brands, categories }: ProductFormProps) {
           {...register("costPrice")}
         />
         <Input
-          label="سعر الجملة (ج.م)"
+          label={t("wholesale")}
           type="number"
           step="0.01"
           min="0"
@@ -191,7 +193,7 @@ export function ProductForm({ product, brands, categories }: ProductFormProps) {
           {...register("wholesalePrice")}
         />
         <Input
-          label="سعر التجزئة (ج.م) *"
+          label={t("retail")}
           type="number"
           step="0.01"
           min="0"
@@ -200,7 +202,7 @@ export function ProductForm({ product, brands, categories }: ProductFormProps) {
           {...register("retailPrice")}
         />
         <Input
-          label="سعر VIP (ج.م)"
+          label={t("vip")}
           type="number"
           step="0.01"
           min="0"
@@ -209,22 +211,22 @@ export function ProductForm({ product, brands, categories }: ProductFormProps) {
           {...register("vipPrice")}
         />
         <Input
-          label="ضريبة القيمة المضافة"
+          label={t("vat")}
           type="number"
           step="0.01"
           min="0"
           dir="ltr"
-          hint="الافتراضي 0.14 — الأسعار قبل الضريبة"
+          hint={t("vatHint")}
           error={errors.taxRate?.message}
           {...register("taxRate")}
         />
         <Input
-          label="وحدة القياس *"
+          label={t("unit")}
           error={errors.unitOfMeasure?.message}
           {...register("unitOfMeasure")}
         />
         <Input
-          label="حد إعادة الطلب (كمية)"
+          label={t("reorder")}
           type="number"
           min="0"
           dir="ltr"
@@ -232,8 +234,8 @@ export function ProductForm({ product, brands, categories }: ProductFormProps) {
           {...register("reorderLevel")}
         />
         <Input
-          label="وسوم"
-          hint="افصل بينها بفاصلة"
+          label={t("tags")}
+          hint={t("tagsHint")}
           error={errors.tags?.message}
           {...register("tags")}
         />
@@ -244,7 +246,7 @@ export function ProductForm({ product, brands, categories }: ProductFormProps) {
           htmlFor="product-description"
           className="text-sm font-medium text-fg"
         >
-          الوصف
+          {t("description")}
         </label>
         <textarea
           id="product-description"
@@ -263,22 +265,22 @@ export function ProductForm({ product, brands, categories }: ProductFormProps) {
           className="h-4 w-4 accent-accent-strong"
           {...register("active")}
         />
-        منتج نشط (يظهر في المتجر)
+        {t("activeLabel")}
       </label>
 
       <div className="flex gap-3 border-t border-border pt-4">
         <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? (
             <>
-              <Loader2 className="w-4 h-4 animate-spin ml-2 inline" />
-              <span>جاري الحفظ...</span>
+              <Loader2 className="w-4 h-4 animate-spin ms-2 inline" />
+              <span>{t("saving")}</span>
             </>
           ) : (
-            <span>حفظ</span>
+            <span>{tCommon("save")}</span>
           )}
         </Button>
         <Button type="button" variant="secondary" onClick={() => router.back()}>
-          إلغاء
+          {tCommon("cancel")}
         </Button>
       </div>
     </form>

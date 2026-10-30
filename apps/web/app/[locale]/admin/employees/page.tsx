@@ -7,15 +7,7 @@ import { FormBanner } from "@/components/admin/FormBanner";
 import type { Employee } from "@elsaad/shared";
 import { Button } from "@/components/ui/Button";
 import { Loader2 } from "lucide-react";
-
-const nf = new Intl.NumberFormat("ar-EG-u-nu-latn");
-
-const roleLabels: Record<string, string> = {
-  admin: "مدير نظام",
-  manager: "مدير فرع",
-  cashier: "كاشير",
-  warehouse: "أمين مخزن",
-};
+import { useLocale, useTranslations } from "next-intl";
 
 const roleStyles: Record<string, string> = {
   admin: "bg-red-500/15 text-red-400",
@@ -25,6 +17,18 @@ const roleStyles: Record<string, string> = {
 };
 
 export default function AdminEmployeesPage() {
+  const t = useTranslations("admin.employees");
+  const tCommon = useTranslations("common");
+  const locale = useLocale();
+  const nf = new Intl.NumberFormat(locale === "ar" ? "ar-EG-u-nu-latn" : "en-US");
+
+  const roleLabels: Record<string, string> = {
+    admin: t("roles.admin"),
+    manager: t("roles.manager"),
+    cashier: t("roles.cashier"),
+    warehouse: t("roles.warehouse"),
+  };
+
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -42,17 +46,17 @@ export default function AdminEmployeesPage() {
   }, [refreshKey]);
 
   return (
-    <div className="space-y-6" dir="rtl">
+    <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-fg">الموظفون</h1>
+          <h1 className="text-2xl font-extrabold text-fg">{t("title")}</h1>
           <p className="mt-1 text-sm text-muted">
-            {loading ? "جاري التحميل..." : `${nf.format(employees.length)} موظف مسجل، مع فرع وكل صلاحية.`}
+            {loading ? tCommon("loading") : t("countLine", { count: nf.format(employees.length) })}
           </p>
         </div>
         {!showCreate && (
           <Button size="sm" onClick={() => setShowCreate(true)}>
-            + إضافة موظف
+            {t("add")}
           </Button>
         )}
       </div>
@@ -64,7 +68,7 @@ export default function AdminEmployeesPage() {
           mode="create"
           onSuccess={() => {
             setShowCreate(false);
-            setBanner({ type: "success", message: "تم إضافة الموظف بنجاح" });
+            setBanner({ type: "success", message: t("createdOk") });
             refetch();
           }}
           onCancel={() => setShowCreate(false)}
@@ -79,7 +83,7 @@ export default function AdminEmployeesPage() {
               initialData={editingEmployee}
               onSuccess={() => {
                 setEditingEmployee(null);
-                setBanner({ type: "success", message: "تم تحديث الموظف بنجاح" });
+                setBanner({ type: "success", message: t("updatedOk") });
                 refetch();
               }}
               onCancel={() => setEditingEmployee(null)}
@@ -98,21 +102,21 @@ export default function AdminEmployeesPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-border text-muted">
-                  <th className="px-4 py-3 font-medium text-right">رقم الموظف</th>
-                  <th className="px-4 py-3 font-medium text-right">الاسم</th>
-                  <th className="px-4 py-3 font-medium text-right">الموبايل</th>
-                  <th className="px-4 py-3 font-medium text-right">الصلاحية</th>
-                  <th className="px-4 py-3 font-medium text-right">الفرع</th>
-                  <th className="px-4 py-3 font-medium text-right">الطلبات</th>
-                  <th className="px-4 py-3 font-medium text-right">الحالة</th>
-                  <th className="px-4 py-3 font-medium text-right">الإجراءات</th>
+                  <th className="px-4 py-3 font-medium text-start">{t("empNo")}</th>
+                  <th className="px-4 py-3 font-medium text-start">{t("name")}</th>
+                  <th className="px-4 py-3 font-medium text-start">{t("mobile")}</th>
+                  <th className="px-4 py-3 font-medium text-start">{t("role")}</th>
+                  <th className="px-4 py-3 font-medium text-start">{t("branchCol")}</th>
+                  <th className="px-4 py-3 font-medium text-start">{t("ordersCol")}</th>
+                  <th className="px-4 py-3 font-medium text-start">{t("statusCol")}</th>
+                  <th className="px-4 py-3 font-medium text-start">{t("actions")}</th>
                 </tr>
               </thead>
               <tbody>
                 {employees.length === 0 ? (
                   <tr>
                     <td colSpan={8} className="px-4 py-8 text-center text-muted">
-                      لا يوجد موظفون بعد.
+                      {t("empty")}
                     </td>
                   </tr>
                 ) : (
@@ -125,7 +129,7 @@ export default function AdminEmployeesPage() {
                         {employee.employeeNumber}
                       </td>
                       <td className="px-4 py-3 font-semibold text-fg">
-                        {employee.nameAr}
+                        {locale === "ar" ? employee.nameAr : (employee.nameEn ?? employee.nameAr)}
                       </td>
                       <td className="px-4 py-3">
                         <a
@@ -146,9 +150,9 @@ export default function AdminEmployeesPage() {
                         </span>
                       </td>
                       <td className="px-4 py-3 text-muted">
-                        {employee.branch?.nameAr ?? "—"}
+                        {locale === "ar" ? (employee.branch?.nameAr ?? "—") : (employee.branch?.nameEn ?? employee.branch?.nameAr ?? "—")}
                       </td>
-                      <td className="px-4 py-3 text-fg">
+                      <td className="px-4 py-3 text-muted font-mono">
                         {nf.format(employee._count?.orders ?? 0)}
                       </td>
                       <td className="px-4 py-3">
@@ -159,16 +163,16 @@ export default function AdminEmployeesPage() {
                               : "bg-bg text-muted"
                           }`}
                         >
-                          {employee.active ? "نشط" : "موقوف"}
+                          {employee.active ? tCommon("active") : tCommon("inactive")}
                         </span>
                       </td>
-                      <td className="px-4 py-3">
+                      <td className="px-4 py-3 flex gap-3 text-sm">
                         <button
                           type="button"
                           onClick={() => setEditingEmployee(employee)}
                           className="font-semibold text-accent hover:underline"
                         >
-                          تعديل
+                          {tCommon("edit")}
                         </button>
                       </td>
                     </tr>

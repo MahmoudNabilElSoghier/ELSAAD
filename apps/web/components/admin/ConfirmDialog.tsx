@@ -2,6 +2,7 @@
 
 import { AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { useTranslations } from "next-intl";
 
 interface ConfirmDialogProps {
   title: string;
@@ -18,8 +19,10 @@ export function ConfirmDialog({
   onCancel,
   isDanger = true,
 }: ConfirmDialogProps) {
+  const t = useTranslations("admin.forms.common");
+
   return (
-    <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4" dir="rtl">
+    <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-card border border-border rounded-xl p-6 shadow-2xl space-y-4">
         <div className="flex items-center gap-3">
           <div className={`p-2 rounded-full ${isDanger ? "bg-red-500/15 text-red-400" : "bg-amber-500/15 text-amber-400"}`}>
@@ -30,14 +33,14 @@ export function ConfirmDialog({
         <p className="text-sm text-muted">{message}</p>
         <div className="flex justify-end gap-3 pt-2">
           <Button variant="secondary" size="sm" onClick={onCancel}>
-            إلغاء
+            {t("cancel")}
           </Button>
           <Button
             size="sm"
             onClick={onConfirm}
             className={isDanger ? "bg-red-600 hover:bg-red-700 text-white" : ""}
           >
-            تأكيد
+            {t("confirm")}
           </Button>
         </div>
       </div>

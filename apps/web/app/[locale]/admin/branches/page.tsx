@@ -7,23 +7,22 @@ import { FormBanner } from "@/components/admin/FormBanner";
 import type { Branch } from "@elsaad/shared";
 import { Button } from "@/components/ui/Button";
 import { Loader2 } from "lucide-react";
-
-const nf = new Intl.NumberFormat("ar-EG-u-nu-latn");
-
-const typeLabels: Record<string, string> = {
-  retail: "بيع بالتجزئة",
-  warehouse: "مخزن",
-  showroom: "صالة عرض",
-  main: "رئيسي",
-  service_center: "مركز صيانة",
-};
-
-const hoursLabels: Record<string, string> = {
-  "sat-thu": "السبت - الخميس",
-  fri: "الجمعة",
-};
+import { useLocale, useTranslations } from "next-intl";
 
 export default function AdminBranchesPage() {
+  const t = useTranslations("admin.branches");
+  const tCommon = useTranslations("common");
+  const locale = useLocale();
+  const nf = new Intl.NumberFormat(locale === "ar" ? "ar-EG-u-nu-latn" : "en-US");
+
+  const typeLabels: Record<string, string> = {
+    retail: t("types.retail"),
+    warehouse: t("types.warehouse"),
+    showroom: t("types.showroom"),
+    main: t("types.main"),
+    service_center: t("types.service_center"),
+  };
+
   const [branches, setBranches] = useState<Branch[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -41,17 +40,17 @@ export default function AdminBranchesPage() {
   }, [refreshKey]);
 
   return (
-    <div className="space-y-6" dir="rtl">
+    <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-fg">الفروع</h1>
+          <h1 className="text-2xl font-extrabold text-fg">{t("title")}</h1>
           <p className="mt-1 text-sm text-muted">
-            {loading ? "جاري التحميل..." : `${nf.format(branches.length)} فرع — الضمان والموظفين والمخزون لكل فرع.`}
+            {loading ? tCommon("loading") : t("countLine", { count: nf.format(branches.length) })}
           </p>
         </div>
         {!showCreate && (
           <Button size="sm" onClick={() => setShowCreate(true)}>
-            + إضافة فرع
+            {t("add")}
           </Button>
         )}
       </div>
@@ -63,7 +62,7 @@ export default function AdminBranchesPage() {
           mode="create"
           onSuccess={() => {
             setShowCreate(false);
-            setBanner({ type: "success", message: "تم إضافة الفرع بنجاح" });
+            setBanner({ type: "success", message: t("createdOk") });
             refetch();
           }}
           onCancel={() => setShowCreate(false)}
@@ -78,7 +77,7 @@ export default function AdminBranchesPage() {
               initialData={editingBranch}
               onSuccess={() => {
                 setEditingBranch(null);
-                setBanner({ type: "success", message: "تم تحديث الفرع بنجاح" });
+                setBanner({ type: "success", message: t("updatedOk") });
                 refetch();
               }}
               onCancel={() => setEditingBranch(null)}
@@ -92,7 +91,7 @@ export default function AdminBranchesPage() {
           <Loader2 className="w-8 h-8 animate-spin text-accent" />
         </div>
       ) : branches.length === 0 ? (
-        <p className="text-muted">لا توجد فروع بعد.</p>
+        <p className="text-muted">{t("empty")}</p>
       ) : (
         <ul className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {branches.map((branch) => (
@@ -102,8 +101,10 @@ export default function AdminBranchesPage() {
             >
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="font-bold text-fg">{branch.nameAr}</p>
-                  {branch.nameEn && (
+                  <p className="font-bold text-fg">
+                    {locale === "ar" ? branch.nameAr : (branch.nameEn ?? branch.nameAr)}
+                  </p>
+                  {branch.nameEn && locale === "ar" && (
                     <p className="text-xs text-muted" dir="ltr">
                       {branch.nameEn}
                     </p>
@@ -117,14 +118,14 @@ export default function AdminBranchesPage() {
                         : "bg-bg text-muted"
                     }`}
                   >
-                    {branch.active ? "نشط" : "موقوف"}
+                    {branch.active ? tCommon("active") : tCommon("inactive")}
                   </span>
                   <button
                     type="button"
                     onClick={() => setEditingBranch(branch)}
-                    className="text-xs font-semibold text-accent hover:underline mr-1"
+                    className="text-xs font-semibold text-accent hover:underline ms-1"
                   >
-                    تعديل
+                    {tCommon("edit")}
                   </button>
                 </div>
               </div>
@@ -154,54 +155,6 @@ export default function AdminBranchesPage() {
                     </a>
                   </p>
                 )}
-                {branch.whatsapp && (
-                  <p>
-                    <a
-                      href={`https://wa.me/${branch.whatsapp}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-accent hover:underline"
-                      dir="ltr"
-                    >
-                      واتساب
-                    </a>
-                  </p>
-                )}
-                {branch.openingHours && (
-                  <ul className="space-y-0.5 pt-1">
-                    {Object.entries(branch.openingHours).map(([day, hours]) => (
-                      <li key={day} className="flex justify-between text-xs">
-                        <span className="text-muted">
-                          {hoursLabels[day] ?? day}
-                        </span>
-                        <span className="text-fg" dir="ltr">
-                          {hours as string}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-
-              <div className="mt-auto grid grid-cols-3 gap-2 border-t border-border pt-3 text-center text-xs">
-                <div>
-                  <p className="font-bold text-fg">
-                    {nf.format(branch._count?.inventory ?? 0)}
-                  </p>
-                  <p className="text-muted">صنف بالمخزون</p>
-                </div>
-                <div>
-                  <p className="font-bold text-fg">
-                    {nf.format(branch._count?.employees ?? 0)}
-                  </p>
-                  <p className="text-muted">موظف</p>
-                </div>
-                <div>
-                  <p className="font-bold text-fg">
-                    {nf.format(branch._count?.orders ?? 0)}
-                  </p>
-                  <p className="text-muted">طلب</p>
-                </div>
               </div>
             </li>
           ))}

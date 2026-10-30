@@ -9,6 +9,7 @@ import type { Employee, Branch } from "@elsaad/shared";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { FormBanner } from "./FormBanner";
+import { useTranslations } from "next-intl";
 import { Loader2 } from "lucide-react";
 
 interface EmployeeFormProps {
@@ -28,22 +29,9 @@ function pickEditable<T extends Record<string, unknown>>(input: T, forbidden: re
   return out as Partial<T>;
 }
 
-function getErrorMessage(err: unknown): string {
-  if (err instanceof ApiError) {
-    const errBody = err.body as { message?: string; issues?: Array<{ path?: string | string[]; message?: string }> };
-    if (errBody?.issues && Array.isArray(errBody.issues)) {
-      const details = errBody.issues
-        .map((i) => `${Array.isArray(i.path) ? i.path.join(".") : i.path || ""}: ${i.message}`)
-        .join("; ");
-      return `فشل التحقق — ${details}`;
-    }
-    if (err.message) return err.message;
-  }
-  if (err instanceof Error) return err.message;
-  return "حدث خطأ أثناء حفظ الموظف";
-}
-
 export function EmployeeForm({ mode = "create", initialData, onSuccess, onCancel }: EmployeeFormProps) {
+  const t = useTranslations("admin.employees");
+  const tCommon = useTranslations("admin.forms.common");
   const [branches, setBranches] = useState<Branch[]>([]);
   const [banner, setBanner] = useState<{ type: "success" | "error"; message: string } | null>(null);
   const [loading, setLoading] = useState(false);
@@ -51,6 +39,21 @@ export function EmployeeForm({ mode = "create", initialData, onSuccess, onCancel
   useEffect(() => {
     getBranches().then(setBranches).catch(() => {});
   }, []);
+
+  const getErrorMessage = (err: unknown): string => {
+    if (err instanceof ApiError) {
+      const errBody = err.body as { message?: string; issues?: Array<{ path?: string | string[]; message?: string }> };
+      if (errBody?.issues && Array.isArray(errBody.issues)) {
+        const details = errBody.issues
+          .map((i) => `${Array.isArray(i.path) ? i.path.join(".") : i.path || ""}: ${i.message}`)
+          .join("; ");
+        return t("form.validationFailed", { details });
+      }
+      if (err.message) return err.message;
+    }
+    if (err instanceof Error) return err.message;
+    return t("form.saveError");
+  };
 
   const {
     register,
@@ -103,10 +106,10 @@ export function EmployeeForm({ mode = "create", initialData, onSuccess, onCancel
           active: editable.active as boolean | undefined,
         };
         await updateEmployee(initialData.id, updatePayload);
-        setBanner({ type: "success", message: "تم تحديث الموظف بنجاح" });
+        setBanner({ type: "success", message: t("form.updatedOk") });
       } else {
         await createEmployee(payload);
-        setBanner({ type: "success", message: "تم إضافة الموظف بنجاح" });
+        setBanner({ type: "success", message: t("form.createdOk") });
       }
 
       if (onSuccess) onSuccess();
@@ -121,42 +124,42 @@ export function EmployeeForm({ mode = "create", initialData, onSuccess, onCancel
   };
 
   return (
-    <div className="bg-card border border-border rounded-xl p-6 shadow-xl" dir="rtl">
+    <div className="bg-card border border-border rounded-xl p-6 shadow-xl">
       <h2 className="text-lg font-bold text-fg mb-4">
-        {mode === "edit" ? "تعديل الموظف" : "إضافة موظف جديد"}
+        {mode === "edit" ? t("form.titleEdit") : t("form.titleNew")}
       </h2>
 
       {banner && <FormBanner type={banner.type} message={banner.message} onClose={() => setBanner(null)} />}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Input label="رقم الموظف" {...register("employeeNumber")} error={errors.employeeNumber?.message} placeholder="EMP-001" disabled={mode === "edit"} />
-          <Input label="الاسم بالعربية" {...register("nameAr")} error={errors.nameAr?.message} placeholder="أحمد محمد" />
-          <Input label="الاسم بالإنجليزية" {...register("nameEn")} error={errors.nameEn?.message} placeholder="Ahmed Mohamed" />
-          <Input label="الرقم القومي" {...register("nationalId")} error={errors.nationalId?.message} placeholder="29501010101010" />
-          <Input label="رقم الموبايل" {...register("phone")} error={errors.phone?.message} placeholder="01001234567" />
-          <Input label="البريد الإلكتروني" {...register("email")} error={errors.email?.message} placeholder="ahmed@elsaad.com" />
+          <Input label={t("form.empNo")} {...register("employeeNumber")} error={errors.employeeNumber?.message} placeholder="EMP-001" disabled={mode === "edit"} />
+          <Input label={t("form.nameAr")} {...register("nameAr")} error={errors.nameAr?.message} placeholder={t("form.phNameAr")} />
+          <Input label={t("form.nameEn")} {...register("nameEn")} error={errors.nameEn?.message} placeholder="Ahmed Mohamed" />
+          <Input label={t("form.nationalId")} {...register("nationalId")} error={errors.nationalId?.message} placeholder="29501010101010" />
+          <Input label={t("form.phone")} {...register("phone")} error={errors.phone?.message} placeholder="01001234567" />
+          <Input label={t("form.email")} {...register("email")} error={errors.email?.message} placeholder="ahmed@elsaad.com" />
 
           <div>
-            <label className="block text-sm font-medium text-fg mb-1">الوظيفة / الصلاحية</label>
+            <label className="block text-sm font-medium text-fg mb-1">{t("form.role")}</label>
             <select
               {...register("role")}
               className="w-full bg-bg border border-border rounded-lg px-4 py-2.5 text-fg text-sm focus:border-accent focus:outline-none"
             >
-              <option value="cashier">كاشير (Cashier)</option>
-              <option value="manager">مدير فرع (Manager)</option>
-              <option value="warehouse">أمين مخزن (Warehouse)</option>
-              <option value="admin">مدير نظام (Admin)</option>
+              <option value="cashier">{t("formRoles.cashier")}</option>
+              <option value="manager">{t("formRoles.manager")}</option>
+              <option value="warehouse">{t("formRoles.warehouse")}</option>
+              <option value="admin">{t("formRoles.admin")}</option>
             </select>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-fg mb-1">الفرع الأساسي</label>
+            <label className="block text-sm font-medium text-fg mb-1">{t("form.branchLabel")}</label>
             <select
               {...register("branchId")}
               className="w-full bg-bg border border-border rounded-lg px-4 py-2.5 text-fg text-sm focus:border-accent focus:outline-none"
             >
-              <option value="">— بدون فرع —</option>
+              <option value="">{t("form.noBranch")}</option>
               {branches.map((branch) => (
                 <option key={branch.id} value={branch.id}>
                   {branch.nameAr}
@@ -167,24 +170,24 @@ export function EmployeeForm({ mode = "create", initialData, onSuccess, onCancel
 
           <div className="flex items-center gap-2 pt-6">
             <input type="checkbox" id="employee-active" {...register("active")} className="w-4 h-4 rounded accent-accent" />
-            <label htmlFor="employee-active" className="text-sm font-medium text-fg">موظف نشط</label>
+            <label htmlFor="employee-active" className="text-sm font-medium text-fg">{t("form.activeLabel")}</label>
           </div>
         </div>
 
         <div className="flex justify-end gap-3 pt-4 border-t border-border">
           {onCancel && (
             <Button type="button" variant="secondary" size="sm" onClick={onCancel}>
-              إلغاء
+              {tCommon("cancel")}
             </Button>
           )}
           <Button type="submit" size="sm" disabled={loading}>
             {loading ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin ml-2" />
-                <span>جاري الحفظ...</span>
+                <Loader2 className="w-4 h-4 animate-spin ms-2" />
+                <span>{t("form.saving")}</span>
               </>
             ) : (
-              <span>حفظ الموظف</span>
+              <span>{t("form.save")}</span>
             )}
           </Button>
         </div>

@@ -3,17 +3,27 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ProductForm } from "@/components/admin/ProductForm";
 import { getBrands, getPartCategories, getProductById } from "@elsaad/api-client";
+import { getTranslations } from "next-intl/server";
 
-export const metadata: Metadata = {
-  title: "تعديل منتج | السعد للدراجات النارية",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; id: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "admin.products" });
+  return {
+    title: t("metaEdit"),
+  };
+}
 
 export default async function EditProductPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ locale: string; id: string }>;
 }) {
-  const { id } = await params;
+  const { locale, id } = await params;
+  const t = await getTranslations({ locale, namespace: "admin.products" });
   const [product, brands, categories] = await Promise.all([
     getProductById(id),
     getBrands(),
@@ -25,12 +35,12 @@ export default async function EditProductPage({
     <div className="space-y-6">
       <div className="flex flex-wrap items-center gap-4">
         <Link
-          href="/admin/products"
+          href={`/${locale}/admin/products`}
           className="inline-flex items-center gap-2 font-semibold text-accent hover:underline"
         >
-          <span aria-hidden="true">←</span> العودة للمنتجات
+          <span aria-hidden="true">←</span> {t("backToList")}
         </Link>
-        <h1 className="text-2xl font-extrabold text-fg">تعديل المنتج</h1>
+        <h1 className="text-2xl font-extrabold text-fg">{t("editTitle")}</h1>
         <span className="font-mono text-sm text-muted" dir="ltr">
           {product.code}
         </span>

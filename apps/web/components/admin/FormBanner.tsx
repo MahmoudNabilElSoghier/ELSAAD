@@ -1,6 +1,7 @@
 "use client";
 
 import { CheckCircle2, AlertTriangle, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface FormBannerProps {
   type: "success" | "error";
@@ -9,6 +10,7 @@ interface FormBannerProps {
 }
 
 export function FormBanner({ type, message, onClose }: FormBannerProps) {
+  const tCommon = useTranslations("common");
   const isSuccess = type === "success";
 
   return (
@@ -18,7 +20,6 @@ export function FormBanner({ type, message, onClose }: FormBannerProps) {
           ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-300"
           : "border-red-500/30 bg-red-500/10 text-red-300"
       }`}
-      dir="rtl"
     >
       <div className="flex items-center gap-2.5">
         {isSuccess ? (
@@ -32,7 +33,7 @@ export function FormBanner({ type, message, onClose }: FormBannerProps) {
         <button
           onClick={onClose}
           className="p-1 rounded-md hover:bg-black/20 transition-colors"
-          aria-label="إغلاق"
+          aria-label={tCommon("close") ?? "Close"}
         >
           <X className="w-4 h-4" />
         </button>
