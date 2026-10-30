@@ -10,7 +10,7 @@ import { Container } from "@/components/ui/Container";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { MessageCircle, Phone, Send, CheckCircle2, AlertCircle } from "lucide-react";
+import { MessageCircle, Phone, Send, CheckCircle2, AlertCircle, Clock, MapPin, ExternalLink } from "lucide-react";
 import { FadeIn } from "@/components/ui/FadeIn";
 
 export function Contact() {
@@ -52,10 +52,15 @@ export function Contact() {
   };
 
   return (
-    <section id="contact" className="py-20 md:py-28 bg-bg scroll-mt-20">
+    <section id="contact" className="relative overflow-hidden py-20 md:py-28 bg-bg scroll-mt-20">
+      {/* Faint accent glow, top-right — matches the OG image style */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-24 right-0 w-[420px] h-[420px] rounded-full bg-accent/[0.03] blur-3xl"
+      />
       <Container size="xl">
         <FadeIn>
-          <div className="text-center max-w-2xl mx-auto mb-16">
+          <div className="text-center max-w-2xl mx-auto mb-8 pb-6 border-b border-border/50">
             <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
               {contactForm.title}
             </h2>
@@ -68,7 +73,7 @@ export function Contact() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start max-w-5xl mx-auto">
           {/* Contact Form */}
           <FadeIn delay={0.05}>
-            <Card padding="lg" className="bg-card border-border">
+            <Card padding="lg" className="bg-card border-border md:p-10">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <Input
                 label={contactForm.fields.name.label}
@@ -173,6 +178,48 @@ export function Contact() {
                 </div>
                 <Button variant="secondary" size="sm" asChild>
                   <a href={`tel:${company.phone}`}>اتصل بنا</a>
+                </Button>
+              </Card>
+
+              <Card padding="md" className="bg-card border-border">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-lg bg-accent/10 text-accent flex items-center justify-center shrink-0">
+                    <Clock className="w-6 h-6" />
+                  </div>
+                  <div className="space-y-1">
+                    <div className="text-sm text-muted">مواعيد العمل</div>
+                    <div className="font-bold text-white">
+                      السبت - الخميس: 10 ص - 10 م
+                    </div>
+                    <div className="font-bold text-white">
+                      الجمعة: 2 م - 10 م
+                    </div>
+                  </div>
+                </div>
+              </Card>
+
+              <Card padding="md" className="bg-card border-border flex items-center justify-between gap-4">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-lg bg-accent/10 text-accent flex items-center justify-center shrink-0">
+                    <MapPin className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <div className="text-sm text-muted">العنوان الرئيسي</div>
+                    <div className="font-bold text-white leading-relaxed">
+                      {company.address}
+                    </div>
+                  </div>
+                </div>
+                <Button variant="secondary" size="sm" asChild>
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(company.address)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5"
+                  >
+                    <span>الخريطة</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
                 </Button>
               </Card>
             </div>

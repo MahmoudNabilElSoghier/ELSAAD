@@ -1,10 +1,23 @@
+"use client";
+
+import { useState } from "react";
 import { branches } from "@/lib/content";
 import { Container } from "@/components/ui/Container";
 import { Card } from "@/components/ui/Card";
-import { MapPin, Phone, Clock } from "lucide-react";
+import { MapPin, Phone, Clock, ExternalLink } from "lucide-react";
 import { FadeIn } from "@/components/ui/FadeIn";
 
+function mapsSearchUrl(address: string) {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+}
+
+function embedUrl(address: string) {
+  return `https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed`;
+}
+
 export function Branches() {
+  const [selectedBranch, setSelectedBranch] = useState(branches[0]);
+
   return (
     <section id="branches" className="py-20 md:py-28 bg-card border-y border-border scroll-mt-20">
       <Container size="xl">
@@ -19,32 +32,84 @@ export function Branches() {
           </div>
         </FadeIn>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {branches.map((branch, index) => (
-            <FadeIn key={branch.id} delay={Math.min(index * 0.05, 0.3)} className="h-full">
-              <Card padding="lg" className="bg-bg/50 border-border flex flex-col justify-between h-full">
-                <div>
-                  <h3 className="text-xl font-bold text-accent mb-4">
-                    {branch.name}
-                  </h3>
-                  <div className="space-y-3 text-sm text-muted">
-                    <div className="flex items-start gap-3">
-                      <MapPin className="w-5 h-5 text-accent shrink-0 mt-0.5" />
-                      <span>{branch.address}</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Phone className="w-5 h-5 text-accent shrink-0" />
-                      <span dir="ltr">{branch.phone}</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Clock className="w-5 h-5 text-accent shrink-0" />
-                      <span>{branch.hours}</span>
-                    </div>
-                  </div>
-                </div>
-              </Card>
+        {/* Mobile: map on top; desktop: cards left, sticky map right */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+          <div className="md:order-2 md:sticky md:top-24">
+            <FadeIn delay={0.1}>
+              <div className="aspect-video rounded-lg overflow-hidden border border-border bg-bg">
+                <iframe
+                  key={selectedBranch.id}
+                  src={embedUrl(selectedBranch.address)}
+                  title={`خريطة ${selectedBranch.name}`}
+                  loading="lazy"
+                  allowFullScreen
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="w-full h-full border-0"
+                />
+              </div>
+              <p className="mt-3 text-sm text-muted text-center">
+                {selectedBranch.name}
+              </p>
             </FadeIn>
-          ))}
+          </div>
+
+          <div className="md:order-1 space-y-4">
+            {branches.map((branch, index) => {
+              const isSelected = branch.id === selectedBranch.id;
+              return (
+                <FadeIn key={branch.id} delay={Math.min(index * 0.05, 0.3)}>
+                  <Card
+                    padding="lg"
+                    role="button"
+                    tabIndex={0}
+                    aria-pressed={isSelected}
+                    onClick={() => setSelectedBranch(branch)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        setSelectedBranch(branch);
+                      }
+                    }}
+                    className={`bg-bg/50 flex flex-col justify-between cursor-pointer transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
+                      isSelected
+                        ? "border-accent"
+                        : "border-border hover:border-accent/40"
+                    }`}
+                  >
+                    <div>
+                      <h3 className="text-xl font-bold text-accent mb-4">
+                        {branch.name}
+                      </h3>
+                      <div className="space-y-3 text-sm text-muted">
+                        <div className="flex items-start gap-3">
+                          <MapPin className="w-5 h-5 text-accent shrink-0 mt-0.5" />
+                          <span>{branch.address}</span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <Phone className="w-5 h-5 text-accent shrink-0" />
+                          <span dir="ltr">{branch.phone}</span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <Clock className="w-5 h-5 text-accent shrink-0" />
+                          <span>{branch.hours}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <a
+                      href={mapsSearchUrl(branch.address)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-accent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm self-start"
+                    >
+                      <span>افتح في خرائط جوجل</span>
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                  </Card>
+                </FadeIn>
+              );
+            })}
+          </div>
         </div>
       </Container>
     </section>
