@@ -112,3 +112,18 @@ Verify afterwards: `curl https://<railway-url>/api/health` and
 - Back up JWT keys (never lose them — invalidates all sessions)
 - Rotate ADMIN_API_KEY quarterly
 - Monitor Railway + Vercel dashboards weekly
+
+## Known Limitations
+- **3.12GB Docker image** — the runtime stage copies the full dev+prod
+  hoisted `node_modules`, so Railway resource usage will be higher than
+  optimal. Safe for v1; optimize with `pnpm deploy --prod` in a separate
+  stage (Phase 2E).
+- **`vercel.json` rewrites uses a literal Railway URL**
+  (`https://elsaad-api.up.railway.app/api/:path*`) — edit it after the
+  first Railway deploy with the actual domain.
+- **JWT keys MUST be backed up** (`apps/api/keys/private.pem` +
+  `public.pem`) — losing them invalidates every issued session; there is
+  no key-rollover flow yet (rotate = all users re-login).
+- **MinIO is optional for v1** — run `STORAGE_DRIVER=local` with a
+  persistent volume on Railway instead. MinIO (or equivalent S3) becomes
+  required for the document-upload feature in production.

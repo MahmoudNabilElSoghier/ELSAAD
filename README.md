@@ -5,11 +5,14 @@ Landing page and future ERP system for ELSAAD Motorcycle.
 ## Status
 
 - ✅ Phase 1 — Landing Page (complete; awaiting production deploy)
-- ✅ Phase 2B Foundation (Phases A–I) — schema, services, admin dashboard,
+- ✅ Phase 2A + 2B Foundation — schema, services, admin dashboard,
   public catalog, Excel/CSV migration, JSON-or-mock seed
 - ✅ Monorepo migration — Next.js app + NestJS API + shared packages
-  (this repo state; **not pushed** — see `docs/MIGRATION-PHASE-2B.md`)
-- 🚧 Phase 2C — Cart + checkout (next)
+  (see `docs/MIGRATION-PHASE-2B.md`)
+- ✅ Sprint 2D — JWT RS256 auth (login/refresh rotation), admin CRUD
+  wired to guarded write endpoints, deploy prep (Dockerfile,
+  Railway/Vercel configs)
+- 🚧 Phase 2E — next (see `docs/PHASE-2-PLAN.md`)
 
 ## Monorepo Layout
 
@@ -30,8 +33,10 @@ docker-compose.yml  postgres 16 + redis 7 + minio (local dev stack)
 - **Web:** Next.js 15.5 (App Router) + React 19 + TypeScript + Tailwind CSS
 - **API:** NestJS 10 + @nestjs/swagger 8 + ZodValidationPipe, port `4000`, base
   path `/api` (Swagger UI at `http://localhost:4000/api/docs`)
-- **Data:** PostgreSQL + Prisma 6 (schema committed, DB not yet provisioned),
-  mock fallback via `withDb` when `DATABASE_URL` is unset
+- **Data:** PostgreSQL + Prisma 6 (schema committed; local Docker Postgres on
+  :5434 provisioned + seeded; production target: Neon — see
+  `docs/DEPLOYMENT.md`), mock fallback via `withDb` when `DATABASE_URL` is
+  unset
 - **Storage:** pluggable `minio` (S3 API, signed URLs, WORM) / `local` (disk)
 - **Tooling:** pnpm 9 workspaces + turbo 2 (no npm scripts at the root)
 
@@ -138,11 +143,11 @@ Routes under `/admin` (RTL sidebar layout):
 
 - All reads go through `@elsaad/api-client` → the NestJS API (each page is
   `force-dynamic`).
-- **No end-user auth yet** (Phase 2D) — do not expose publicly until
-  next-auth lands. API writes are protected by the temporary
-  `x-admin-api-key` header (Decision 1B).
-- Admin **form submissions currently log only** — wiring forms to the guarded
-  write endpoints is deferred (Phase 2B behavior preserved; flagged).
+- **Admin auth**: `/admin` is gated by `middleware.ts` + `/admin/login` using
+  custom JWT RS256 (no next-auth). Writes accept a `Bearer` access token or
+  the legacy `x-admin-api-key` header (deprecated, Phase 3).
+- Admin form submissions POST/PATCH/DELETE through `@elsaad/api-client` to
+  the guarded write endpoints (wired in Sprint 2D / B3).
 - Mock mode shows a "معاينة بيانات تجريبية" badge; all admin routes carry
   `noindex` metadata.
 
@@ -160,7 +165,18 @@ list, 5-minute presigned download URL, soft delete, purge, per-document WORM
 Smoke-test: `pnpm --filter @elsaad/api test:storage` (auto-skips when MinIO
 is not running).
 
-## Known Issues
+## Known Issues (pre-Phase 2E)
+
+- **Docker image is 3.12GB** (`apps/api/Dockerfile` copies the full
+  dev+prod hoisted `node_modules` into the runtime stage). Safe for v1;
+  optimization via `pnpm deploy --prod` in a separate stage (post-2E).
+- **`vercel.json` has a hardcoded Railway URL** — edit the `rewrites`
+  destination after the first Railway deploy with the actual domain.
+- **Initial `/api/auth/me` returns 401 once** before the silent refresh
+  succeeds (cosmetic console noise on first admin page load). Pre-emptive
+  refresh in `AdminNav` is a Phase 2E improvement.
+- **Auth rate limit is in-memory** (5 failed logins/email/5 min) — resets on
+  API restart and is per-instance only. Redis-backed in Phase 2E.
 
 ⚠️ Contact form requires `RESEND_API_KEY` + `CONTACT_EMAIL_TO` env vars to
 actually deliver messages. Without them, submissions return success but are
@@ -215,7 +231,7 @@ pnpm lint     # eslint across all packages
 ### API scripts (`pnpm --filter @elsaad/api …`)
 
 - `dev` — `tsx watch src/main.ts`
-- `build` / `start` — compile + run `dist/apps/api/src/main.js`
+- `build` / `start` — typecheck (`tsc --noEmit`) + esbuild bundle → `dist/main.js`, then run it
 - `db:push` / `db:seed` / `db:migrate-excel` / `db:studio` / `prisma:validate`
 - `test:storage` — storage smoke test (local or minio)
 

@@ -60,16 +60,52 @@ Build orchestration: turbo (`build`/`lint`/`dev` task graph in `turbo.json`).
 6. Lookup endpoints answer HTTP 404 for missing rows; `apiGetOrNull`
    maps 404 back to `null` so page-level `if (!x) notFound()` checks still work.
 
-## Auth (temporary, Decision 1B)
+## Auth (Sprint 2D — JWT RS256 + refresh rotation)
 
-- No User model yet. All write endpoints (POST/PUT/DELETE, uploads, purge)
-  are protected by `AdminApiKeyGuard`: the `x-admin-api-key` header must
-  equal the `ADMIN_API_KEY` env var (timing-safe compare), otherwise 403.
-  Unconfigured key ⇒ 403 (safe default).
-- `@elsaad/api-client` attaches the key only for mutating calls and only
-  server-side (`ADMIN_API_KEY`, never a `NEXT_PUBLIC_*` variable).
-- Admin **forms in the web UI still only log** their payloads — connecting
-  them to the guarded endpoints is deliberately deferred (Phase 2B state).
+- **Why RS256 (asymmetric):** the API signs with the private key
+  (`JWT_PRIVATE_KEY`), anything holding the public key
+  (`JWT_PUBLIC_KEY`) can verify without ever seeing the private key —
+  enables future service-to-service verification. Keys load from
+  `JWT_KEYS_DIR` (gitignored `apps/api/keys/*.pem`) or inline env PEMs;
+  missing/invalid keys ⇒ auth endpoints return 503 (writes still work
+  via API key).
+- **Access token:** RS256 JWT `{sub, email, role, iat, exp}`, **15 min**
+  (`JWT_ACCESS_TTL`), held **in memory** by the client only — never
+  persisted to localStorage/cookies.
+- **Refresh token:** opaque random 32 bytes (base64url); the DB stores
+  only its **sha256 hash** (`RefreshToken.tokenHash`), TTL 7 days
+  (`JWT_REFRESH_TTL`). **Rotated on every use**: presenting a token
+  revokes it and issues a successor in the same `familyId`. **Reuse
+  detection** — presenting an already-revoked token revokes the whole
+  family (theft signal), so a stolen refresh cookie dies with its
+  family.
+- **Cookie `elsaad_rt`:** `httpOnly`, `SameSite=Lax`, `Secure` in
+  production, **`path=/`** (set and cleared at `/` so logout always
+  finds it), 7-day max-age. Rotation refresh + logout both rewrite/clear
+  it.
+- **Dual auth on writes:** every mutating endpoint accepts either
+  `Authorization: Bearer <access JWT>` (`AdminAuthGuard`) **or** the
+  legacy `x-admin-api-key` header (timing-safe compare vs
+  `ADMIN_API_KEY`). The API-key path is **deprecated in Phase 3**.
+- **Single-flight refresh:** concurrent 401s from the api-client share
+  one in-flight refresh promise — a burst of parallel requests triggers
+  exactly one `/api/auth/refresh`.
+- **Rate limit:** in-memory (`rate-limit.service.ts`) — 5 failed
+  logins per email per 5 min → 429, counter resets on successful
+  login; Redis-backed in Phase 2E.
+
+### Known trade-offs
+
+- **In-memory access token** is lost on every page reload — the client
+  must silently refresh once on load (standard SPA pattern; causes one
+  harmless `/api/auth/me` 401 on first paint, see README Known Issues).
+- **In-memory rate limit** resets on API restart and is per-instance
+  only — under multi-instance deploy, limits multiply per instance
+  (acceptable until Redis-backed in 2E).
+- **No edge JWT verification:** `middleware.ts` only checks cookie
+  presence for `/admin` routing; the real signature/DB check happens
+  server-side on every authenticated request. Verifying JWTs at the
+  edge would require the `jose` dependency — deferred to Phase 2E.
 
 ## Storage & Documents
 
