@@ -6,9 +6,13 @@ export const size = {
 };
 
 export const contentType = "image/png";
-export const alt = "السعد للدراجات النارية — ELSAAD Motorcycle";
 
-export default async function Image() {
+type Props = { params: Promise<{ locale: string }> };
+
+export default async function Image({ params }: Props) {
+  const { locale } = await params;
+  const isAr = locale === "ar";
+
   const arabicFont = await fetch(
     new URL("https://fonts.gstatic.com/s/cairo/v28/SLXgc1nY6HkvangtZmpQdkhzfH5lkSs2SgRjCAGMQ1z0hOA-W1Q.ttf")
   ).then((res) => res.arrayBuffer());
@@ -86,7 +90,7 @@ export default async function Image() {
               lineHeight: 1.1,
             }}
           >
-            السعد للدراجات النارية
+            {isAr ? "السعد للدراجات النارية" : "ELSAAD Motorcycle"}
           </div>
           <div
             style={{
@@ -95,21 +99,22 @@ export default async function Image() {
               fontWeight: 500,
             }}
           >
-            قطع غيار أصلية &middot; صيانة معتمدة &middot; تقسيط
+            {isAr ? "قطع غيار أصلية · صيانة معتمدة · تقسيط" : "Genuine Spare Parts & Certified Maintenance"}
           </div>
         </div>
 
-        {/* Bottom Footer Domain */}
+        {/* Footer */}
         <div
           style={{
             display: "flex",
+            justifyContent: "space-between",
             alignItems: "center",
             fontSize: "20px",
             color: "#6B7280",
-            fontWeight: 500,
           }}
         >
-          elsaad.com
+          <div>{isAr ? "السعد للدراجات النارية — 35 عاماً من الخبرة" : "35 Years of Excellence in Egypt"}</div>
+          <div style={{ color: "#E63946", fontWeight: 600 }}>elsaad.com</div>
         </div>
       </div>
     ),
@@ -120,7 +125,7 @@ export default async function Image() {
           name: "Cairo",
           data: arabicFont,
           style: "normal",
-          weight: 900,
+          weight: 700,
         },
       ],
     }
