@@ -53,7 +53,7 @@ export function Gallery() {
                     aria-hidden
                     className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                   />
-                  <span className="absolute bottom-4 right-4 text-white font-bold translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                  <span className="absolute bottom-4 start-4 text-white font-bold translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                     {tCommon("brandName")}
                   </span>
                 </Card>

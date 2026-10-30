@@ -6,26 +6,29 @@ import { getBrandBySlug } from "@elsaad/api-client";
 
 export const dynamic = "force-dynamic";
 
-type PageProps = { params: Promise<{ slug: string }> };
+type PageProps = { params: Promise<{ locale: string; slug: string }> };
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug } = await params;
+  const { locale, slug } = await params;
   const brand = await getBrandBySlug(slug);
-  if (!brand) return { title: "ماركة غير موجودة | السعد للدراجات النارية" };
+  if (!brand) return { title: locale === "ar" ? "ماركة غير موجودة | السعد للدراجات النارية" : "Brand not found | ELSAAD Motorcycle" };
+  const brandName = brand.nameAr ?? brand.name;
   return {
-    title: `${brand.nameAr ?? brand.name} | الماركات | السعد للدراجات النارية`,
+    title: locale === "ar" ? `${brandName} | الماركات | السعد للدراجات النارية` : `${brandName} | Brands | ELSAAD Motorcycle`,
     description:
       brand.description ??
-      `موديلات وقطع غيار ${brand.nameAr ?? brand.name} المتوفرة في السعد للدراجات النارية.`,
+      (locale === "ar"
+        ? `موديلات وقطع غيار ${brandName} المتوفرة في السعد للدراجات النارية.`
+        : `Models and spare parts for ${brandName} available at ELSAAD.`),
   };
 }
 
-const nf = new Intl.NumberFormat("ar-EG-u-nu-latn");
-
 export default async function BrandDetailPage({ params }: PageProps) {
-  const { slug } = await params;
+  const { locale, slug } = await params;
   const brand = await getBrandBySlug(slug);
   if (!brand) notFound();
+
+  const nf = new Intl.NumberFormat(locale === "ar" ? "ar-EG-u-nu-latn" : "en-US");
 
   const models = brand.models ?? [];
   const grouped = new Map<string, typeof models>();
@@ -39,10 +42,10 @@ export default async function BrandDetailPage({ params }: PageProps) {
     <main id="main-content" className="flex-1 py-12 md:py-16">
       <Container>
         <Link
-          href="/brands"
+          href={`/${locale}/brands`}
           className="mb-6 inline-flex items-center gap-2 font-semibold text-accent hover:underline"
         >
-          <span aria-hidden="true">←</span> كل الماركات
+          <span aria-hidden="true">←</span> {locale === "ar" ? "كل الماركات" : "All brands"}
         </Link>
 
         <header className="mb-10 flex flex-wrap items-start gap-5">
@@ -56,22 +59,19 @@ export default async function BrandDetailPage({ params }: PageProps) {
             <h1 className="text-3xl md:text-4xl font-extrabold text-fg">
               {brand.nameAr ?? brand.name}
             </h1>
-            <p className="mt-1 text-muted" dir="ltr">
-              {brand.name}
-            </p>
             {brand.description && (
               <p className="mt-3 max-w-2xl leading-relaxed text-muted">
                 {brand.description}
               </p>
             )}
             <div className="mt-4 flex flex-wrap gap-4 text-sm text-muted">
-              <span>{nf.format(models.length)} موديل</span>
-              <span>{nf.format(brand._count?.products ?? 0)} قطعة غيار</span>
+              <span><span dir="ltr">{nf.format(models.length)}</span> {locale === "ar" ? "موديل" : "models"}</span>
+              <span><span dir="ltr">{nf.format(brand._count?.products ?? 0)}</span> {locale === "ar" ? "قطعة غيار" : "spare parts"}</span>
               <Link
-                href={`/products?brand=${brand.slug}`}
+                href={`/${locale}/products?brand=${brand.slug}`}
                 className="font-semibold text-accent hover:underline"
               >
-                عرض قطع الغيار ←
+                {locale === "ar" ? "عرض قطع الغيار ←" : "View spare parts →"}
               </Link>
             </div>
           </div>
@@ -79,7 +79,7 @@ export default async function BrandDetailPage({ params }: PageProps) {
 
         {models.length === 0 ? (
           <p className="rounded-xl border border-border bg-card px-4 py-12 text-center text-muted">
-            موديلات هذه الماركة هتظهر هنا قريبًا.
+            {locale === "ar" ? "موديلات هذه الماركة هتظهر هنا قريبًا." : "Models for this brand will appear here soon."}
           </p>
         ) : (
           <div className="space-y-10">
@@ -95,30 +95,27 @@ export default async function BrandDetailPage({ params }: PageProps) {
                   {list.map((model) => (
                     <li key={model.id}>
                       <Link
-                        href={`/brands/${brand.slug}/${model.slug}`}
+                        href={`/${locale}/brands/${brand.slug}/${model.slug}`}
                         className="group flex h-full flex-col gap-3 rounded-xl border border-border bg-card p-5 transition-colors hover:border-accent"
                       >
                         <div>
                           <h3 className="font-bold text-fg group-hover:text-accent">
                             {model.nameAr ?? model.name}
                           </h3>
-                          <p className="text-sm text-muted" dir="ltr">
-                            {model.name}
-                          </p>
                         </div>
                         <div className="mt-auto flex flex-wrap gap-2 text-xs">
                           {model.engineCc && (
                             <span className="rounded-full bg-bg px-2.5 py-1 text-muted">
-                              {nf.format(model.engineCc)} سي سي
+                              <span dir="ltr">{nf.format(model.engineCc)}</span> {locale === "ar" ? "سي سي" : "CC"}
                             </span>
                           )}
                           {model.yearFrom && (
                             <span className="rounded-full bg-bg px-2.5 py-1 text-muted">
-                              من {nf.format(model.yearFrom)}
+                              {locale === "ar" ? `من ${nf.format(model.yearFrom)}` : `From ${nf.format(model.yearFrom)}`}
                             </span>
                           )}
                           <span className="rounded-full bg-bg px-2.5 py-1 text-muted">
-                            {nf.format(model._count?.compatibilities ?? 0)} قطعة متوافقة
+                            <span dir="ltr">{nf.format(model._count?.compatibilities ?? 0)}</span> {locale === "ar" ? "قطعة متوافقة" : "compatible parts"}
                           </span>
                         </div>
                       </Link>

@@ -5,57 +5,57 @@ import { getBrands } from "@elsaad/api-client";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "الماركات | السعد للدراجات النارية",
-  description:
-    "ماركات الدراجات النارية وقطع غيارها المتوفرة في السعد — SYM، Kymco، Haojue وغيرها.",
-};
+type PageProps = { params: Promise<{ locale: string }> };
 
-const nf = new Intl.NumberFormat("ar-EG-u-nu-latn");
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { locale } = await params;
+  return {
+    title: locale === "ar" ? "الماركات | السعد للدراجات النارية" : "Brands | ELSAAD Motorcycle",
+    description:
+      locale === "ar"
+        ? "ماركات الدراجات النارية وقطع غيارها المتوفرة في السعد — SYM، Kymco، Haojue وغيرها."
+        : "Motorcycle brands and spare parts available at ELSAAD.",
+  };
+}
 
-export default async function BrandsPage() {
+export default async function BrandsPage({ params }: PageProps) {
+  const { locale } = await params;
+  const nf = new Intl.NumberFormat(locale === "ar" ? "ar-EG-u-nu-latn" : "en-US");
   const brands = await getBrands();
 
   return (
     <main id="main-content" className="flex-1 py-12 md:py-16">
       <Container>
         <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-fg">الماركات</h1>
+          <h1 className="text-3xl md:text-4xl font-extrabold text-fg">{locale === "ar" ? "الماركات" : "Brands"}</h1>
           <p className="mt-2 text-muted">
-            {nf.format(brands.length)} ماركة — اختار ماركتك لتشوف الموديلات وقطع غيارها.
+            <span dir="ltr">{nf.format(brands.length)}</span> {locale === "ar" ? "ماركة — اختار ماركتك لتشوف الموديلات وقطع غيارها." : "brands — choose your brand to see models and spare parts."}
           </p>
         </div>
 
         {brands.length === 0 ? (
           <p className="rounded-xl border border-border bg-card px-4 py-12 text-center text-muted">
-            الماركات هتظهر هنا قريبًا.
+            {locale === "ar" ? "الماركات هتظهر هنا قريبًا." : "Brands will appear here soon."}
           </p>
         ) : (
           <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {brands.map((brand) => (
               <li key={brand.id}>
                 <Link
-                  href={`/brands/${brand.slug}`}
+                  href={`/${locale}/brands/${brand.slug}`}
                   className="group flex h-full flex-col items-start gap-4 rounded-xl border border-border bg-card p-6 transition-colors hover:border-accent"
                 >
-                  <span
-                    className="flex h-14 w-14 items-center justify-center rounded-full bg-accent-strong/15 text-2xl font-extrabold text-accent"
-                    aria-hidden="true"
-                  >
-                    {(brand.nameAr ?? brand.name).charAt(0)}
-                  </span>
                   <div>
-                    <h2 className="text-lg font-bold text-fg group-hover:text-accent">
+                    <h2 className="text-xl font-bold text-fg group-hover:text-accent">
                       {brand.nameAr ?? brand.name}
                     </h2>
-                    <p className="text-sm text-muted" dir="ltr">
-                      {brand.name}
-                    </p>
                   </div>
-                  <div className="mt-auto flex gap-4 pt-2 text-sm text-muted">
-                    <span>{nf.format(brand._count?.models ?? 0)} موديل</span>
-                    <span>{nf.format(brand._count?.products ?? 0)} قطعة غيار</span>
-                  </div>
+                  <p className="text-sm text-muted line-clamp-2">
+                    {locale === "ar" ? (brand.description ?? "قطع غيار وموديلات متوفرة للأصلية.") : (brand.description ?? "Genuine spare parts and models available.")}
+                  </p>
+                  <span className="mt-auto text-xs font-semibold text-accent">
+                    {locale === "ar" ? "عرض الموديلات ←" : "View models →"}
+                  </span>
                 </Link>
               </li>
             ))}

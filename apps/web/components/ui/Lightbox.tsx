@@ -3,6 +3,7 @@
 import * as React from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, Image as ImageIcon, X } from "lucide-react";
+import { useLocale } from "next-intl";
 
 export type LightboxItem = {
   src: string;
@@ -25,6 +26,7 @@ type LightboxProps = {
 export function Lightbox({ items, index, onClose, onNavigate }: LightboxProps) {
   const closeRef = React.useRef<HTMLButtonElement>(null);
   const [imgFailed, setImgFailed] = React.useState(false);
+  const locale = useLocale();
 
   const item = items[index];
   const prev = () => onNavigate((index - 1 + items.length) % items.length);
@@ -67,6 +69,7 @@ export function Lightbox({ items, index, onClose, onNavigate }: LightboxProps) {
         if (e.target === e.currentTarget) onClose();
       }}
     >
+      {/* Close: physical top-right (universal UX) */}
       <button
         ref={closeRef}
         type="button"
@@ -83,17 +86,17 @@ export function Lightbox({ items, index, onClose, onNavigate }: LightboxProps) {
             type="button"
             onClick={prev}
             aria-label="الصورة السابقة"
-            className="absolute right-4 md:right-8 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            className="absolute end-4 md:end-8 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
-            <ChevronRight className="w-7 h-7" />
+            {locale === "ar" ? <ChevronRight className="w-7 h-7" /> : <ChevronLeft className="w-7 h-7" />}
           </button>
           <button
             type="button"
             onClick={next}
             aria-label="الصورة التالية"
-            className="absolute left-4 md:left-8 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            className="absolute start-4 md:start-8 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
-            <ChevronLeft className="w-7 h-7" />
+            {locale === "ar" ? <ChevronLeft className="w-7 h-7" /> : <ChevronRight className="w-7 h-7" />}
           </button>
         </>
       )}

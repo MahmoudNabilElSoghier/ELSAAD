@@ -1,15 +1,16 @@
 import { categories } from "@/lib/content";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Container } from "@/components/ui/Container";
 import { Card } from "@/components/ui/Card";
-import { ArrowLeft, Bike, Wrench, Shield, Compass } from "lucide-react";
+import { ArrowLeft, ArrowRight, Bike, Wrench, Shield, Compass } from "lucide-react";
 import { FadeIn } from "@/components/ui/FadeIn";
 
 const icons = [Bike, Compass, Wrench, Shield];
 
 export function Categories() {
   const t = useTranslations("categories");
+  const locale = useLocale();
 
   return (
     <section id="categories" className="py-20 md:py-28 bg-bg scroll-mt-20">
@@ -50,7 +51,11 @@ export function Categories() {
                     </div>
                     <div className="flex items-center justify-between text-accent text-sm font-semibold">
                       <span>{t("cta")}</span>
-                      <ArrowLeft className="w-4 h-4 shrink-0 transition-transform duration-300 group-hover:-translate-x-1" />
+                      {locale === "ar" ? (
+                        <ArrowLeft className="w-4 h-4 shrink-0 transition-transform duration-300 group-hover:-translate-x-1" />
+                      ) : (
+                        <ArrowRight className="w-4 h-4 shrink-0 transition-transform duration-300 group-hover:translate-x-1" />
+                      )}
                     </div>
                   </Card>
                 </Link>

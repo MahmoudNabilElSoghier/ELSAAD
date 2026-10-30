@@ -55,6 +55,7 @@ export function Contact() {
   return (
     <section id="contact" className="relative overflow-hidden py-20 md:py-28 bg-bg scroll-mt-20">
       {/* Faint accent glow, top-right — matches the OG image style */}
+      {/* Decorative glow: physical (aesthetic only) */}
       <div
         aria-hidden
         className="pointer-events-none absolute -top-24 right-0 w-[420px] h-[420px] rounded-full bg-accent/[0.03] blur-3xl"

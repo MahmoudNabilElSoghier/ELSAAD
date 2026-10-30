@@ -7,31 +7,37 @@ import { getBrands, getPartCategories, getProducts, totalStock } from "@elsaad/a
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "قطع الغيار | السعد للدراجات النارية",
-  description:
-    "كتالوج قطع الغيار الأصلية — فلاتر، كابلات، بوجيهات، سلاسل وأكثر لكل ماركات الدراجات النارية.",
+type PageProps = {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ q?: string; brand?: string; cat?: string; page?: string }>;
 };
 
-const nf = new Intl.NumberFormat("ar-EG-u-nu-latn");
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  return {
+    title: locale === "ar" ? "قطع الغيار | السعد للدراجات النارية" : "Spare Parts | ELSAAD Motorcycle",
+    description:
+      locale === "ar"
+        ? "كتالوج قطع الغيار الأصلية — فلاتر، كابلات، بوجيهات، سلاسل وأكثر لكل ماركات الدراجات النارية."
+        : "Genuine spare parts catalog for all motorcycle brands.",
+  };
+}
 
 const selectClass =
   "rounded-lg border border-border bg-card px-4 py-3 text-fg focus:border-accent focus:outline-none";
 
-function stockBadge(stock: number, reorderLevel: number) {
-  if (stock <= 0) return { label: "غير متوفر", classes: "bg-red-500/15 text-red-400" };
+function stockBadge(stock: number, reorderLevel: number, locale: string) {
+  if (stock <= 0) return { label: locale === "ar" ? "غير متوفر" : "Out of stock", classes: "bg-red-500/15 text-red-400" };
   if (stock <= reorderLevel)
-    return { label: "كمية محدودة", classes: "bg-amber-500/15 text-amber-400" };
-  return { label: "متوفر", classes: "bg-emerald-500/15 text-emerald-400" };
+    return { label: locale === "ar" ? "كمية محدودة" : "Low stock", classes: "bg-amber-500/15 text-amber-400" };
+  return { label: locale === "ar" ? "متوفر" : "In stock", classes: "bg-emerald-500/15 text-emerald-400" };
 }
 
-export default async function ProductsPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ q?: string; brand?: string; cat?: string; page?: string }>;
-}) {
+export default async function ProductsPage({ params, searchParams }: PageProps) {
+  const { locale } = await params;
   const { q = "", brand = "", cat = "", page = "1" } = await searchParams;
   const pageNum = Math.max(1, Number(page) || 1);
+  const nf = new Intl.NumberFormat(locale === "ar" ? "ar-EG-u-nu-latn" : "en-US");
 
   const [result, brands, categories] = await Promise.all([
     getProducts({
@@ -46,39 +52,39 @@ export default async function ProductsPage({
   ]);
 
   const pageHref = (target: number) => {
-    const params = new URLSearchParams();
-    if (q) params.set("q", q);
-    if (brand) params.set("brand", brand);
-    if (cat) params.set("cat", cat);
-    if (target > 1) params.set("page", String(target));
-    const qs = params.toString();
-    return `/products${qs ? `?${qs}` : ""}`;
+    const p = new URLSearchParams();
+    if (q) p.set("q", q);
+    if (brand) p.set("brand", brand);
+    if (cat) p.set("cat", cat);
+    if (target > 1) p.set("page", String(target));
+    const qs = p.toString();
+    return `/${locale}/products${qs ? `?${qs}` : ""}`;
   };
 
   return (
     <main id="main-content" className="flex-1 py-12 md:py-16">
       <Container>
         <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-fg">قطع الغيار</h1>
+          <h1 className="text-3xl md:text-4xl font-extrabold text-fg">{locale === "ar" ? "قطع الغيار" : "Spare Parts"}</h1>
           <p className="mt-2 text-muted">
-            {nf.format(result.total)} قطعة — ابحث بالاسم أو الكود أو حسب الماركة والتصنيف.
+            <span dir="ltr">{nf.format(result.total)}</span> {locale === "ar" ? "قطعة — ابحث بالاسم أو الكود أو حسب الماركة والتصنيف." : "items — search by name, code, or filter by brand and category."}
           </p>
         </div>
 
         <form
-          action="/products"
+          action={`/${locale}/products`}
           method="get"
           className="mb-8 grid gap-3 rounded-xl border border-border bg-card p-4 md:grid-cols-[1fr_auto_auto_auto]"
         >
           <Input
-            label="بحث"
+            label={locale === "ar" ? "بحث" : "Search"}
             name="q"
             defaultValue={q}
-            placeholder="اسم القطعة أو الكود"
+            placeholder={locale === "ar" ? "اسم القطعة أو الكود" : "Part name or code"}
           />
           <div className="flex flex-col gap-1.5">
             <label htmlFor="filter-brand" className="text-sm font-medium text-fg">
-              الماركة
+              {locale === "ar" ? "الماركة" : "Brand"}
             </label>
             <select
               id="filter-brand"
@@ -86,7 +92,7 @@ export default async function ProductsPage({
               defaultValue={brand}
               className={selectClass}
             >
-              <option value="">كل الماركات</option>
+              <option value="">{locale === "ar" ? "كل الماركات" : "All brands"}</option>
               {brands.map((item) => (
                 <option key={item.id} value={item.slug}>
                   {item.nameAr ?? item.name}
@@ -96,7 +102,7 @@ export default async function ProductsPage({
           </div>
           <div className="flex flex-col gap-1.5">
             <label htmlFor="filter-cat" className="text-sm font-medium text-fg">
-              التصنيف
+              {locale === "ar" ? "التصنيف" : "Category"}
             </label>
             <select
               id="filter-cat"
@@ -104,7 +110,7 @@ export default async function ProductsPage({
               defaultValue={cat}
               className={selectClass}
             >
-              <option value="">كل التصنيفات</option>
+              <option value="">{locale === "ar" ? "كل التصنيفات" : "All categories"}</option>
               {categories.map((item) => (
                 <option key={item.id} value={item.slug}>
                   {item.parentId ? "└ " : ""}
@@ -115,24 +121,24 @@ export default async function ProductsPage({
           </div>
           <div className="flex items-end">
             <Button type="submit" variant="secondary" className="w-full md:w-auto">
-              تطبيق
+              {locale === "ar" ? "تطبيق" : "Apply"}
             </Button>
           </div>
         </form>
 
         {result.items.length === 0 ? (
           <p className="rounded-xl border border-border bg-card px-4 py-12 text-center text-muted">
-            لا توجد قطع مطابقة لبحثك — جرّب كلمة تانية أو غيّر الفلاتر.
+            {locale === "ar" ? "لا توجد قطع مطابقة لبحثك — جرّب كلمة تانية أو غيّر الفلاتر." : "No matching parts found — try a different search or filter."}
           </p>
         ) : (
           <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {result.items.map((product) => {
               const stock = totalStock(product);
-              const badge = stockBadge(stock, product.reorderLevel);
+              const badge = stockBadge(stock, product.reorderLevel, locale);
               return (
                 <li key={product.id}>
                   <Link
-                    href={`/products/${product.code}`}
+                    href={`/${locale}/products/${product.code}`}
                     className="group flex h-full flex-col gap-3 rounded-xl border border-border bg-card p-5 transition-colors hover:border-accent"
                   >
                     <div className="flex items-start justify-between gap-2">
@@ -155,12 +161,16 @@ export default async function ProductsPage({
                     </p>
                     <div className="mt-auto flex items-end justify-between pt-2">
                       <p className="text-lg font-extrabold text-fg">
-                        {product.retailPrice != null
-                          ? `${nf.format(product.retailPrice)} ج.م`
-                          : "عند التواصل"}
+                        {product.retailPrice != null ? (
+                          <span dir="ltr">
+                            {nf.format(product.retailPrice)} {locale === "ar" ? "ج.م" : "EGP"}
+                          </span>
+                        ) : (
+                          (locale === "ar" ? "عند التواصل" : "Contact for price")
+                        )}
                       </p>
                       <span className="text-sm font-semibold text-accent">
-                        التفاصيل
+                        {locale === "ar" ? "التفاصيل" : "Details"}
                       </span>
                     </div>
                   </Link>
@@ -172,7 +182,7 @@ export default async function ProductsPage({
 
         {result.totalPages > 1 && (
           <nav
-            aria-label="صفحات المنتجات"
+            aria-label={locale === "ar" ? "صفحات المنتجات" : "Product pagination"}
             className="mt-8 flex items-center justify-between text-sm"
           >
             <Link
@@ -184,10 +194,14 @@ export default async function ProductsPage({
                   : "text-fg hover:border-accent"
               }`}
             >
-              السابق
+              {locale === "ar" ? "السابق" : "Previous"}
             </Link>
             <span className="text-muted">
-              صفحة {nf.format(result.page)} من {nf.format(result.totalPages)}
+              {locale === "ar" ? (
+                <>صفحة <span dir="ltr">{nf.format(result.page)}</span> من <span dir="ltr">{nf.format(result.totalPages)}</span></>
+              ) : (
+                <>Page <span dir="ltr">{nf.format(result.page)}</span> of <span dir="ltr">{nf.format(result.totalPages)}</span></>
+              )}
             </span>
             <Link
               href={pageHref(result.page + 1)}
@@ -198,13 +212,13 @@ export default async function ProductsPage({
                   : "text-fg hover:border-accent"
               }`}
             >
-              التالي
+              {locale === "ar" ? "التالي" : "Next"}
             </Link>
           </nav>
         )}
 
         <p className="mt-6 text-xs text-muted">
-          الأسعار لا تشمل ضريبة القيمة المضافة (تُضاف عند الفاتورة).
+          {locale === "ar" ? "الأسعار لا تشمل ضريبة القيمة المضافة (تُضاف عند الفاتورة)." : "Prices do not include VAT (added at checkout)."}
         </p>
       </Container>
     </main>

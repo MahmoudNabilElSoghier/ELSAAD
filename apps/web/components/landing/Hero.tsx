@@ -21,7 +21,7 @@ export function Hero() {
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(230,57,70,0.15),transparent_60%)]" />
 
       <Container size="xl" className="relative z-10 py-20 md:py-32">
-        <div className="max-w-2xl text-center md:text-right">
+        <div className="max-w-2xl text-center md:text-start">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight mb-6">
             {t("headline")}
           </h1>
