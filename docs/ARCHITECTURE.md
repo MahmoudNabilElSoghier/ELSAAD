@@ -128,6 +128,15 @@ COMPLIANCE retention on minio).
 Keys are always fresh: `entityType/entityId/<uuid>-<slugified-name>` — a key
 is never reused for different content.
 
+## i18n & Theming Architecture
+
+- **next-intl v4:** Request-scoped locale handling with `requestLocale` and localized routes under `/ar/*` and `/en/*`.
+- **Middleware:** Handles locale prefixes, cookie persistence (`NEXT_LOCALE`), and admin auth routing (`elsaad_rt` check for `/[locale]/admin/*`) in a single pass.
+- **Message Files:** Located at `apps/web/messages/{ar,en}.json` with matching structure.
+- **RTL/LTR Layout:** Logical CSS properties (`ms-`, `me-`, `ps-`, `pe-`, `start-`, `end-`) and `@custom-variant rtl/ltr` for directional icons and transforms.
+- **Theming:** `next-themes` manages light/dark mode via class-based `.dark` selectors and CSS variables (`:root` for light theme, `.dark` for dark theme overrides). Transitions are cross-faded on surfaces and text (200ms) while respecting `prefers-reduced-motion`.
+- **Typography:** Cairo font supports both Arabic and Latin scripts natively.
+
 ## Conventions
 
 - **Response envelope** `{ data, isMock }` from every service; controllers

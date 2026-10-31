@@ -3,21 +3,18 @@
 ## Project Summary
 ELSAAD (السعد للدراجات النارية) — 35-year motorcycle dealership and parts
 supplier in Egypt. Phase 1 landing page, Phase 2B catalog/admin foundation,
-and the turbo+pnpm monorepo migration are complete. Active work: Sprint 2D
-(auth → admin write wiring → deploy prep).
+monorepo migration, Sprint 2D auth + write wiring, and Phases 3-7 (bilingual AR/EN i18n, RTL/LTR hardening, light/dark theming, locale-aware SEO, and documentation) are complete.
 
 ## Tech Stack
 - Turborepo + pnpm 9 workspaces, Node 24, `.npmrc` `node-linker=hoisted`
-- `apps/web` — Next.js 15.5 (App Router) + React 19 + Tailwind v4, RTL-native
-  (`dir="rtl"`), UI at :3000
+- `apps/web` — Next.js 15.5 (App Router) + React 19 + Tailwind v4 + next-intl (v4) + next-themes, bilingual AR/EN under `/ar/*` and `/en/*`, UI at :3000
 - `apps/api` — NestJS 10 + Prisma 6 + Swagger 8, port 4000, base path `/api`
   (built to a single esbuild bundle, `pnpm start` = `node dist/main.js`)
 - `packages/shared` — `@elsaad/shared`: zod schemas, domain types, mock data,
   landing content, Prisma→domain mappers
 - `packages/api-client` — `@elsaad/api-client`: typed fetch client used by web
 - Local Docker stack: postgres 16 (:5434), redis 7 (:6380), minio (:9010/:9011)
-- Auth (Sprint 2D): JWT RS256 (node:crypto, no extra deps) + rotating refresh
-  tokens; `x-admin-api-key` remains a dual-auth alternative for scripts/CI
+- Auth: JWT RS256 (node:crypto, no extra deps) + rotating refresh tokens (`elsaad_rt` cookie); `x-admin-api-key` remains a dual-auth alternative for scripts/CI
 
 ## Critical File Access Rules
 1. Never scan the whole repository or recurse into `node_modules`, `.next`, or `.git`.
@@ -44,18 +41,12 @@ and the turbo+pnpm monorepo migration are complete. Active work: Sprint 2D
 
 ## Current State & Next Steps
 - Done: Phase 1 landing; Phase 2B schema + admin + catalog; monorepo
-  migration; Prisma db:push + seed (real JSON data); storage/documents
-  (MinIO + WORM + smoke tests); Decimal/JsonValue mappers; esbuild dist start.
-- Active — Sprint 2D: A1 auth schema/bootstrap → A2 JWT module (rotation +
-  reuse detection + rate limit) → A3 login UI + middleware → B1-B3 write-endpoint
-  gaps + admin form wiring → C1-C2 deploy configs + docs.
+  migration; Sprint 2D auth + write wiring; Phases 3-7 (bilingual AR/EN messages, RTL/LTR logical CSS properties, custom variants, locale-aware OG/metadata/sitemap/robots, persistence cookie, comprehensive documentation).
 - Deferred: Phase 2C cart/checkout; Phase 2E (password reset, session UI,
   auth unit tests, Redis-backed rate limit, stock movements, orders admin).
 
 ## Do-NOT List
 - Do not push to `main`.
 - Do not touch Phase 1 landing components.
-- Do not add unauthorized dependencies (approved so far: `framer-motion`,
-  `react-hook-form`, `zod`, `lucide-react`, `sonner`, plus workspace tooling;
-  auth uses node:crypto only).
-- Do not expose `/admin` publicly before Sprint 2D auth lands.
+- Do not add unauthorized dependencies; auth uses node:crypto only.
+- Do not expose `/admin` publicly without auth.

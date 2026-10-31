@@ -30,7 +30,7 @@ docker-compose.yml  postgres 16 + redis 7 + minio (local dev stack)
 
 ## Tech Stack
 
-- **Web:** Next.js 15.5 (App Router) + React 19 + TypeScript + Tailwind CSS
+- **Web:** Next.js 15.5 (App Router) + React 19 + TypeScript + Tailwind CSS + next-intl (v4)
 - **API:** NestJS 10 + @nestjs/swagger 8 + ZodValidationPipe, port `4000`, base
   path `/api` (Swagger UI at `http://localhost:4000/api/docs`)
 - **Data:** PostgreSQL + Prisma 6 (schema committed; local Docker Postgres on
@@ -39,6 +39,13 @@ docker-compose.yml  postgres 16 + redis 7 + minio (local dev stack)
   unset
 - **Storage:** pluggable `minio` (S3 API, signed URLs, WORM) / `local` (disk)
 - **Tooling:** pnpm 9 workspaces + turbo 2 (no npm scripts at the root)
+
+## Internationalization & Theming
+
+- **Bilingual AR/EN:** Fully localized routes under `/ar/*` and `/en/*` powered by `next-intl`. Default locale: `ar` (RTL-native).
+- **Locale Persistence:** Stored in the `NEXT_LOCALE` cookie (1-year max-age).
+- **Theming:** Light and dark mode support via `next-themes` and CSS variables (`:root` for light, `.dark` for dark override). Brand colors (`accent`, `accent-strong`) remain consistent across themes.
+- **Typography:** Cairo font supports both Arabic and Latin scripts seamlessly.
 
 ## Quick Start
 

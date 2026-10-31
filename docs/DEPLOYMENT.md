@@ -95,12 +95,14 @@ Verify afterwards: `curl https://<railway-url>/api/health` and
    `/api/:path*` → `https://elsaad-api.up.railway.app/api/:path*`
 
 ## Step 6 — Smoke Test Post-Deploy
-- [ ] `https://<vercel-domain>/` → landing page
-- [ ] `https://<vercel-domain>/products` → products from DB
-- [ ] `https://<vercel-domain>/admin` → redirect to login
-- [ ] Login with `admin@elsaad.com` → dashboard
-- [ ] Create a test brand → appears in table
-- [ ] Edit + delete the test brand
+- [ ] `https://<vercel-domain>/` → redirects to `/ar`
+- [ ] `https://<vercel-domain>/ar` and `https://<vercel-domain>/en` both load correctly
+- [ ] Locale switcher preserves path and persists via `NEXT_LOCALE` cookie
+- [ ] Theme toggle persists light/dark mode preference
+- [ ] `https://<vercel-domain>/products` → products from DB (with LTR numbers)
+- [ ] `https://<vercel-domain>/admin` → redirect to login in active locale
+- [ ] Admin login works in both `/ar/admin/login` and `/en/admin/login`
+- [ ] OG image preview: share `/ar` and `/en` links on WhatsApp → locale-specific cards
 - [ ] Check API Swagger: `https://elsaad-api.up.railway.app/api/docs`
 
 ## Rollback
